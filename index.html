@@ -1,4 +1,4 @@
-<!doctype html>
+!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -34,7 +34,7 @@ section.content-section{padding:92px 0}.section-heading{max-width:710px;margin-b
 .result-caption{color:#d6e5f2;font-size:.78rem;margin:0 auto 12px;max-width:390px}
 .mini-chart-wrap{height:95px;margin:0 auto 13px;max-width:440px}
 #miniGrowthChart{width:100%;height:100%;display:block}
-.result-cta{width:100%;font-size:.87rem;padding:13px 12px}
+.result-cta{width:100%;font-size:.87rem;padding:13px 12px}\n.sim-disclaimer{text-align:left;font-size:.78rem;line-height:1.65;color:#53677a;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}\n.sim-disclaimer p{margin:0 0 10px}\n.simulator-chart{display:none;height:140px;max-width:100%;margin:12px auto}\n.simulator-chart.is-visible{display:block}\n.calculating-message{margin:12px 0;color:var(--navy)}
 .service-card{position:relative;overflow:hidden}
 .service-card.has-photo{background-size:cover;background-position:center;color:#fff;min-height:290px;justify-content:flex-end}
 .service-card.has-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,38,62,.08) 0%,rgba(12,38,62,.82) 100%)}
@@ -105,16 +105,23 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
         <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" type="number" min="2000" max="1000000" step="100" value="2000" required><small>MXN</small></span></label>
         <label>Edad de retiro <input id="ageRetirement" type="number" min="65" max="90" value="65" required></label>
         <button class="btn btn-primary calc-btn" id="calculateButton" type="submit">Calcular mi proyección</button>
-        <p id="calculatingMessage" class="calculating-message" hidden>Calculando tu proyección… <span class="progress-track"><i id="progressFill"></i></span></p>
+        <div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
       </form>
+      <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" aria-label="Gráfica ilustrativa del crecimiento del fondo"></canvas></div>
       <div class="retirement-result" id="resultPanel" aria-live="polite" hidden>
         <p class="result-label">Tu retiro estimado podría ser</p>
         <div class="retirement-amount" id="retirementAmount">$0</div>
         <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
-        <div class="mini-chart-wrap"><canvas id="miniGrowthChart" aria-label="Gráfica ilustrativa de crecimiento del fondo"></canvas></div>
+        
         <a class="btn btn-wa result-cta" href="#" data-wa="simulador">Quiero revisar mi proyección por WhatsApp</a>
       </div>
-      <p class="sim-note">Estimación ilustrativa con supuestos fijos. El cálculo definitivo, las condiciones del producto y el tratamiento fiscal se revisan en asesoría.</p>
+      <div class="sim-note sim-disclaimer">
+        <p><strong>Importante sobre esta proyección</strong></p>
+        <p>Se utiliza un rendimiento bruto ilustrativo del 10% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
+        <p>La cifra considera cargos de administración, gestión y cargos fijos, así como un bono de fidelidad proyectado, sujeto a las condiciones del plan. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
+        <p><strong>*Posible beneficio fiscal anual:</strong> se utiliza una referencia fija de ISR del 20%. Se supone que la aportación considerada es deducible, sujeta al límite del 10% de los ingresos acumulables, cinco UMA anuales y los demás requisitos del Artículo 151. El beneficio real puede ser menor o nulo; lo revisaremos contigo en la asesoría.</p>
+        <p>La proyección se muestra antes de impuestos al retiro. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -434,23 +441,24 @@ function calculateRetirement(){
  const years=retire-age;
  const inputs={edadActual:age,tipoPlan:"Deducible 151",plazo:years,periodicidad:"Mensual",isrPct:.25,tasaRendimiento:.10,inflacion:0,udiValor:8.81,overrides:[monthly*12]};
  latestSimulation=simulate(inputs,years);
- const rows=latestSimulation.annual||[],last=rows[rows.length-1],amount=last?last.saldoTotal:0;
+ const rows=Array.isArray(latestSimulation)?latestSimulation:[],last=rows[rows.length-1],amount=last?Number(last.saldoTotal)||0:0;
  return {rows,amount,retire,years};
 }
 function animateProjection(result){
- const panel=document.getElementById("resultPanel"),message=document.getElementById("calculatingMessage"),fill=document.getElementById("progressFill"),button=document.getElementById("calculateButton");
- panel.hidden=true;message.hidden=false;button.disabled=true;button.textContent="Calculando…";
+ const panel=document.getElementById("resultPanel"),message=document.getElementById("calculatingMessage"),graphWrap=document.querySelector(".simulator-chart"),fill=document.getElementById("progressFill"),button=document.getElementById("calculateButton");
+ panel.hidden=true;message.hidden=false;graphWrap.classList.add("is-visible");button.disabled=true;button.textContent="Calculando…";
  const duration=4200,start=performance.now(),rows=result.rows;
  function frame(now){
   const t=Math.min(1,(now-start)/duration),idx=Math.max(1,Math.ceil(t*(rows.length-1))),partial=rows.slice(0,idx);
-  amountEl.textContent=fmtMXN(result.amount*t);
+  const currentRow=partial[partial.length-1];
+  amountEl.textContent=fmtMXN(currentRow ? currentRow.saldoTotal : 0);
   drawMiniChart(partial);
-  fill.style.width=(t*100)+"%";
+  if(fill)fill.style.width=(t*100)+"%";
   if(t<1){requestAnimationFrame(frame);}
   else{
    amountEl.textContent=fmtMXN(result.amount);
    captionEl.textContent=`Proyección ilustrativa a los ${result.retire} años · ${result.years} años de ahorro estimado`;
-   drawMiniChart(rows);message.hidden=true;panel.hidden=false;button.disabled=false;button.textContent="Volver a calcular";
+   drawMiniChart(rows);message.hidden=true;panel.hidden=false;graphWrap.classList.add("is-visible");button.disabled=false;button.textContent="Volver a calcular";
   }
  }
  requestAnimationFrame(frame);
@@ -462,7 +470,7 @@ function closeSimulator(){simulator.classList.remove("is-open");document.body.cl
 document.querySelectorAll("[data-open-sim],a[href='#simulador']").forEach(el=>el.addEventListener("click",openSimulator));
 document.getElementById("closeSimulator").addEventListener("click",closeSimulator);
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSimulator();});
-window.addEventListener("resize",()=>{if(latestSimulation&& !document.getElementById("resultPanel").hidden)drawMiniChart(latestSimulation.annual||[]);});
+window.addEventListener("resize",()=>{if(latestSimulation&& !document.getElementById("resultPanel").hidden)drawMiniChart(Array.isArray(latestSimulation)?latestSimulation:[]);});
 </script>
 </body>
 </html>
