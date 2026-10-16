@@ -1,348 +1,468 @@
-
 <!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#153F68">
 <title>Gerardo España | Asesoría financiera y patrimonial</title>
-<meta name="description" content="Calcula una proyección ilustrativa de tu retiro con Gerardo España.">
+<meta name="description" content="Calcula tu retiro y conoce opciones de asesoría financiera, protección patrimonial y seguros con Gerardo España. Atención en línea en México.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--n:#153f68;--n2:#0e2e4d;--b:#285b88;--ink:#172b3e;--muted:#637588;--line:#dfe7ef;--pale:#edf3f8;--shadow:0 18px 55px #10304e1a}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:85px}
-body{margin:0;color:var(--ink);font:16px/1.55 "DM Sans",sans-serif}
-h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.035em;line-height:1.12}
-h1{font-size:clamp(2.5rem,5vw,4.4rem)}
-h2{font-size:clamp(2rem,3.5vw,3rem)}
-.container{width:min(1160px,calc(100% - 32px));margin:auto}
-.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.76rem;font-weight:800;color:var(--b)}
-.muted,.service-card p{color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:13px 20px;text-decoration:none;font-weight:800;cursor:pointer}
-.primary{background:var(--n);color:#fff}
-.light{background:#fff;color:var(--n);border:1px solid var(--line)}
-header{height:74px;position:sticky;top:0;z-index:10;background:#fffffff2;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.nav{height:100%;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--n);font-weight:800}
-.mark{background:var(--n);color:#fff;border-radius:12px;padding:10px}
-.brand small{display:block;color:var(--muted);font-size:.7rem}
-.links{display:flex;gap:20px;align-items:center}
-.links a:not(.btn){text-decoration:none;color:#43586c;font-weight:700;font-size:.9rem}
-.menu{display:none}
-.hero{padding:55px 0 70px;background:radial-gradient(circle at 90% 0,#e4eef7,transparent 32%),#f9fbfd}
-.hero-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center}
-.hero-copy>p:not(.eyebrow){font-size:1.08rem;color:#52687c}
-.pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
-.pill{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:30px;font-size:.8rem}
-.sim{background:#fff;border:1px solid var(--line);border-radius:24px;padding:14px;box-shadow:var(--shadow)}
-.simtop{display:flex;justify-content:space-between;gap:10px;padding:8px 10px 14px;color:var(--n);font-weight:800}
-.tag{background:#e7f7ed;color:#26724b;border-radius:20px;padding:5px 9px;font-size:.7rem}
-.form{display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:10px}
-.form label{font-size:.84rem;font-weight:700;display:grid;gap:6px}
-.form input{min-width:0;width:100%;padding:12px;border:1px solid #d2deea;border-radius:11px;font:inherit}
-.form label:nth-child(3),.form button{grid-column:1/-1}
-.money{display:flex;align-items:center;gap:7px;border:1px solid #d2deea;border-radius:11px;padding:0 9px}
-.money input{border:0}
-.result{background:linear-gradient(145deg,var(--n),var(--n2));border-radius:19px;color:#fff;padding:23px;text-align:center}
-.result-label{margin:0;color:#d6e5f2}
-.amount{font:800 clamp(2.3rem,5vw,4rem)/1.1 Manrope,sans-serif;overflow-wrap:anywhere;margin:9px 0}
-.caption{font-size:.78rem;color:#d6e5f2}
-.chart{height:90px;width:100%;display:block}
-.note{font-size:.74rem;color:var(--muted);padding:10px 8px 0}
-.trust{padding:20px;border-block:1px solid var(--line);display:flex;justify-content:center;gap:28px;flex-wrap:wrap;color:#4b6277;font-weight:700;font-size:.88rem}
-section.content{padding:82px 0}
-.about{background:#f6f9fc}
-.aboutgrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:55px;align-items:center}
-.portrait{display:block;width:100%;max-height:680px;aspect-ratio:4/5;object-fit:cover;object-position:center 35%;border-radius:24px;box-shadow:var(--shadow)}
-.creds{display:grid;gap:12px;margin:25px 0}
-.cred{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px}
-.cred p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
-.heading{max-width:720px;margin-bottom:30px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.service-card{border:1px solid var(--line);border-radius:20px;padding:25px;min-height:220px;cursor:pointer;transition:.2s}
-.service-card:hover,.service-card:focus{box-shadow:var(--shadow);transform:translateY(-2px);outline-color:var(--b)}
-.ico{width:48px;height:48px;border-radius:14px;background:var(--pale);display:grid;place-items:center;color:var(--n);font-size:1.4rem}
-.cardlink{font-weight:800;color:var(--n);font-size:.9rem}
-.cta{background:linear-gradient(120deg,var(--n),#244f77);color:white;border-radius:24px;padding:36px;display:flex;align-items:center;justify-content:space-between;gap:25px}
-.cta p{color:#d6e3ef}
-.footer{background:#0d2944;color:#dce7f0;padding:30px 0}
-.footnote{font-size:.78rem;color:#b9cad9;max-width:800px}
-.footlinks{display:flex;gap:15px}
-.footlinks a{color:#fff}
-.backdrop{position:fixed;inset:0;z-index:50;background:#07192a9e;display:none;align-items:center;justify-content:center;padding:16px}
-.backdrop.open{display:flex}
-.modal{position:relative;background:#fff;width:min(100%,470px);border-radius:23px;padding:28px;box-shadow:0 24px 90px #0004}
-.modal h2{font-size:1.7rem}
-.modal p{color:var(--muted)}
-.close{position:absolute;right:14px;top:14px;border:1px solid var(--line);border-radius:50%;background:#fff;width:38px;height:38px;font-size:1.4rem;cursor:pointer}
-.modal .btn{width:100%;margin-top:8px}
-@media(max-width:850px){.hero-grid,.aboutgrid{grid-template-columns:1fr;gap:28px}.portrait{max-width:500px}.links a:not(.btn){display:none}}
-@media(max-width:620px){
-.links{display:none;position:absolute;top:65px;left:14px;right:14px;background:white;padding:14px;border:1px solid var(--line);border-radius:15px;flex-direction:column;align-items:stretch}
-.links.open{display:flex}.links a:not(.btn){display:block;padding:8px}
-.menu{display:block;background:white;border:1px solid var(--line);border-radius:10px;padding:9px}
-.hero{padding:32px 0 45px}.form{grid-template-columns:1fr}
-.form label:nth-child(3),.form button{grid-column:auto}
-.result{padding:20px 13px}section.content{padding:60px 0}
-.grid{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:column;padding:25px}.trust{gap:12px}
-}
+:root{--navy:#153F68;--navy2:#0e2e4d;--blue:#285b88;--ink:#172b3e;--muted:#637588;--line:#dfe7ef;--pale:#edf3f8;--white:#fff;--green:#25D366;--gold:#b78b4a;--radius:22px;--shadow:0 18px 55px rgba(16,48,78,.10)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}body{margin:0;color:var(--ink);font-family:"DM Sans",sans-serif;background:#fff;line-height:1.55}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.035em}h1{font-size:clamp(2.5rem,5vw,4.6rem);line-height:1.04;margin-bottom:20px}h2{font-size:clamp(2rem,3.5vw,3rem);line-height:1.12;margin-bottom:16px}h3{font-size:1.2rem;line-height:1.25}.container{width:min(1160px,calc(100% - 40px));margin:auto}.eyebrow{font-size:.76rem;text-transform:uppercase;letter-spacing:.15em;font-weight:800;color:var(--blue);margin-bottom:13px}.muted{color:var(--muted)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:14px 21px;text-decoration:none;font-weight:800;font-size:.95rem;cursor:pointer;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:var(--navy);color:white;box-shadow:0 10px 24px rgba(21,63,104,.18)}.btn-wa{background:var(--green);color:#073d20;box-shadow:0 10px 24px rgba(37,211,102,.16)}.btn-light{background:white;color:var(--navy);border:1px solid var(--line)}.btn svg{width:19px;height:19px}.site-header{height:76px;position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(223,231,239,.8)}.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-family:Manrope,sans-serif;font-weight:800;line-height:1.05}.brand-mark{width:40px;height:40px;border-radius:13px;background:var(--navy);color:white;display:grid;place-items:center;font-size:1rem;letter-spacing:-.04em}.brand small{display:block;font-family:"DM Sans",sans-serif;color:var(--muted);font-size:.69rem;font-weight:600;letter-spacing:.02em;margin-top:5px}.nav-links{display:flex;align-items:center;gap:25px}.nav-links a{font-size:.88rem;text-decoration:none;color:#43586c;font-weight:700}.nav-links a:hover{color:var(--navy)}.nav-links .btn{color:white;padding:11px 17px}.menu-toggle{display:none;border:1px solid var(--line);background:white;border-radius:12px;padding:9px 12px;color:var(--navy);font-weight:800}
+.hero{padding:66px 0 76px;background:radial-gradient(circle at 88% 6%,#e4eef7 0,transparent 32%),linear-gradient(180deg,#f8fbfe 0,#fff 100%)}.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}.hero-copy{padding:10px 0}.hero-copy h1 span{color:var(--blue)}.hero-copy p{font-size:1.1rem;max-width:510px;color:#52687c;margin-bottom:25px}.hero-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.pill{display:inline-flex;gap:7px;align-items:center;border:1px solid #dce6ef;background:rgba(255,255,255,.75);padding:8px 11px;border-radius:999px;color:#435b70;font-size:.8rem;font-weight:700}.pill svg{width:15px;height:15px;color:#2e7d58}.sim-shell{background:white;border:1px solid #dce6ef;border-radius:26px;padding:13px;box-shadow:var(--shadow);overflow:hidden}.sim-top{display:flex;align-items:center;justify-content:space-between;padding:10px 13px 14px;gap:10px}.sim-top strong{font-family:Manrope,sans-serif;font-size:1.04rem;color:var(--navy)}.live-tag{font-size:.7rem;font-weight:800;color:#26724b;background:#e7f7ed;padding:6px 9px;border-radius:999px}.sim-frame{width:100%;height:780px;border:0;display:block;border-radius:16px;background:#f4f7fb}.sim-note{font-size:.75rem;color:#6a7d8e;padding:11px 13px 3px;margin:0}
+.trust-strip{padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:white}.trust-items{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;color:#4b6277;font-size:.86rem;font-weight:700}.trust-items span{display:flex;align-items:center;gap:8px}.trust-items svg{width:18px;height:18px;color:var(--blue)}
+section.content-section{padding:92px 0}.section-heading{max-width:710px;margin-bottom:38px}.section-heading p{font-size:1.05rem;color:var(--muted)}.about{background:#f6f9fc}.about-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:64px;align-items:start}.profile-card{border-radius:26px;padding:28px;background:linear-gradient(145deg,var(--navy),var(--navy2));color:white;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow)}.profile-monogram{width:78px;height:78px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);border-radius:24px;display:grid;place-items:center;font:800 1.6rem Manrope,sans-serif}.profile-card h3{font-size:1.6rem;margin:22px 0 7px}.profile-card p{color:#d8e5f0;margin:0}.credential-list{display:grid;gap:14px;margin:28px 0 30px}.credential{display:flex;gap:14px;align-items:flex-start;padding:17px 18px;background:white;border:1px solid var(--line);border-radius:16px}.credential-icon{width:38px;height:38px;flex:0 0 38px;background:var(--pale);color:var(--navy);border-radius:12px;display:grid;place-items:center}.credential-icon svg{width:19px;height:19px}.credential strong{display:block;margin-bottom:3px}.credential p{font-size:.9rem;color:var(--muted);margin:0}
+.services{background:white}.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.service-card{border:1px solid var(--line);border-radius:22px;padding:28px;background:white;display:flex;flex-direction:column;min-height:255px;transition:box-shadow .2s,transform .2s}.service-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}.service-icon{width:52px;height:52px;display:grid;place-items:center;background:var(--pale);border-radius:16px;color:var(--navy);margin-bottom:21px}.service-icon svg{width:25px;height:25px}.service-card p{color:var(--muted);font-size:.94rem;flex:1}.service-card .btn{align-self:flex-start;margin-top:8px}.service-card.featured{background:#f6f9fc;border-color:#cad9e7}
+.cta-band{padding:0 0 92px}.cta-inner{background:linear-gradient(120deg,#153f68,#244f77);color:white;border-radius:28px;padding:clamp(28px,5vw,54px);display:flex;align-items:center;justify-content:space-between;gap:30px}.cta-inner h2{max-width:660px;margin-bottom:10px}.cta-inner p{color:#d6e3ef;margin:0;max-width:650px}.cta-inner .btn{flex-shrink:0}.site-footer{background:#0d2944;color:#dce7f0;padding:35px 0}.footer-inner{display:flex;justify-content:space-between;gap:30px;align-items:flex-start}.footer-brand{font:800 1rem Manrope,sans-serif}.footer-note{font-size:.78rem;max-width:700px;color:#b9cad9;margin:12px 0 0}.footer-links{display:flex;gap:16px;flex-wrap:wrap}.footer-links a{color:#e4edf5;text-decoration:none;font-size:.82rem}.wa-float{position:fixed;right:20px;bottom:20px;z-index:60;width:58px;height:58px;border-radius:50%;background:var(--green);color:#064b25;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.18);text-decoration:none}.wa-float svg{width:28px;height:28px}
+@media(max-width:900px){.hero-grid,.about-grid{grid-template-columns:1fr;gap:30px}.hero{padding-top:42px}.hero-copy{max-width:700px}.sim-frame{height:850px}.profile-card{min-height:240px}.nav-links{gap:15px}.nav-links a:not(.btn){display:none}}
+@media(max-width:620px){.container{width:min(100% - 28px,1160px)}.site-header{height:68px}.brand-mark{width:36px;height:36px}.nav-links{display:none;position:absolute;left:14px;right:14px;top:62px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);flex-direction:column;align-items:stretch}.nav-links.open{display:flex}.nav-links a:not(.btn){display:block;padding:8px}.menu-toggle{display:block}.hero{padding:32px 0 48px}.hero-grid{gap:28px}.hero-copy p{font-size:1rem}.sim-shell{padding:8px;border-radius:20px}.sim-frame{height:920px}.sim-top{padding:9px 8px 12px}.content-section{padding:64px 0!important}.section-heading{margin-bottom:26px}.services-grid{grid-template-columns:1fr}.service-card{padding:23px;min-height:0}.cta-band{padding-bottom:64px}.cta-inner{align-items:flex-start;flex-direction:column;border-radius:22px}.footer-inner{flex-direction:column}.wa-float{right:14px;bottom:14px;width:54px;height:54px}}
+
+.calc-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 13px 20px}
+.calc-form label{font-weight:700;color:#344b60;font-size:.84rem;display:grid;gap:7px}
+.calc-form input{width:100%;min-width:0;border:1px solid #d2deea;background:#fbfdff;border-radius:12px;padding:13px 12px;font:600 1rem "DM Sans",sans-serif;color:var(--ink);outline-color:#5a86ad}
+.calc-form label:nth-child(3){grid-column:1/-1}
+.money-input{display:flex;align-items:center;border:1px solid #d2deea;background:#fbfdff;border-radius:12px;padding:0 11px;gap:7px}
+.money-input input{border:0;background:transparent;padding-left:0;padding-right:0;outline:none}
+.money-input b,.money-input small{color:#72879a;font-weight:700}
+.calc-btn{grid-column:1/-1;width:100%;border-radius:13px;min-height:51px}
+.retirement-result{background:linear-gradient(145deg,#153f68,#0e2e4d);border-radius:20px;color:white;padding:24px 22px 22px;margin:0 8px 8px;text-align:center}
+.result-label{font-size:.9rem;color:#d6e5f2;font-weight:700;margin:0 0 5px}
+.retirement-amount{font:800 clamp(2.6rem,5.1vw,4.3rem)/1.05 Manrope,sans-serif;letter-spacing:-.06em;color:#fff;overflow-wrap:anywhere;margin:6px 0 9px}
+.result-caption{color:#d6e5f2;font-size:.78rem;margin:0 auto 12px;max-width:390px}
+.mini-chart-wrap{height:95px;margin:0 auto 13px;max-width:440px}
+#miniGrowthChart{width:100%;height:100%;display:block}
+.result-cta{width:100%;font-size:.87rem;padding:13px 12px}
+.service-card{position:relative;overflow:hidden}
+.service-card.has-photo{background-size:cover;background-position:center;color:#fff;min-height:290px;justify-content:flex-end}
+.service-card.has-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,38,62,.08) 0%,rgba(12,38,62,.82) 100%)}
+.service-card.has-photo>*{position:relative;z-index:1}
+.service-card.has-photo .service-icon{background:rgba(255,255,255,.15);color:white;backdrop-filter:blur(8px)}
+.service-card.has-photo p{color:#e5edf5}.service-card.has-photo h3{color:white}
+@media(max-width:620px){.calc-form{grid-template-columns:1fr;padding:10px 8px 16px}.calc-form label:nth-child(3),.calc-btn{grid-column:auto}.retirement-result{padding:23px 15px;margin:0 2px 4px}.retirement-amount{font-size:clamp(2.35rem,11vw,3.4rem)}}
+
+
+.calculating-message{font-weight:700;color:#dceafa;padding:12px 8px;margin:0}.progress-track{display:block;height:7px;background:rgba(255,255,255,.2);border-radius:99px;margin-top:10px;overflow:hidden}.progress-track i{display:block;width:0;height:100%;background:#a7d9ff;border-radius:99px;transition:width .12s linear}
+/* Modal del simulador */
+.sim-shell#simulador{display:none;position:fixed;z-index:1002;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;border-radius:24px;padding:18px;box-shadow:0 30px 100px rgba(5,25,45,.35)}
+.sim-shell#simulador.is-open{display:block}
+body.modal-active{overflow:hidden}
+body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,43,.68);backdrop-filter:blur(5px);z-index:1001}
+.modal-close{position:sticky;top:0;float:right;border:0;background:#edf3f8;color:#153f68;border-radius:999px;width:40px;height:40px;font-size:1.5rem;cursor:pointer;z-index:2}
+.hero-grid{grid-template-columns:1fr 1fr}
+.hero-photo{width:100%;height:560px;object-fit:cover;border-radius:4px 4px 70px 4px;box-shadow:var(--shadow)}
+.hero-copy h1 span{color:#0755c9}
+.hero-copy .eyebrow{color:#0755c9}
+.profile-card{background:#153f68 url('gerardo-espana.png') center 25%/cover no-repeat;min-height:420px;display:flex;align-items:flex-end;padding:28px;border-radius:22px;overflow:hidden;position:relative;color:white}
+.profile-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(5,26,48,.88))}
+.profile-card>*{position:relative;z-index:1}
+.profile-monogram{display:none}
+.profile-card p,.profile-card h3{color:white}
+.btn-wa{background:#fff;color:#153f68;border:1px solid #dce6ef;box-shadow:none}
+.btn-wa:hover{background:#edf3f8}
+@media(max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-photo{height:420px;grid-row:2}.sim-shell#simulador{padding:10px}.retirement-result{margin:0}.calc-form{grid-template-columns:1fr}.calc-form label:nth-child(3),.calc-btn{grid-column:auto}}
+
 </style>
 </head>
 <body>
-<header>
-<div class="container nav">
-<a class="brand" href="#inicio"><span class="mark">GE</span><span>Gerardo España<small>Asesoría financiera y patrimonial</small></span></a>
-<button class="menu" id="menu" aria-expanded="false">Menú</button>
-<nav class="links" id="links">
-<a href="#simulador">Calcula tu retiro</a><a href="#sobre-mi">Sobre mí</a><a href="#servicios">Servicios</a>
-<a class="btn primary" href="#" data-wa="general">Contactar</a>
-</nav>
-</div>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="#inicio" aria-label="Gerardo España, inicio">
+      <span class="brand-mark">GE</span>
+      <span>Gerardo España<small>Asesoría financiera y patrimonial</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#simulador">Calcula tu retiro</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#servicios">En qué te puedo ayudar</a>
+      <a class="btn btn-primary" href="#" data-wa="general">Agenda una asesoría</a>
+    </nav>
+  </div>
 </header>
 <main>
 <section class="hero" id="inicio">
-<div class="container hero-grid">
-<div class="hero-copy">
-<p class="eyebrow">Planeación para tu futuro</p>
-<h1>Ponle número a <span style="color:var(--b)">tu retiro.</span></h1>
-<p>Calcula una proyección ilustrativa de tu retiro y conoce opciones de acuerdo con tus metas, tiempo y capacidad de ahorro.</p>
-<a class="btn primary" href="#simulador">Calcular mi retiro ↓</a>
-<div class="pills"><span class="pill">✓ Proyección ilustrativa</span><span class="pill">✓ Atención en línea en México</span></div>
-</div>
-<div class="sim" id="simulador">
-<div class="simtop"><span>Calcula tu retiro</span><span class="tag">Proyección ilustrativa</span></div>
-<form class="form" id="calc">
-<label>Edad actual<input id="age" type="number" min="18" max="64" value="35" required></label>
-<label>Aportación mensual<span class="money">$ <input id="monthly" type="number" min="2000" max="1000000" step="100" value="2000" required> <small>MXN</small></span></label>
-<label>Edad de retiro<input id="retire" type="number" min="65" max="90" value="65" required></label>
-<button class="btn primary" type="submit">Calcular mi retiro</button>
-</form>
-<div class="result" aria-live="polite">
-<p class="result-label">Tu retiro estimado podría ser</p><div class="amount" id="amount">$0</div>
-<p class="caption" id="caption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
-<canvas id="chart" class="chart" aria-label="Gráfica ilustrativa de crecimiento"></canvas>
-<a class="btn light" href="#" data-wa="simulador">Revisar mi proyección con Gerardo</a>
-</div>
-<p class="note">Cálculo matemático ilustrativo con rendimiento supuesto del 10% anual, sin inflación, comisiones ni impuestos. No es una garantía ni cotización de producto.</p>
-</div>
-</div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Tu futuro, con dirección</p>
+      <h1>Construye tu retiro. <span>Protege lo que más importa.</span></h1>
+      <p>Soy Gerardo España, asesor de seguros e inversión. Te ayudo a entender tus números, proteger tu patrimonio y construir una estrategia financiera que tenga sentido para ti.</p>
+      <a class="btn btn-primary" href="#" data-open-sim>Calcular mi retiro <span aria-hidden="true">↗</span></a>
+      <a class="btn btn-light" href="#" data-wa="general">Agenda una asesoría <span aria-hidden="true">→</span></a>
+      <div class="hero-points">
+        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>Proyección personalizada</span>
+        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>Atención en línea en México</span>
+      </div>
+    </div>
+    <img class="hero-photo" src="gerardo-espana.png" alt="Gerardo España, asesor financiero y patrimonial">
+    <div class="sim-shell" id="simulador" role="dialog" aria-modal="true" aria-labelledby="simTitle">
+      <button type="button" class="modal-close" id="closeSimulator" aria-label="Cerrar simulador">×</button>
+      <div class="sim-top"><strong id="simTitle">Calcula tu retiro</strong><span class="live-tag">Proyección ilustrativa</span></div>
+      <form class="calc-form" id="retirementForm">
+        <label>Edad actual <input id="ageNow" type="number" min="18" max="64" value="35" required></label>
+        <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" type="number" min="2000" max="1000000" step="100" value="2000" required><small>MXN</small></span></label>
+        <label>Edad de retiro <input id="ageRetirement" type="number" min="65" max="90" value="65" required></label>
+        <button class="btn btn-primary calc-btn" id="calculateButton" type="submit">Calcular mi proyección</button>
+        <p id="calculatingMessage" class="calculating-message" hidden>Calculando tu proyección… <span class="progress-track"><i id="progressFill"></i></span></p>
+      </form>
+      <div class="retirement-result" id="resultPanel" aria-live="polite" hidden>
+        <p class="result-label">Tu retiro estimado podría ser</p>
+        <div class="retirement-amount" id="retirementAmount">$0</div>
+        <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
+        <div class="mini-chart-wrap"><canvas id="miniGrowthChart" aria-label="Gráfica ilustrativa de crecimiento del fondo"></canvas></div>
+        <a class="btn btn-wa result-cta" href="#" data-wa="simulador">Quiero revisar mi proyección por WhatsApp</a>
+      </div>
+      <p class="sim-note">Estimación ilustrativa con supuestos fijos. El cálculo definitivo, las condiciones del producto y el tratamiento fiscal se revisan en asesoría.</p>
+    </div>
+  </div>
 </section>
-<div class="trust"><span>✓ Planeación financiera</span><span>✓ Decisiones con información</span><span>✓ Asesoría personalizada</span></div>
-<section class="content about" id="sobre-mi">
-<div class="container aboutgrid">
-<img class="portrait" src="gerardo-espana.png" alt="Gerardo España en su oficina" loading="lazy">
-<div>
-<p class="eyebrow">Sobre mí</p><h2>Decisiones financieras con más claridad.</h2>
-<p class="muted">Soy Gerardo España. Te ayudo a revisar opciones de retiro, inversión y protección patrimonial de acuerdo con tus objetivos, horizonte y capacidad de ahorro.</p>
-<div class="creds">
-<div class="cred"><strong>Estudios en Finanzas y Banca</strong><p>Escuela Bancaria y Comercial.</p></div>
-<div class="cred"><strong>AMIB Figura 3 · Serie 210</strong><p>Asesor en Estrategias de Inversión. Credencial y vigencia sujetas a verificación.</p></div>
-<div class="cred"><strong>Cédula de agente de seguros CNSF</strong><p>Cédula A. Verificar registro y vigencia antes de publicar datos adicionales.</p></div>
+<div class="trust-strip">
+  <div class="container trust-items">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg>Planeación financiera</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h16"/><path d="m7 15 4-4 3 2 5-7"/></svg>Decisiones con información</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Asesoría personalizada</span>
+  </div>
 </div>
-<a class="btn primary" href="#" data-wa="general">Consultar una asesoría</a>
-</div>
-</div>
+<section class="content-section about" id="sobre-mi">
+  <div class="container about-grid">
+    <div class="profile-card"><div><p class="eyebrow" style="color:#b9d3e8">Tu asesor</p><h3>Gerardo España</h3><p>Asesoría financiera, patrimonial y de seguros.</p></div></div>
+    <div>
+      <p class="eyebrow">Sobre mí</p>
+      <h2>Decisiones financieras con más claridad.</h2>
+      <p class="muted">Te ayudo a revisar opciones de retiro, inversión y protección patrimonial de acuerdo con tus objetivos.</p>
+      <div class="credential-list">
+        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><div><strong>Estudios en Finanzas y Banca</strong><p>Escuela Bancaria y Comercial (EBC). Estudios concluidos; titulación pendiente.</p></div></div>
+        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="m8.2 13-1 8 4.8-2.5 4.8 2.5-1-8"/></svg></span><div><strong>AMIB Figura 3 · Serie 210</strong><p>Asesor en Estrategias de Inversión. Acreditación profesional AMIB indicada.</p></div></div>
+        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></span><div><strong>Cédula de agente de seguros CNSF</strong><p>Cédula A. Los datos de registro se compartirán y verificarán en asesoría.</p></div></div>
+      </div>
+      <a class="btn btn-wa" href="#" data-wa="general">Agenda una asesoría</a>
+    </div>
+  </div>
 </section>
-<section class="content" id="servicios">
-<div class="container">
-<div class="heading"><p class="eyebrow">Servicios</p><h2>En qué te puedo ayudar</h2><p class="muted">Selecciona un tema para abrir una ventana de contacto con el mensaje de WhatsApp correspondiente.</p></div>
-<div class="grid">
-<article class="service-card" tabindex="0" role="button" data-wa="retiro"><div class="ico">◷</div><h3>Proyección de plan de retiro</h3><p>Revisemos tu horizonte de ahorro, aportaciones y objetivos.</p><span class="cardlink">Consultar este servicio ↗</span></article>
-<article class="service-card" tabindex="0" role="button" data-wa="seguros"><div class="ico">◇</div><h3>Prevención de riesgos y seguros</h3><p>Opciones de gastos médicos mayores, vida y protección residencial.</p><span class="cardlink">Consultar este servicio ↗</span></article>
-<article class="service-card" tabindex="0" role="button" data-wa="bolsa"><div class="ico">↗</div><h3>Asesoría para invertir en bolsa</h3><p>Alternativas del mercado bursátil según tus objetivos y perfil de riesgo.</p><span class="cardlink">Consultar este servicio ↗</span></article>
-<article class="service-card" tabindex="0" role="button" data-wa="auto"><div class="ico">⌑</div><h3>Seguro de auto</h3><p>Opciones de cobertura para tu vehículo según tus necesidades.</p><span class="cardlink">Consultar este servicio ↗</span></article>
-</div>
-</div>
+<section class="content-section services" id="servicios">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Servicios</p>
+      <h2>En qué te puedo ayudar</h2>
+      <p>Podemos revisar tus objetivos y necesidades para explorar alternativas de planeación financiera y protección patrimonial.</p>
+    </div>
+    <div class="services-grid">
+      <article class="service-card featured has-photo" style="background-image:url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=85)">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/><path d="M8 3 6 5M16 3l2 2"/></svg></div>
+        <h3>Proyección de plan de retiro</h3>
+        <p>Revisa tus objetivos de retiro, el tiempo disponible y la aportación que podrías destinar a un plan de ahorro.</p>
+        <a class="btn btn-wa" href="#" data-wa="retiro">Agenda una asesoría</a>
+      </article>
+      <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1000&q=85)">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></div>
+        <h3>Prevención de riesgos y seguros</h3>
+        <p>Explora opciones de gastos médicos mayores, seguro de vida y seguro residencial para proteger tu patrimonio y a tu familia.</p>
+        <a class="btn btn-wa" href="#" data-wa="seguros">Agenda una asesoría</a>
+      </article>
+      <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1000&q=85)">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 6-7"/><path d="M16 6h4v4"/></svg></div>
+        <h3>Asesoría para invertir en bolsa</h3>
+        <p>Conoce alternativas del mercado bursátil y revisa cómo se relacionan con tus objetivos y tu perfil de riesgo.</p>
+        <a class="btn btn-wa" href="#" data-wa="bolsa">Agenda una asesoría</a>
+      </article>
+      <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=85)">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 11 1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M3 11h18v7H3z"/><path d="M6 18v2m12-2v2M6 14h.01M18 14h.01"/></svg></div>
+        <h3>Seguro de auto</h3>
+        <p>Revisa alternativas de cobertura para tu vehículo de acuerdo con tus necesidades y condiciones.</p>
+        <a class="btn btn-wa" href="#" data-wa="auto">Agenda una asesoría</a>
+      </article>
+    </div>
+  </div>
 </section>
-<section class="content" style="padding-top:0"><div class="container cta"><div><h2>El primer paso es revisar tus opciones.</h2><p>Elige el tema que quieres planear o proteger y coordinamos una asesoría.</p></div><a class="btn light" href="#" data-wa="general">Contactar a Gerardo</a></div></section>
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div><h2>El primer paso es revisar tus opciones.</h2><p>Cuéntame qué quieres planear o proteger y coordinamos una asesoría en línea.</p></div>
+    <a class="btn btn-wa" href="#" data-wa="general">Agenda una asesoría</a>
+  </div>
+</section>
 </main>
-<footer class="footer"><div class="container"><strong>Gerardo España</strong><p class="footnote">El simulador es ilustrativo y no garantiza rendimientos. Condiciones, comisiones, beneficios fiscales y disponibilidad dependen del producto, la normativa y la situación individual. Verifica las credenciales y condiciones antes de contratar.</p><div class="footlinks"><a href="#inicio">Inicio</a><a href="#simulador">Simulador</a><a href="#servicios">Servicios</a></div></div></footer>
-<div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-<div class="modal"><button class="close" id="close" aria-label="Cerrar">×</button><p class="eyebrow">Contacto directo</p><h2 id="modalTitle">Hablemos por WhatsApp</h2><p id="modalText">Se abrirá WhatsApp con un mensaje listo para enviar.</p><a class="btn primary" id="waLink" href="#" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp ↗</a><button class="btn light" id="cancel" type="button">Seguir explorando</button></div>
-</div>
-
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div><div class="footer-brand">Gerardo España</div><p class="footer-note">La información del simulador es ilustrativa y no constituye una garantía de rendimiento ni una recomendación personalizada. Las condiciones, beneficios fiscales, comisiones y disponibilidad de productos dependen del producto, la normativa aplicable y la situación de cada persona. Verifica los términos antes de contratar.</p><p class="footer-note">Las credenciales y referencias profesionales deberán comprobarse y mantenerse actualizadas antes de publicar el sitio.</p></div>
+    <div class="footer-links"><a href="#inicio">Inicio</a><a href="#simulador">Simulador</a><a href="#servicios">Servicios</a></div>
+  </div>
+</footer>
+<a class="wa-float" href="#" data-wa="general" aria-label="Contactar por WhatsApp">
+<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.16 1.6 5.97L.12 24l6.3-1.65a11.9 11.9 0 0 0 5.68 1.45h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.24-6.15-3.47-8.44ZM12.1 21.78a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.82 9.82 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.82 9.82 0 0 1 2.9 7c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg>
+</a>
 <script>
-/* Confirma este número antes de publicar; se conserva el del sitio anterior. */
-const PHONE = "524423776762";
-
-const MSG = {
+const WHATSAPP_NUMBER = "524423776762"; // Confirmar que el número está correcto en formato internacional.
+const messages = {\n  simulador: "Hola, Gerardo. Acabo de calcular una proyección de retiro y quiero agendar una asesoría para revisarla contigo.",
   general: "Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.",
-  simulador: "Hola, Gerardo. Acabo de calcular una proyección de retiro y quiero revisarla contigo.",
-  retiro: "Hola, Gerardo. Quiero revisar opciones de plan personal de retiro.",
-  seguros: "Hola, Gerardo. Quiero revisar opciones de prevención de riesgos y seguros.",
-  bolsa: "Hola, Gerardo. Quiero hablar sobre asesoría para invertir en bolsa.",
-  auto: "Hola, Gerardo. Quiero conocer opciones de seguro para mi auto."
+  retiro: "Hola, Gerardo. Quiero agendar una asesoría para conocer opciones de plan de retiro.",
+  seguros: "Hola, Gerardo. Quiero agendar una asesoría para revisar opciones de protección y seguros.",
+  bolsa: "Hola, Gerardo. Quiero agendar una asesoría para hablar sobre alternativas de inversión en bolsa.",
+  auto: "Hola, Gerardo. Quiero agendar una asesoría para conocer opciones de seguro para mi auto."
 };
-
-const backdrop = document.getElementById("backdrop");
-
-function contact(key) {
-  key = MSG[key] ? key : "general";
-  document.getElementById("modalText").textContent =
-    MSG[key] + " Al continuar, WhatsApp se abrirá con este mensaje preparado.";
-  document.getElementById("waLink").href =
-    "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(MSG[key]);
-  backdrop.classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-
-function closeModal() {
-  backdrop.classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-document.querySelectorAll("[data-wa]").forEach(el => {
-  el.addEventListener("click", event => {
-    event.preventDefault();
-    contact(el.dataset.wa);
+document.querySelectorAll("[data-wa]").forEach(a=>{
+  a.addEventListener("click",e=>{
+    e.preventDefault();
+    const key=a.getAttribute("data-wa")||"general";
+    const url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(messages[key]||messages.general);
+    window.open(url,"_blank","noopener,noreferrer");
   });
 });
+const menuToggle=document.getElementById("menuToggle");
+const navLinks=document.getElementById("navLinks");
+menuToggle.addEventListener("click",()=>{const open=navLinks.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(open));});
+navLinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{navLinks.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");}));
+</script>
+<script>
+const bonoTable = {
+  5:[0,0,0,0,0], 6:[0,0,0,0,0], 7:[0,0,0,0,0], 8:[0,0,0,0,0], 9:[0,0,0,0,0],
+  10:[0,0.05,0.15,0.25,0.35], 11:[0,0.05,0.15,0.25,0.35], 12:[0,0.05,0.15,0.25,0.35],
+  13:[0,0.05,0.15,0.25,0.35], 14:[0,0.05,0.15,0.25,0.35],
+  15:[0,0.3,0.4,0.5,0.6], 16:[0,0.3,0.4,0.5,0.6], 17:[0,0.3,0.4,0.5,0.6],
+  18:[0,0.3,0.4,0.5,0.6], 19:[0,0.3,0.4,0.5,0.6],
+  20:[0,0.55,0.65,0.75,1.0], 21:[0,0.55,0.65,0.75,1.0], 22:[0,0.55,0.65,0.75,1.0],
+  23:[0,0.55,0.65,0.75,1.0], 24:[0,0.55,0.65,0.75,1.0], 25:[0,0.55,0.65,0.75,1.0],
+};
+const thresholds = [0, 12000, 36000, 60000, 90000];
+// Constantes fiscales 2025 (SMG diario zona A $278.80, UMA diaria $113.14, revaluación PLUS 4.21% anual)
+const UMA_DIARIA = 113.14;
+const TOPE151_BASE = 206367;  // 5 UMA's anuales (año 1); en el Excel este tope escala cada año con la inflación
+const TOPE185_BASE = 152000;  // tope anual Art. 185; también escala cada año con la inflación (igual que en el Excel)
+const PERIODOS = {"Mensual":12,"Trimestral":4,"Semestral":2,"Anual":1};
+const N_YEARS = 25;
+const SI_MESES = 18; // Saldo Inicial: primeros 18 meses
 
-document.querySelectorAll(".service-card").forEach(el => {
-  el.addEventListener("keydown", event => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      contact(el.dataset.wa);
+function bracketIndex(aportacionAnual){
+  let idx=0;
+  for(let i=0;i<thresholds.length;i++) if(aportacionAnual>=thresholds[i]) idx=i;
+  return idx;
+}
+function pctBono(plazo, aportacionAnualBase){
+  const p = Math.max(5, Math.min(25, Math.round(plazo)));
+  const row = bonoTable[p] || bonoTable[25];
+  return row[bracketIndex(aportacionAnualBase)];
+}
+
+function bracketIndex(aportacionAnual){
+  let idx=0;
+  for(let i=0;i<thresholds.length;i++) if(aportacionAnual>=thresholds[i]) idx=i;
+  return idx;
+}
+function pctBono(plazo, aportacionAnualBase){
+  const p = Math.max(5, Math.min(25, Math.round(plazo)));
+  const row = bonoTable[p] || bonoTable[25];
+  return row[bracketIndex(aportacionAnualBase)];
+}
+
+function simulate(inputs, totalYears){
+  const {edadActual, tipoPlan, plazo, periodicidad, isrPct, tasaRendimiento, inflacion, udiValor, overrides} = inputs;
+  const nY = totalYears || N_YEARS;
+  const tasaMensual = Math.pow(1+tasaRendimiento,1/12)-1;
+  // Tasa del Bono de Fidelidad: CETE + 5% anual garantizado, topado a 9% anual. El simulador proyecta con el tope de 9%.
+  const tasaBonoAnual = 0.09;
+  const tasaBonoMensual = Math.pow(1+tasaBonoAnual,1/12)-1;
+  const iva = tipoPlan==="No Deducible 93" ? 1 : 1.16;
+  const pagosPorAno = PERIODOS[periodicidad];
+
+  const aplicada=[];
+  for(let y=0;y<nY;y++){
+    if(y===0) aplicada.push(overrides[0] ?? 0);
+    else{
+      const ov = (y<overrides.length) ? overrides[y] : null;
+      aplicada.push((ov!==null && ov!==undefined) ? ov : aplicada[y-1]*(1+inflacion));
     }
+  }
+  const aportacionAnual = aplicada.map(a=>a); // "aplicada" ya representa el monto ANUAL (Inversión Anual)
+  const aportacionAcumulada=[];
+  aportacionAnual.forEach((v,i)=>aportacionAcumulada.push(i===0? v : aportacionAcumulada[i-1]+v));
+
+  const pctB = pctBono(plazo, aportacionAnual[0]);
+
+  let SI=0, SC=0, P=0; // Saldo Inicial (meses 1-18), Saldo Comprometido (mes 19+), Saldo de Bono
+  const anual=[];
+  for(let y=1;y<=nY;y++){
+    for(let m=1;m<=12;m++){
+      const numMesGlobal=(y-1)*12+m;
+      const enSI = numMesGlobal<=SI_MESES;
+      const paga = periodicidad==="Mensual" ? true :
+        periodicidad==="Trimestral" ? ((m-1)%3===0) :
+        periodicidad==="Semestral" ? ((m-1)%6===0) : (m===1);
+      const E = paga ? aplicada[y-1]/pagosPorAno : 0;
+
+      const E_SI = enSI ? E : 0;
+      const E_SC = enSI ? 0 : E;
+
+      // Saldo Inicial: recibe aportaciones solo durante los primeros 18 meses, pero sigue
+      // vivo y pagando sus propios cargos (Gestión 0.1% mensual + Administración 1.5%
+      // trimestral) mientras la póliza esté en vigor, tal como marcan las Condiciones
+      // Generales ("Cargo Administrativo: hasta 1.5% trimestral... sobre el Fondo
+      // Individual en Administración Inicial").
+      {
+        const F = SI;
+        const interes = (F+E_SI)*tasaMensual;
+        const cargoFijoInicial = numMesGlobal===1 ? -500 : 0;
+        const cargoAdmin = (numMesGlobal%3===0) ? -(F+E_SI+interes+cargoFijoInicial)*0.015*iva : 0;
+        const cargoGestion = -(F+E_SI+interes+cargoFijoInicial+cargoAdmin)*0.001*iva;
+        SI = F+E_SI+interes+cargoFijoInicial+cargoAdmin+cargoGestion;
+      }
+      // Saldo Comprometido (mes 19+): recibe las aportaciones una vez terminado el Plazo
+      // Inicial; paga Gestión 0.1% mensual + Cargo Fijo de 25 UDIS al mes (unificado para
+      // los tres artículos, conforme a las versiones vigentes de las Condiciones Generales).
+      if(!enSI){
+        const F = SC;
+        const interes = (F+E_SC)*tasaMensual;
+        const cargoFijoUDI = -25*udiValor;
+        const cargoGestion = -(F+E_SC+interes+cargoFijoUDI)*0.001*iva;
+        SC = F+E_SC+interes+cargoFijoUDI+cargoGestion;
+      }
+
+      // Bono de Fidelidad: propia tasa (inflación+5%, tope 9%), mismos cargos que Saldo Inicial.
+      // El bono se calcula ÚNICAMENTE sobre las aportaciones del primer año (meses 1-12): a
+      // partir del mes 13 ya no entran nuevas aportaciones al bono, aunque su saldo sigue
+      // generando interés y pagando sus propios cargos como cualquier otro año.
+      const bonoDelMes = (numMesGlobal<=12) ? E*pctB : 0;
+      const Fb = P;
+      const interesBono = (Fb+bonoDelMes)*tasaBonoMensual;
+      const cargoAdminBono = (numMesGlobal%3===0) ? -(Fb+bonoDelMes+interesBono)*0.015 : 0;
+      const cargoGestionBono = -(Fb+bonoDelMes+interesBono+cargoAdminBono)*0.001;
+      P = Fb+bonoDelMes+interesBono+cargoAdminBono+cargoGestionBono;
+    }
+    const edad = edadActual+y;
+    const saldoAlVencer = SI+SC+P; // valor total si se cumple el plazo comprometido y el esquema de aportaciones
+    // Antes de cumplir el plazo comprometido, el Saldo Inicial (meses 1-18) y el Bono de Fidelidad
+    // NO son líquidos: solo el Saldo Comprometido lo es (igual que Resumen!O en el Excel).
+    // Al cumplirse el plazo comprometido, TODO el fondo se libera (Saldo Inicial + Saldo Comprometido + Bono).
+    const saldoDisponible = (y>=plazo) ? saldoAlVencer : SC;
+    let tope=0;
+    if(tipoPlan==="Deducible 151") tope=TOPE151_BASE*Math.pow(1+inflacion,y-1);
+    else if(tipoPlan==="Deducible 185") tope=TOPE185_BASE*Math.pow(1+inflacion,y-1);
+    const beneficioAno = tipoPlan==="No Deducible 93" ? 0 : Math.min(aportacionAnual[y-1],tope)*isrPct;
+    anual.push({ano:y, edad, aportacionAnual:aportacionAnual[y-1], aportacionAcumulada:aportacionAcumulada[y-1],
+      saldoDisponible, saldoBono:P, saldoTotal:saldoAlVencer, beneficioAno, aplicada:aplicada[y-1],
+      isOverride: overrides[y-1]!==null && overrides[y-1]!==undefined, cumplioPlazo: y>=plazo});
+  }
+  let benAcum=0, benAcumSimple=0;
+  anual.forEach(row=>{
+    benAcum = row.beneficioAno + benAcum*(1+tasaRendimiento); // reinvertido a la tasa de rendimiento (para la corrida/tabla)
+    benAcumSimple += row.beneficioAno; // suma simple año con año, SIN reinversión (para la tarjeta KPI)
+    row.beneficioAcumulado = benAcum;
+    row.beneficioAcumuladoSimple = benAcumSimple;
   });
-});
+  anual.forEach(row=>{
+    // Saldo Neto Estimado post-ISR, según reglas exactas por artículo.
+    // Exención fiscal total: se cumple SOLO cuando se cumplen AMBOS filtros a la vez:
+    //   1) Edad mínima que marca la ley (60 años Art. 93 | 65 años Art. 151 y 185)
+    //   2) Mínimo 5 años de permanencia dentro del plan
+    // Al cumplirse ambos, el Saldo Neto = Saldo Disponible (100% libre de impuestos), y solo se
+    // descuenta el 1% de comisión por retiro anticipado si aún no se cumple el plazo comprometido.
+    const edadMinimaLey = tipoPlan==="No Deducible 93" ? 60 : 65;
+    // Exención total: SOLO aplica a Art. 93 y Art. 151 (exención tipo pensión, art. 93 LISR).
+    // El Art. 185 NUNCA es libre de impuestos: por ley, todo lo retirado se acumula como
+    // ingreso ordinario del año, topado únicamente a la tasa marginal que tenía el cliente
+    // en el año en que hizo la aportación (no hay monto exento).
+    const exentoTotal = tipoPlan!=="Deducible 185" && row.edad>=edadMinimaLey && row.ano>=5;
+    let neto;
+    if(exentoTotal){
+      neto = row.cumplioPlazo ? row.saldoDisponible : row.saldoDisponible*0.99;
+    } else if(tipoPlan==="No Deducible 93"){
+      // Antes de cumplir ambos filtros: 20% sobre el interés real (base: Saldo Disponible).
+      neto = row.saldoDisponible - 0.20*Math.max(0,row.saldoDisponible-row.aportacionAcumulada);
+    } else if(tipoPlan==="Deducible 151"){
+      // Antes de cumplir ambos filtros: Saldo Disponible*0.80 (Fórmula exacta del Excel, Resumen!Q)
+      neto = row.saldoDisponible*0.80;
+    } else {
+      neto = row.saldoDisponible*0.65; // Art. 185: tasa máxima vigente 35% antes de cumplir ambos filtros
+    }
+    row.saldoNeto=neto;
+  });
+  return anual;
+}
 
-document.getElementById("close").onclick = closeModal;
-document.getElementById("cancel").onclick = closeModal;
-backdrop.addEventListener("click", event => {
-  if (event.target === backdrop) closeModal();
-});
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeModal();
-});
+// ============ ESTADO ============
+const state = {
+  nombre:"",
+  edadActual:35,
+  tipoPlan:"Deducible 151",
+  plazo:30,
+  periodicidad:"Mensual",
+  isrPct:0.25,
+  tasaRendimiento:0.10,
+  inflacion:0,
+  udiValor:8.81,
+  overrides: Array(N_YEARS).fill(null),
+};
+state.overrides[0] = 24000;
 
-const menu = document.getElementById("menu");
-const links = document.getElementById("links");
-
-menu.onclick = () => {
-  const isOpen = links.classList.toggle("open");
-  menu.setAttribute("aria-expanded", String(isOpen));
+const planHints = {
+  "No Deducible 93": "Sin deducción fiscal en aportación. Antes de cumplir 60 años y 5 de permanencia: retención de 20% sobre el interés real. Cumplidos ambos filtros: exento en su totalidad (menos 1% de comisión si aún no se cumple el plazo comprometido).",
+  "Deducible 151": "Aportación deducible hasta $206,367 anuales (5 UMA's), tope que crece cada año con la inflación. Antes de cumplir 65 años y 5 de permanencia: retención de 20% sobre el saldo. Cumplidos ambos filtros: exento en su totalidad (menos 1% de comisión si aún no se cumple el plazo comprometido).",
+  "Deducible 185": "Aportación deducible hasta $152,000 anuales. El Art. 185 nunca es libre de impuestos: por ley, todo lo retirado se acumula como ingreso ordinario del año (topado a tu tasa marginal del año de aportación). En esta ilustración se aplica una retención simplificada del 35% (tasa máxima vigente) en todo momento.",
+};
+const planLabels = {
+  "No Deducible 93": "Art. 93 — No Deducible",
+  "Deducible 151": "Art. 151 — Deducible",
+  "Deducible 185": "Art. 185 — Deducible",
+};
+const planHintsShort = {
+  "No Deducible 93": "Sin deducción en aportación. Antes de 60 años + 5 de permanencia: retención de 20% sobre el interés real. Cumplidos ambos: exento en su totalidad (menos 1% si aún no se cumple el plazo).",
+  "Deducible 151": "Deducible hasta $206,367 anuales (5 UMA), tope que crece con la inflación. Antes de 65 años + 5 de permanencia: retención de 20% sobre el saldo. Cumplidos ambos: exento en su totalidad.",
+  "Deducible 185": "Deducible hasta $152,000 anuales, tope que crece con la inflación. El Art. 185 nunca es libre de impuestos: se acumula como ingreso ordinario, topado a tu tasa marginal del año de aportación. Ilustrado aquí con retención simplificada del 35% siempre.",
 };
 
-links.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => links.classList.remove("open"));
-});
-
-const form = document.getElementById("calc");
-const age = document.getElementById("age");
-const monthly = document.getElementById("monthly");
-const retire = document.getElementById("retire");
-const amount = document.getElementById("amount");
-const caption = document.getElementById("caption");
-const canvas = document.getElementById("chart");
-
-function fmt(value) {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: "MXN",
-    maximumFractionDigits: 0
-  }).format(value);
+const fmtMXN = n => new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",maximumFractionDigits:0}).format(Math.max(0,n||0));
+const ageNowEl=document.getElementById("ageNow"), monthlyEl=document.getElementById("monthlyContribution"), ageRetireEl=document.getElementById("ageRetirement");
+const amountEl=document.getElementById("retirementAmount"), captionEl=document.getElementById("retirementCaption"), chart=document.getElementById("miniGrowthChart");
+let latestSimulation=null;
+function drawMiniChart(rows){
+ const ctx=chart.getContext("2d"),dpr=window.devicePixelRatio||1,w=Math.max(280,chart.clientWidth||400),h=Math.max(80,chart.clientHeight||95);
+ chart.width=w*dpr;chart.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);if(!rows||!rows.length)return;
+ const vals=rows.map(r=>Math.max(0,r.saldoTotal||0)),max=Math.max(...vals,1),pad=7;
+ ctx.strokeStyle="rgba(255,255,255,.14)";ctx.lineWidth=1;
+ for(let i=1;i<=3;i++){const y=pad+(h-2*pad)*i/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+ const pts=vals.map((v,i)=>({x:pad+(w-2*pad)*(i/Math.max(1,vals.length-1)),y:h-pad-(h-2*pad)*(v/max)}));
+ const grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,"rgba(134,203,255,.42)");grad.addColorStop(1,"rgba(134,203,255,0)");
+ ctx.beginPath();ctx.moveTo(pts[0].x,h-pad);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,h-pad);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+ ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle="#a7d9ff";ctx.lineWidth=2.7;ctx.lineJoin="round";ctx.stroke();
+ const last=pts[pts.length-1];ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
 }
-
-/* Aportaciones al final de cada mes; rendimiento efectivo anual supuesto del 10%. */
-function project(currentAge, monthlyAmount, retirementAge) {
-  const months = (retirementAge - currentAge) * 12;
-  const monthlyRate = Math.pow(1.10, 1 / 12) - 1;
-  let balance = 0;
-  const points = [0];
-
-  for (let month = 1; month <= months; month++) {
-    balance = balance * (1 + monthlyRate) + monthlyAmount;
-    if (month % 12 === 0) points.push(balance);
+function calculateRetirement(){
+ let age=Math.round(Number(ageNowEl.value)),monthly=Number(monthlyEl.value),retire=Math.round(Number(ageRetireEl.value));
+ if(!Number.isFinite(age)||!Number.isFinite(monthly)||!Number.isFinite(retire)){return null;}
+ age=Math.max(18,Math.min(64,age));monthly=Math.max(2000,Math.min(1000000,monthly));retire=Math.max(65,Math.min(90,retire));
+ ageNowEl.value=age;monthlyEl.value=monthly;ageRetireEl.value=retire;
+ const years=retire-age;
+ const inputs={edadActual:age,tipoPlan:"Deducible 151",plazo:years,periodicidad:"Mensual",isrPct:.25,tasaRendimiento:.10,inflacion:0,udiValor:8.81,overrides:[monthly*12]};
+ latestSimulation=simulate(inputs,years);
+ const rows=latestSimulation.annual||[],last=rows[rows.length-1],amount=last?last.saldoTotal:0;
+ return {rows,amount,retire,years};
+}
+function animateProjection(result){
+ const panel=document.getElementById("resultPanel"),message=document.getElementById("calculatingMessage"),fill=document.getElementById("progressFill"),button=document.getElementById("calculateButton");
+ panel.hidden=true;message.hidden=false;button.disabled=true;button.textContent="Calculando…";
+ const duration=4200,start=performance.now(),rows=result.rows;
+ function frame(now){
+  const t=Math.min(1,(now-start)/duration),idx=Math.max(1,Math.ceil(t*(rows.length-1))),partial=rows.slice(0,idx);
+  amountEl.textContent=fmtMXN(result.amount*t);
+  drawMiniChart(partial);
+  fill.style.width=(t*100)+"%";
+  if(t<1){requestAnimationFrame(frame);}
+  else{
+   amountEl.textContent=fmtMXN(result.amount);
+   captionEl.textContent=`Proyección ilustrativa a los ${result.retire} años · ${result.years} años de ahorro estimado`;
+   drawMiniChart(rows);message.hidden=true;panel.hidden=false;button.disabled=false;button.textContent="Volver a calcular";
   }
-
-  return {
-    balance,
-    points,
-    years: retirementAge - currentAge,
-    contributions: monthlyAmount * months
-  };
+ }
+ requestAnimationFrame(frame);
 }
-
-function draw(points) {
-  const ctx = canvas.getContext("2d");
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  const dpr = window.devicePixelRatio || 1;
-
-  canvas.width = Math.max(1, width * dpr);
-  canvas.height = Math.max(1, height * dpr);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, width, height);
-
-  const max = Math.max(...points, 1);
-  const coords = points.map((value, index) => ({
-    x: 5 + (width - 10) * index / Math.max(1, points.length - 1),
-    y: height - 5 - (height - 10) * value / max
-  }));
-
-  ctx.strokeStyle = "#b8d8f4";
-  ctx.lineWidth = 3;
-  ctx.lineJoin = "round";
-  ctx.beginPath();
-
-  coords.forEach((point, index) => {
-    if (index === 0) ctx.moveTo(point.x, point.y);
-    else ctx.lineTo(point.x, point.y);
-  });
-
-  ctx.stroke();
-
-  const last = coords[coords.length - 1];
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  ctx.arc(last.x, last.y, 4, 0, Math.PI * 2);
-  ctx.fill();
-}
-
-function updateCalculator() {
-  const currentAge = Number(age.value);
-  const monthlyAmount = Number(monthly.value);
-  const retirementAge = Number(retire.value);
-
-  if (
-    !Number.isFinite(currentAge) ||
-    !Number.isFinite(monthlyAmount) ||
-    !Number.isFinite(retirementAge) ||
-    currentAge < 18 || currentAge > 64 ||
-    monthlyAmount < 2000 || monthlyAmount > 1000000 ||
-    retirementAge < 65 || retirementAge > 90 ||
-    retirementAge <= currentAge
-  ) {
-    amount.textContent = "Revisa tus datos";
-    caption.textContent =
-      "Edad: 18–64; aportación: $2,000–$1,000,000 al mes; retiro: 65–90 años.";
-    draw([0, 1]);
-    return;
-  }
-
-  const result = project(currentAge, monthlyAmount, retirementAge);
-  amount.textContent = fmt(result.balance);
-  caption.textContent =
-    `En ${result.years} años habrías aportado ${fmt(result.contributions)}. ` +
-    "Supuesto: 10% anual, sin inflación, comisiones ni impuestos.";
-
-  draw(result.points);
-}
-
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  updateCalculator();
-});
-
-[age, monthly, retire].forEach(input => {
-  input.addEventListener("input", updateCalculator);
-});
-
-window.addEventListener("resize", updateCalculator);
-updateCalculator();
+document.getElementById("retirementForm").addEventListener("submit",e=>{e.preventDefault();const result=calculateRetirement();if(result)animateProjection(result);});
+const simulator=document.getElementById("simulador");
+function openSimulator(e){if(e)e.preventDefault();simulator.classList.add("is-open");document.body.classList.add("modal-active");document.getElementById("ageNow").focus();}
+function closeSimulator(){simulator.classList.remove("is-open");document.body.classList.remove("modal-active");}
+document.querySelectorAll("[data-open-sim],a[href='#simulador']").forEach(el=>el.addEventListener("click",openSimulator));
+document.getElementById("closeSimulator").addEventListener("click",closeSimulator);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSimulator();});
+window.addEventListener("resize",()=>{if(latestSimulation&& !document.getElementById("resultPanel").hidden)drawMiniChart(latestSimulation.annual||[]);});
 </script>
 </body>
 </html>
