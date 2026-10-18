@@ -1,5 +1,5 @@
 'use strict';
-const WHATSAPP_NUMBER='524423776762';
+const WHATSAPP_NUMBER='524423777762';
 const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.',simulador:'Hola, Gerardo. Quiero revisar mi proyección de retiro contigo.',retiro:'Hola, Gerardo. Me interesa una proyección de plan de retiro.',seguros:'Hola, Gerardo. Quiero revisar seguros de gastos médicos mayores, vida o residencial.',bolsa:'Hola, Gerardo. Quiero asesoría para invertir en bolsa.',auto:'Hola, Gerardo. Quiero revisar un seguro para mi auto.'};
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);

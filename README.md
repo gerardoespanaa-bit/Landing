@@ -16,4 +16,4 @@ El plazo enviado al motor se limita a 25 años, conservando las aportaciones has
 
 Referencia fiscal: [SAT, aportaciones complementarias de retiro](https://www.sat.gob.mx/minisitio/DeduccionesPersonales/aportaciones_complementarias.html). La referencia de ISR del 20% no es un cálculo personalizado y está sujeta a requisitos y límites.
 
-Único teléfono encontrado, consistente desde el primer commit: `+52 442 377 6762`. Se verifican estructura de URL y mensajes, pero la titularidad y disponibilidad de la cuenta deben confirmarse con Gerardo. No se enviaron mensajes. AMIB, CNSF y relación con Allianz se comunican con vigencia/documentación pendiente de verificación; EBC indica titulación pendiente.
+Teléfono corregido y confirmado por Gerardo: `+52 442 377 7762`. Se verifican estructura de URL y mensajes, con número confirmado por el propietario. No se enviaron mensajes. AMIB, CNSF y relación con Allianz se comunican con vigencia/documentación pendiente de verificación; EBC indica titulación pendiente.
