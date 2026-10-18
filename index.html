@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -34,7 +34,12 @@ section.content-section{padding:92px 0}.section-heading{max-width:710px;margin-b
 .result-caption{color:#d6e5f2;font-size:.78rem;margin:0 auto 12px;max-width:390px}
 .mini-chart-wrap{height:95px;margin:0 auto 13px;max-width:440px}
 #miniGrowthChart{width:100%;height:100%;display:block}
-.result-cta{width:100%;font-size:.87rem;padding:13px 12px}\n.sim-disclaimer{text-align:left;font-size:.78rem;line-height:1.65;color:#53677a;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}\n.sim-disclaimer p{margin:0 0 10px}\n.simulator-chart{display:none;height:140px;max-width:100%;margin:12px auto}\n.simulator-chart.is-visible{display:block}\n.calculating-message{margin:12px 0;color:var(--navy)}
+.result-cta{width:100%;font-size:.87rem;padding:13px 12px}
+.sim-disclaimer{text-align:left;font-size:.78rem;line-height:1.65;color:#53677a;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.sim-disclaimer p{margin:0 0 10px}
+.simulator-chart{display:none;height:140px;max-width:100%;margin:12px auto}
+.simulator-chart.is-visible{display:block}
+.calculating-message{margin:12px 0;color:var(--navy)}
 .service-card{position:relative;overflow:hidden}
 .service-card.has-photo{background-size:cover;background-position:center;color:#fff;min-height:290px;justify-content:flex-end}
 .service-card.has-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,38,62,.08) 0%,rgba(12,38,62,.82) 100%)}
@@ -64,6 +69,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 .btn-wa:hover{background:#edf3f8}
 @media(max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-photo{height:420px;grid-row:2}.sim-shell#simulador{padding:10px}.retirement-result{margin:0}.calc-form{grid-template-columns:1fr}.calc-form label:nth-child(3),.calc-btn{grid-column:auto}}
 
+[hidden]{display:none!important}.simulator-chart.is-visible{height:200px;max-width:640px}.service-card a:after{content:"";position:absolute;inset:0}.service-card .btn{position:static}.service-card:focus-within{outline:3px solid #285b88}.wa-float{background:var(--navy);color:white}dialog{border:1px solid var(--line);border-radius:24px;padding:28px;width:min(520px,calc(100% - 28px));max-height:90dvh;overflow:auto;color:var(--ink)}dialog::backdrop{background:rgba(7,24,43,.68)}dialog textarea{width:100%;min-height:140px;padding:12px;font:inherit;border:1px solid var(--line);border-radius:12px}dialog .btn{margin-top:16px}.sim-shell#simulador{max-height:calc(100dvh - 24px)}:focus-visible{outline:3px solid #5499cf;outline-offset:4px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -102,24 +108,25 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
       <div class="sim-top"><strong id="simTitle">Calcula tu retiro</strong><span class="live-tag">Proyección ilustrativa</span></div>
       <form class="calc-form" id="retirementForm">
         <label>Edad actual <input id="ageNow" type="number" min="18" max="64" value="35" required></label>
-        <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" type="number" min="2000" max="1000000" step="100" value="2000" required><small>MXN</small></span></label>
+        <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" type="number" min="2000" max="1000000" step="1" value="2000" required><small>MXN</small></span></label>
         <label>Edad de retiro <input id="ageRetirement" type="number" min="65" max="90" value="65" required></label>
         <button class="btn btn-primary calc-btn" id="calculateButton" type="submit">Calcular mi proyección</button>
-        <div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
+        <p id="calculationError" role="alert" hidden></p><div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
       </form>
-      <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" aria-label="Gráfica ilustrativa del crecimiento del fondo"></canvas></div>
+
       <div class="retirement-result" id="resultPanel" aria-live="polite" hidden>
         <p class="result-label">Tu retiro estimado podría ser</p>
-        <div class="retirement-amount" id="retirementAmount">$0</div>
+        <div class="retirement-amount" id="retirementAmount">—</div>
+        <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Evolución anual del saldo proyectado"></canvas></div><p id="chartSummary" class="result-caption"></p>
         <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
-        
+
         <a class="btn btn-wa result-cta" href="#" data-wa="simulador">Quiero revisar mi proyección por WhatsApp</a>
       </div>
       <div class="sim-note sim-disclaimer">
         <p><strong>Importante sobre esta proyección</strong></p>
         <p>Se utiliza un rendimiento bruto ilustrativo del 10% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
-        <p>La cifra considera cargos de administración, gestión y cargos fijos, así como un bono de fidelidad proyectado, sujeto a las condiciones del plan. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
-        <p><strong>*Posible beneficio fiscal anual:</strong> se utiliza una referencia fija de ISR del 20%. Se supone que la aportación considerada es deducible, sujeta al límite del 10% de los ingresos acumulables, cinco UMA anuales y los demás requisitos del Artículo 151. El beneficio real puede ser menor o nulo; lo revisaremos contigo en la asesoría.</p>
+        <p>Se conserva el motor existente, que aplica supuestos de administración (1.5% trimestral sobre saldo inicial), gestión (0.1% mensual), cargo inicial de $500, cargo mensual de 25 UDIS desde el mes 19, UDI fija de $8.81 y una tabla de bono con tasa ilustrativa del 9%. Estos parámetros, su tratamiento de IVA, la elegibilidad del bono y su aplicación después de 25 años no están verificados contra un contrato vigente. La cifra es un escenario técnico provisional; no es una cotización oficial ni confirma los costos o beneficios de un producto. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
+        <p><strong>*Posible beneficio fiscal anual:</strong> una tasa de ISR del 20% sería únicamente una referencia, no una devolución asegurada. No se calcula un beneficio fiscal personalizado en este simulador. La deducibilidad está sujeta al límite del 10% de los ingresos acumulables, cinco UMA anuales y los demás requisitos del Artículo 151. El beneficio real puede ser menor o nulo; lo revisaremos contigo en la asesoría.</p>
         <p>La proyección se muestra antes de impuestos al retiro. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
       </div>
     </div>
@@ -141,8 +148,9 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
       <p class="muted">Te ayudo a revisar opciones de retiro, inversión y protección patrimonial de acuerdo con tus objetivos.</p>
       <div class="credential-list">
         <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><div><strong>Estudios en Finanzas y Banca</strong><p>Escuela Bancaria y Comercial (EBC). Estudios concluidos; titulación pendiente.</p></div></div>
-        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="m8.2 13-1 8 4.8-2.5 4.8 2.5-1-8"/></svg></span><div><strong>AMIB Figura 3 · Serie 210</strong><p>Asesor en Estrategias de Inversión. Acreditación profesional AMIB indicada.</p></div></div>
+        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="m8.2 13-1 8 4.8-2.5 4.8 2.5-1-8"/></svg></span><div><strong>AMIB Figura 3 · Serie 210</strong><p>Asesor en Estrategias de Inversión. Credencial comunicada; vigencia pendiente de verificación documental.</p></div></div>
         <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></span><div><strong>Cédula de agente de seguros CNSF</strong><p>Cédula A. Los datos de registro se compartirán y verificarán en asesoría.</p></div></div>
+        <div class="credential"><span class="credential-icon">A</span><div><strong>Agente de Allianz</strong><p>Referencia profesional comunicada; documentación y vigencia por verificar.</p></div></div>
       </div>
       <a class="btn btn-wa" href="#" data-wa="general">Agenda una asesoría</a>
     </div>
@@ -199,278 +207,8 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <a class="wa-float" href="#" data-wa="general" aria-label="Contactar por WhatsApp">
 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.16 1.6 5.97L.12 24l6.3-1.65a11.9 11.9 0 0 0 5.68 1.45h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.24-6.15-3.47-8.44ZM12.1 21.78a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.82 9.82 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.82 9.82 0 0 1 2.9 7c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg>
 </a>
-<script>
-const WHATSAPP_NUMBER = "524423776762"; // Confirmar que el número está correcto en formato internacional.
-const messages = {\n  simulador: "Hola, Gerardo. Acabo de calcular una proyección de retiro y quiero agendar una asesoría para revisarla contigo.",
-  general: "Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.",
-  retiro: "Hola, Gerardo. Quiero agendar una asesoría para conocer opciones de plan de retiro.",
-  seguros: "Hola, Gerardo. Quiero agendar una asesoría para revisar opciones de protección y seguros.",
-  bolsa: "Hola, Gerardo. Quiero agendar una asesoría para hablar sobre alternativas de inversión en bolsa.",
-  auto: "Hola, Gerardo. Quiero agendar una asesoría para conocer opciones de seguro para mi auto."
-};
-document.querySelectorAll("[data-wa]").forEach(a=>{
-  a.addEventListener("click",e=>{
-    e.preventDefault();
-    const key=a.getAttribute("data-wa")||"general";
-    const url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(messages[key]||messages.general);
-    window.open(url,"_blank","noopener,noreferrer");
-  });
-});
-const menuToggle=document.getElementById("menuToggle");
-const navLinks=document.getElementById("navLinks");
-menuToggle.addEventListener("click",()=>{const open=navLinks.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(open));});
-navLinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{navLinks.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");}));
-</script>
-<script>
-const bonoTable = {
-  5:[0,0,0,0,0], 6:[0,0,0,0,0], 7:[0,0,0,0,0], 8:[0,0,0,0,0], 9:[0,0,0,0,0],
-  10:[0,0.05,0.15,0.25,0.35], 11:[0,0.05,0.15,0.25,0.35], 12:[0,0.05,0.15,0.25,0.35],
-  13:[0,0.05,0.15,0.25,0.35], 14:[0,0.05,0.15,0.25,0.35],
-  15:[0,0.3,0.4,0.5,0.6], 16:[0,0.3,0.4,0.5,0.6], 17:[0,0.3,0.4,0.5,0.6],
-  18:[0,0.3,0.4,0.5,0.6], 19:[0,0.3,0.4,0.5,0.6],
-  20:[0,0.55,0.65,0.75,1.0], 21:[0,0.55,0.65,0.75,1.0], 22:[0,0.55,0.65,0.75,1.0],
-  23:[0,0.55,0.65,0.75,1.0], 24:[0,0.55,0.65,0.75,1.0], 25:[0,0.55,0.65,0.75,1.0],
-};
-const thresholds = [0, 12000, 36000, 60000, 90000];
-// Constantes fiscales 2025 (SMG diario zona A $278.80, UMA diaria $113.14, revaluación PLUS 4.21% anual)
-const UMA_DIARIA = 113.14;
-const TOPE151_BASE = 206367;  // 5 UMA's anuales (año 1); en el Excel este tope escala cada año con la inflación
-const TOPE185_BASE = 152000;  // tope anual Art. 185; también escala cada año con la inflación (igual que en el Excel)
-const PERIODOS = {"Mensual":12,"Trimestral":4,"Semestral":2,"Anual":1};
-const N_YEARS = 25;
-const SI_MESES = 18; // Saldo Inicial: primeros 18 meses
+<script src="engine.js" defer></script>
+<script src="app.js" defer></script>
 
-function bracketIndex(aportacionAnual){
-  let idx=0;
-  for(let i=0;i<thresholds.length;i++) if(aportacionAnual>=thresholds[i]) idx=i;
-  return idx;
-}
-function pctBono(plazo, aportacionAnualBase){
-  const p = Math.max(5, Math.min(25, Math.round(plazo)));
-  const row = bonoTable[p] || bonoTable[25];
-  return row[bracketIndex(aportacionAnualBase)];
-}
-
-function bracketIndex(aportacionAnual){
-  let idx=0;
-  for(let i=0;i<thresholds.length;i++) if(aportacionAnual>=thresholds[i]) idx=i;
-  return idx;
-}
-function pctBono(plazo, aportacionAnualBase){
-  const p = Math.max(5, Math.min(25, Math.round(plazo)));
-  const row = bonoTable[p] || bonoTable[25];
-  return row[bracketIndex(aportacionAnualBase)];
-}
-
-function simulate(inputs, totalYears){
-  const {edadActual, tipoPlan, plazo, periodicidad, isrPct, tasaRendimiento, inflacion, udiValor, overrides} = inputs;
-  const nY = totalYears || N_YEARS;
-  const tasaMensual = Math.pow(1+tasaRendimiento,1/12)-1;
-  // Tasa del Bono de Fidelidad: CETE + 5% anual garantizado, topado a 9% anual. El simulador proyecta con el tope de 9%.
-  const tasaBonoAnual = 0.09;
-  const tasaBonoMensual = Math.pow(1+tasaBonoAnual,1/12)-1;
-  const iva = tipoPlan==="No Deducible 93" ? 1 : 1.16;
-  const pagosPorAno = PERIODOS[periodicidad];
-
-  const aplicada=[];
-  for(let y=0;y<nY;y++){
-    if(y===0) aplicada.push(overrides[0] ?? 0);
-    else{
-      const ov = (y<overrides.length) ? overrides[y] : null;
-      aplicada.push((ov!==null && ov!==undefined) ? ov : aplicada[y-1]*(1+inflacion));
-    }
-  }
-  const aportacionAnual = aplicada.map(a=>a); // "aplicada" ya representa el monto ANUAL (Inversión Anual)
-  const aportacionAcumulada=[];
-  aportacionAnual.forEach((v,i)=>aportacionAcumulada.push(i===0? v : aportacionAcumulada[i-1]+v));
-
-  const pctB = pctBono(plazo, aportacionAnual[0]);
-
-  let SI=0, SC=0, P=0; // Saldo Inicial (meses 1-18), Saldo Comprometido (mes 19+), Saldo de Bono
-  const anual=[];
-  for(let y=1;y<=nY;y++){
-    for(let m=1;m<=12;m++){
-      const numMesGlobal=(y-1)*12+m;
-      const enSI = numMesGlobal<=SI_MESES;
-      const paga = periodicidad==="Mensual" ? true :
-        periodicidad==="Trimestral" ? ((m-1)%3===0) :
-        periodicidad==="Semestral" ? ((m-1)%6===0) : (m===1);
-      const E = paga ? aplicada[y-1]/pagosPorAno : 0;
-
-      const E_SI = enSI ? E : 0;
-      const E_SC = enSI ? 0 : E;
-
-      // Saldo Inicial: recibe aportaciones solo durante los primeros 18 meses, pero sigue
-      // vivo y pagando sus propios cargos (Gestión 0.1% mensual + Administración 1.5%
-      // trimestral) mientras la póliza esté en vigor, tal como marcan las Condiciones
-      // Generales ("Cargo Administrativo: hasta 1.5% trimestral... sobre el Fondo
-      // Individual en Administración Inicial").
-      {
-        const F = SI;
-        const interes = (F+E_SI)*tasaMensual;
-        const cargoFijoInicial = numMesGlobal===1 ? -500 : 0;
-        const cargoAdmin = (numMesGlobal%3===0) ? -(F+E_SI+interes+cargoFijoInicial)*0.015*iva : 0;
-        const cargoGestion = -(F+E_SI+interes+cargoFijoInicial+cargoAdmin)*0.001*iva;
-        SI = F+E_SI+interes+cargoFijoInicial+cargoAdmin+cargoGestion;
-      }
-      // Saldo Comprometido (mes 19+): recibe las aportaciones una vez terminado el Plazo
-      // Inicial; paga Gestión 0.1% mensual + Cargo Fijo de 25 UDIS al mes (unificado para
-      // los tres artículos, conforme a las versiones vigentes de las Condiciones Generales).
-      if(!enSI){
-        const F = SC;
-        const interes = (F+E_SC)*tasaMensual;
-        const cargoFijoUDI = -25*udiValor;
-        const cargoGestion = -(F+E_SC+interes+cargoFijoUDI)*0.001*iva;
-        SC = F+E_SC+interes+cargoFijoUDI+cargoGestion;
-      }
-
-      // Bono de Fidelidad: propia tasa (inflación+5%, tope 9%), mismos cargos que Saldo Inicial.
-      // El bono se calcula ÚNICAMENTE sobre las aportaciones del primer año (meses 1-12): a
-      // partir del mes 13 ya no entran nuevas aportaciones al bono, aunque su saldo sigue
-      // generando interés y pagando sus propios cargos como cualquier otro año.
-      const bonoDelMes = (numMesGlobal<=12) ? E*pctB : 0;
-      const Fb = P;
-      const interesBono = (Fb+bonoDelMes)*tasaBonoMensual;
-      const cargoAdminBono = (numMesGlobal%3===0) ? -(Fb+bonoDelMes+interesBono)*0.015 : 0;
-      const cargoGestionBono = -(Fb+bonoDelMes+interesBono+cargoAdminBono)*0.001;
-      P = Fb+bonoDelMes+interesBono+cargoAdminBono+cargoGestionBono;
-    }
-    const edad = edadActual+y;
-    const saldoAlVencer = SI+SC+P; // valor total si se cumple el plazo comprometido y el esquema de aportaciones
-    // Antes de cumplir el plazo comprometido, el Saldo Inicial (meses 1-18) y el Bono de Fidelidad
-    // NO son líquidos: solo el Saldo Comprometido lo es (igual que Resumen!O en el Excel).
-    // Al cumplirse el plazo comprometido, TODO el fondo se libera (Saldo Inicial + Saldo Comprometido + Bono).
-    const saldoDisponible = (y>=plazo) ? saldoAlVencer : SC;
-    let tope=0;
-    if(tipoPlan==="Deducible 151") tope=TOPE151_BASE*Math.pow(1+inflacion,y-1);
-    else if(tipoPlan==="Deducible 185") tope=TOPE185_BASE*Math.pow(1+inflacion,y-1);
-    const beneficioAno = tipoPlan==="No Deducible 93" ? 0 : Math.min(aportacionAnual[y-1],tope)*isrPct;
-    anual.push({ano:y, edad, aportacionAnual:aportacionAnual[y-1], aportacionAcumulada:aportacionAcumulada[y-1],
-      saldoDisponible, saldoBono:P, saldoTotal:saldoAlVencer, beneficioAno, aplicada:aplicada[y-1],
-      isOverride: overrides[y-1]!==null && overrides[y-1]!==undefined, cumplioPlazo: y>=plazo});
-  }
-  let benAcum=0, benAcumSimple=0;
-  anual.forEach(row=>{
-    benAcum = row.beneficioAno + benAcum*(1+tasaRendimiento); // reinvertido a la tasa de rendimiento (para la corrida/tabla)
-    benAcumSimple += row.beneficioAno; // suma simple año con año, SIN reinversión (para la tarjeta KPI)
-    row.beneficioAcumulado = benAcum;
-    row.beneficioAcumuladoSimple = benAcumSimple;
-  });
-  anual.forEach(row=>{
-    // Saldo Neto Estimado post-ISR, según reglas exactas por artículo.
-    // Exención fiscal total: se cumple SOLO cuando se cumplen AMBOS filtros a la vez:
-    //   1) Edad mínima que marca la ley (60 años Art. 93 | 65 años Art. 151 y 185)
-    //   2) Mínimo 5 años de permanencia dentro del plan
-    // Al cumplirse ambos, el Saldo Neto = Saldo Disponible (100% libre de impuestos), y solo se
-    // descuenta el 1% de comisión por retiro anticipado si aún no se cumple el plazo comprometido.
-    const edadMinimaLey = tipoPlan==="No Deducible 93" ? 60 : 65;
-    // Exención total: SOLO aplica a Art. 93 y Art. 151 (exención tipo pensión, art. 93 LISR).
-    // El Art. 185 NUNCA es libre de impuestos: por ley, todo lo retirado se acumula como
-    // ingreso ordinario del año, topado únicamente a la tasa marginal que tenía el cliente
-    // en el año en que hizo la aportación (no hay monto exento).
-    const exentoTotal = tipoPlan!=="Deducible 185" && row.edad>=edadMinimaLey && row.ano>=5;
-    let neto;
-    if(exentoTotal){
-      neto = row.cumplioPlazo ? row.saldoDisponible : row.saldoDisponible*0.99;
-    } else if(tipoPlan==="No Deducible 93"){
-      // Antes de cumplir ambos filtros: 20% sobre el interés real (base: Saldo Disponible).
-      neto = row.saldoDisponible - 0.20*Math.max(0,row.saldoDisponible-row.aportacionAcumulada);
-    } else if(tipoPlan==="Deducible 151"){
-      // Antes de cumplir ambos filtros: Saldo Disponible*0.80 (Fórmula exacta del Excel, Resumen!Q)
-      neto = row.saldoDisponible*0.80;
-    } else {
-      neto = row.saldoDisponible*0.65; // Art. 185: tasa máxima vigente 35% antes de cumplir ambos filtros
-    }
-    row.saldoNeto=neto;
-  });
-  return anual;
-}
-
-// ============ ESTADO ============
-const state = {
-  nombre:"",
-  edadActual:35,
-  tipoPlan:"Deducible 151",
-  plazo:30,
-  periodicidad:"Mensual",
-  isrPct:0.25,
-  tasaRendimiento:0.10,
-  inflacion:0,
-  udiValor:8.81,
-  overrides: Array(N_YEARS).fill(null),
-};
-state.overrides[0] = 24000;
-
-const planHints = {
-  "No Deducible 93": "Sin deducción fiscal en aportación. Antes de cumplir 60 años y 5 de permanencia: retención de 20% sobre el interés real. Cumplidos ambos filtros: exento en su totalidad (menos 1% de comisión si aún no se cumple el plazo comprometido).",
-  "Deducible 151": "Aportación deducible hasta $206,367 anuales (5 UMA's), tope que crece cada año con la inflación. Antes de cumplir 65 años y 5 de permanencia: retención de 20% sobre el saldo. Cumplidos ambos filtros: exento en su totalidad (menos 1% de comisión si aún no se cumple el plazo comprometido).",
-  "Deducible 185": "Aportación deducible hasta $152,000 anuales. El Art. 185 nunca es libre de impuestos: por ley, todo lo retirado se acumula como ingreso ordinario del año (topado a tu tasa marginal del año de aportación). En esta ilustración se aplica una retención simplificada del 35% (tasa máxima vigente) en todo momento.",
-};
-const planLabels = {
-  "No Deducible 93": "Art. 93 — No Deducible",
-  "Deducible 151": "Art. 151 — Deducible",
-  "Deducible 185": "Art. 185 — Deducible",
-};
-const planHintsShort = {
-  "No Deducible 93": "Sin deducción en aportación. Antes de 60 años + 5 de permanencia: retención de 20% sobre el interés real. Cumplidos ambos: exento en su totalidad (menos 1% si aún no se cumple el plazo).",
-  "Deducible 151": "Deducible hasta $206,367 anuales (5 UMA), tope que crece con la inflación. Antes de 65 años + 5 de permanencia: retención de 20% sobre el saldo. Cumplidos ambos: exento en su totalidad.",
-  "Deducible 185": "Deducible hasta $152,000 anuales, tope que crece con la inflación. El Art. 185 nunca es libre de impuestos: se acumula como ingreso ordinario, topado a tu tasa marginal del año de aportación. Ilustrado aquí con retención simplificada del 35% siempre.",
-};
-
-const fmtMXN = n => new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",maximumFractionDigits:0}).format(Math.max(0,n||0));
-const ageNowEl=document.getElementById("ageNow"), monthlyEl=document.getElementById("monthlyContribution"), ageRetireEl=document.getElementById("ageRetirement");
-const amountEl=document.getElementById("retirementAmount"), captionEl=document.getElementById("retirementCaption"), chart=document.getElementById("miniGrowthChart");
-let latestSimulation=null;
-function drawMiniChart(rows){
- const ctx=chart.getContext("2d"),dpr=window.devicePixelRatio||1,w=Math.max(280,chart.clientWidth||400),h=Math.max(80,chart.clientHeight||95);
- chart.width=w*dpr;chart.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);if(!rows||!rows.length)return;
- const vals=rows.map(r=>Math.max(0,r.saldoTotal||0)),max=Math.max(...vals,1),pad=7;
- ctx.strokeStyle="rgba(255,255,255,.14)";ctx.lineWidth=1;
- for(let i=1;i<=3;i++){const y=pad+(h-2*pad)*i/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
- const pts=vals.map((v,i)=>({x:pad+(w-2*pad)*(i/Math.max(1,vals.length-1)),y:h-pad-(h-2*pad)*(v/max)}));
- const grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,"rgba(134,203,255,.42)");grad.addColorStop(1,"rgba(134,203,255,0)");
- ctx.beginPath();ctx.moveTo(pts[0].x,h-pad);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,h-pad);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
- ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle="#a7d9ff";ctx.lineWidth=2.7;ctx.lineJoin="round";ctx.stroke();
- const last=pts[pts.length-1];ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
-}
-function calculateRetirement(){
- let age=Math.round(Number(ageNowEl.value)),monthly=Number(monthlyEl.value),retire=Math.round(Number(ageRetireEl.value));
- if(!Number.isFinite(age)||!Number.isFinite(monthly)||!Number.isFinite(retire)){return null;}
- age=Math.max(18,Math.min(64,age));monthly=Math.max(2000,Math.min(1000000,monthly));retire=Math.max(65,Math.min(90,retire));
- ageNowEl.value=age;monthlyEl.value=monthly;ageRetireEl.value=retire;
- const years=retire-age;
- const inputs={edadActual:age,tipoPlan:"Deducible 151",plazo:years,periodicidad:"Mensual",isrPct:.25,tasaRendimiento:.10,inflacion:0,udiValor:8.81,overrides:[monthly*12]};
- latestSimulation=simulate(inputs,years);
- const rows=Array.isArray(latestSimulation)?latestSimulation:[],last=rows[rows.length-1],amount=last?Number(last.saldoTotal)||0:0;
- return {rows,amount,retire,years};
-}
-function animateProjection(result){
- const panel=document.getElementById("resultPanel"),message=document.getElementById("calculatingMessage"),graphWrap=document.querySelector(".simulator-chart"),fill=document.getElementById("progressFill"),button=document.getElementById("calculateButton");
- panel.hidden=true;message.hidden=false;graphWrap.classList.add("is-visible");button.disabled=true;button.textContent="Calculando…";
- const duration=4200,start=performance.now(),rows=result.rows;
- function frame(now){
-  const t=Math.min(1,(now-start)/duration),idx=Math.max(1,Math.ceil(t*(rows.length-1))),partial=rows.slice(0,idx);
-  const currentRow=partial[partial.length-1];
-  amountEl.textContent=fmtMXN(currentRow ? currentRow.saldoTotal : 0);
-  drawMiniChart(partial);
-  if(fill)fill.style.width=(t*100)+"%";
-  if(t<1){requestAnimationFrame(frame);}
-  else{
-   amountEl.textContent=fmtMXN(result.amount);
-   captionEl.textContent=`Proyección ilustrativa a los ${result.retire} años · ${result.years} años de ahorro estimado`;
-   drawMiniChart(rows);message.hidden=true;panel.hidden=false;graphWrap.classList.add("is-visible");button.disabled=false;button.textContent="Volver a calcular";
-  }
- }
- requestAnimationFrame(frame);
-}
-document.getElementById("retirementForm").addEventListener("submit",e=>{e.preventDefault();const result=calculateRetirement();if(result)animateProjection(result);});
-const simulator=document.getElementById("simulador");
-function openSimulator(e){if(e)e.preventDefault();simulator.classList.add("is-open");document.body.classList.add("modal-active");document.getElementById("ageNow").focus();}
-function closeSimulator(){simulator.classList.remove("is-open");document.body.classList.remove("modal-active");}
-document.querySelectorAll("[data-open-sim],a[href='#simulador']").forEach(el=>el.addEventListener("click",openSimulator));
-document.getElementById("closeSimulator").addEventListener("click",closeSimulator);
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSimulator();});
-window.addEventListener("resize",()=>{if(latestSimulation&& !document.getElementById("resultPanel").hidden)drawMiniChart(Array.isArray(latestSimulation)?latestSimulation:[]);});
-</script>
-</body>
+<dialog id="contactDialog" aria-labelledby="contactTitle"><button class="modal-close" id="closeContact" aria-label="Cerrar contacto">×</button><h2 id="contactTitle">Agenda una asesoría</h2><p>Coordinamos tu asesoría directamente por WhatsApp.</p><p>Destino: +52 442 377 6762</p><label for="contactMessage">Tu mensaje</label><textarea id="contactMessage" maxlength="2000"></textarea><a class="btn btn-primary" id="contactContinue" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a></dialog></body>
 </html>
