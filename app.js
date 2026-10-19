@@ -9,7 +9,7 @@ function project(age,monthly,retire){
  const years=retire-age;
  const rows=simulate({edadActual:age,tipoPlan:'Deducible 151',plazo:Math.min(25,years),periodicidad:'Mensual',isrPct:0,tasaRendimiento:.10,inflacion:0,udiValor:8.81,overrides:[monthly*12]},years);
  if(!Array.isArray(rows)||rows.length!==years||rows.some(r=>!Number.isFinite(r.saldoTotal)||r.saldoTotal<=0))throw Error('No fue posible obtener una proyección válida. Revisa los datos.');
- return {rows,years,retire,monthly,amount:rows.at(-1).saldoTotal};
+ return {rows,years,retire,monthly,amount:rows.at(-1).saldoTotal,contributions:rows.at(-1).aportacionAcumulada,taxAnnual:annualTaxReference(monthly)};
 }
 function draw(t){
  if(!latest)return;
@@ -27,17 +27,34 @@ function draw(t){
 function cancel(){cancelAnimationFrame(frameId);button.disabled=false;button.textContent='Calcular mi proyección';$('calculatingMessage').hidden=true;}
 form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;cancel();$('calculationError').hidden=true;
  try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch(error){panel.hidden=true;$('calculationError').textContent=error.message;$('calculationError').hidden=false;return;}
- panel.hidden=false;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
+ panel.hidden=false;$('projectionMetrics').hidden=true;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
  const start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:4000;
- function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`${latest.years} años de aportaciones · retiro a los ${latest.retire} años · libre de impuestos*`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.monthly*12*latest.years)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);}}
+ function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} años`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;}}
  frameId=requestAnimationFrame(frame);
 });
 form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});
+const minimumAgeMessages={ageNow:'¡La edad mínima de inicio son 18 años!',ageRetirement:'Cotizador permite edad mínima a los 65. Si te interesa retirarte antes agenda una asesoría para ver tu proyección.'};
+let ageMessages=new Map();
+function renderAgeMessages(){const notice=$('ageNotice');notice.replaceChildren();for(const text of ageMessages.values()){const p=document.createElement('p');p.textContent=text;notice.append(p);}notice.hidden=ageMessages.size===0;}
+for(const id of Object.keys(minimumAgeMessages)){
+ const input=$(id),minimum=Number(input.min);
+ function validateMinimum(){if(input.value!==''&&Number.isFinite(input.valueAsNumber)&&input.valueAsNumber<minimum)ageMessages.set(id,minimumAgeMessages[id]);else ageMessages.delete(id);renderAgeMessages();}
+ input.addEventListener('input',validateMinimum);
+ input.addEventListener('invalid',validateMinimum);
+ input.addEventListener('blur',()=>{if(input.value!==''&&Number.isFinite(input.valueAsNumber)&&input.valueAsNumber<minimum){input.value=String(minimum);ageMessages.set(id,minimumAgeMessages[id]);renderAgeMessages();}});
+ input.addEventListener('keydown',event=>{if(event.key==='ArrowDown'&&input.valueAsNumber<=minimum){event.preventDefault();ageMessages.set(id,minimumAgeMessages[id]);renderAgeMessages();}});
+}
+document.querySelectorAll('[data-age-step]').forEach(step=>step.addEventListener('click',()=>{
+ const input=$(step.dataset.ageStep),delta=Number(step.dataset.delta),minimum=Number(input.min),maximum=Number(input.max),current=input.valueAsNumber;
+ if(delta<0&&Number.isFinite(current)&&current<=minimum){input.value=String(minimum);ageMessages.set(input.id,minimumAgeMessages[input.id]);renderAgeMessages();return;}
+ input.value=String(Math.min(maximum,Math.max(minimum,Number.isFinite(current)?current+delta:minimum)));
+ input.dispatchEvent(new Event('input',{bubbles:true}));
+}));
 const simulator=$('simulador');
 function closeSimulator(){const interrupted=button.disabled;cancel();if(interrupted){latest=null;panel.hidden=true;panel.setAttribute('aria-busy','false');}simulator.classList.remove('is-open');document.body.classList.remove('modal-active');returnFocus?.focus();}
 document.querySelectorAll('[data-open-sim],a[href="#simulador"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();returnFocus=el;simulator.classList.add('is-open');document.body.classList.add('modal-active');$('ageNow').focus();if(latest)draw(progress);}));
 $('closeSimulator').addEventListener('click',closeSimulator);
-document.addEventListener('keydown',e=>{if(!simulator.classList.contains('is-open')||$('contactDialog').open)return;if(e.key==='Escape')closeSimulator();if(e.key==='Tab'){const items=[...simulator.querySelectorAll('button,input,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+document.addEventListener('keydown',e=>{if(!simulator.classList.contains('is-open')||$('contactDialog').open||$('credentialDialog').open)return;if(e.key==='Escape')closeSimulator();if(e.key==='Tab'){const items=[...simulator.querySelectorAll('button,input,a[href],summary')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 window.addEventListener('resize',()=>draw(progress));
 const contact=$('contactDialog');
 let contactContext='general';
@@ -83,3 +100,12 @@ profileButtons.forEach(button=>button.addEventListener('click',()=>{
  $('profileStatus').textContent=slides[index].querySelector('figcaption').textContent;
  if(matchMedia('(max-width: 900px)').matches)$('profileViewer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
 }));
+
+const credentialDialog=$('credentialDialog');
+const credentialDocuments={amib:{title:'Certificado AMIB · Serie 210',images:[['assets/certificado-amib.png','Certificado AMIB de Gerardo López España, Serie 210']]},cnsf:{title:'Cédula CNSF · M401339',images:[['assets/cedula-cnsf-1.png','Cédula CNSF, frente; identificadores personales omitidos'],['assets/cedula-cnsf-2.png','Cédula CNSF, reverso con número y vigencia']]}};
+document.querySelectorAll('[data-document]').forEach(trigger=>trigger.addEventListener('click',()=>{
+ const key=trigger.dataset.document,documentData=credentialDocuments[key];$('credentialTitle').textContent=documentData.title;const content=$('credentialContent');content.replaceChildren();content.classList.toggle('is-cnsf',key==='cnsf');
+ for(const [src,alt] of documentData.images){const img=document.createElement('img');img.src=src;img.alt=alt;content.append(img);}
+ credentialDialog.showModal();document.body.classList.add('credential-active');content.scrollTop=0;
+}));
+$('closeCredential').addEventListener('click',()=>credentialDialog.close());credentialDialog.addEventListener('close',()=>document.body.classList.remove('credential-active'));

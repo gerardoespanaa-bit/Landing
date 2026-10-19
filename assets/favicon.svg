@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 300 250"><g id="GE" aria-label="Monograma GE entrelazado">
-<path id="G-curva" fill="#0B2545" d="M192.904 33.096 A113 113 0 1 0 113 226 H125 V194 H113 A81 81 0 1 1 170.276 55.724 Z"/>
-<path id="GE-union" fill="#0B2545" d="M86 116 H165 Q169 116 169 120 V194 H275 Q279 194 279 198 V222 Q279 226 275 226 H137 V148 H86 Q82 148 82 144 V120 Q82 116 86 116 Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 300 250"><rect x="-10" y="-10" width="300" height="250" rx="38" fill="#0B2545"/><g id="GE" aria-label="Monograma GE entrelazado">
+<path id="G-curva" fill="#FFFFFF" d="M192.904 33.096 A113 113 0 1 0 113 226 H125 V194 H113 A81 81 0 1 1 170.276 55.724 Z"/>
+<path id="GE-union" fill="#FFFFFF" d="M86 116 H165 Q169 116 169 120 V194 H275 Q279 194 279 198 V222 Q279 226 275 226 H137 V148 H86 Q82 148 82 144 V120 Q82 116 86 116 Z"/>
 <rect id="E-brazo-superior" x="132" y="72" width="147" height="32" rx="4" fill="#3E4EEA"/>
 <rect id="E-brazo-medio" x="179" y="132" width="100" height="32" rx="4" fill="#3E4EEA"/>
 </g></svg>
