@@ -21,3 +21,11 @@ Fuentes: [SAT, aportaciones de retiro](https://www.sat.gob.mx/minisitio/Deduccio
 Las credenciales se muestran en un visor modal de imágenes, sin enlaces ni pestañas PDF. Se retiran los PDF del árbol actual; las imágenes pueden guardarse o capturarse y el historial público puede conservar versiones anteriores. La copia CNSF omite CURP, RFC y QR. Las fechas provienen de documentos recibidos, sin consulta de registro en vivo.
 
 WhatsApp confirmado: +52 442 377 7762. El 30% de descuento de auto es texto comercial proporcionado por el propietario; las condiciones se consultan al cotizar. No se enviaron mensajes durante las pruebas.
+
+## Privacidad y medición preparadas
+
+`aviso-de-privacidad.html` es un borrador con los datos confirmados y campos pendientes de aprobación. Se accede desde el pie, el contacto por WhatsApp y Sobre mí. No publicar el borrador como aviso definitivo. `measurement-config.js` conserva los IDs vacíos y la integración desactivada. Los eventos de `measurement.js` se habilitan solo con IDs reales, aviso aprobado, configuración activada y aceptación analítica. No se modifica el motor financiero.
+
+Consultar [PRIVACIDAD-Y-MEDICION.md](PRIVACIDAD-Y-MEDICION.md) para datos pendientes, guía de GTM/GA4, consentimiento y verificación final obligatoria con Tag Assistant y DebugView. Esa verificación sigue pendiente de los IDs y del contenedor real.
+
+`node test-measurement.cjs` ejecuta pruebas de navegador de activación, consentimiento, cargas únicas, eventos, exclusión de datos privados, cálculos, contacto y móvil. Requiere Playwright instalado en el entorno de desarrollo y Chrome; no añade dependencias de producción. Se puede indicar `PLAYWRIGHT_MODULE` con la ruta al módulo existente y `CHROME_PATH` con la ruta del ejecutable. `QA_OUTPUT` permite guardar capturas y resultados fuera del repositorio. Las solicitudes de GTM y WhatsApp se interceptan: estas pruebas no envían eventos a Google ni mensajes y no equivalen a DebugView.
