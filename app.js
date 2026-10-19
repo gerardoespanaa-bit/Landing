@@ -4,6 +4,7 @@ const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer c
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 let latest=null,frameId=0,progress=1,returnFocus=null;
+const measure=(name,service,location)=>{try{window.LandingMeasurement?.track(name,service,location);}catch{/* Measurement must never block the calculator or contact. */}};
 function project(age,monthly,retire){
  if(!Number.isInteger(age)||age<18||age>64||!Number.isInteger(retire)||retire<65||retire>90||!Number.isFinite(monthly)||monthly<2000||monthly>1000000)throw Error('Revisa las edades y una aportación mensual entre $2,000 y $1,000,000.');
  const years=retire-age;
@@ -42,7 +43,7 @@ form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm
  try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch(error){panel.hidden=true;$('calculationError').textContent=error.message;$('calculationError').hidden=false;return;}
  panel.hidden=false;$('projectionMetrics').hidden=true;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
  const start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:4000;
- function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} años`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;celebrateProjection();requestAnimationFrame(()=>{if(simulator.classList.contains('is-open'))$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
+ function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} ${latest.years===1?'año':'años'}`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;measure('simulator_complete','retiro','simulator');celebrateProjection();requestAnimationFrame(()=>{if(simulator.classList.contains('is-open'))$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
  frameId=requestAnimationFrame(frame);
 });
 form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});
@@ -85,12 +86,14 @@ document.querySelectorAll('[data-age-step]').forEach(step=>step.addEventListener
 }));
 const simulator=$('simulador');
 function closeSimulator(){const interrupted=button.disabled;cancel();if(interrupted){latest=null;panel.hidden=true;panel.setAttribute('aria-busy','false');}simulator.classList.remove('is-open');document.body.classList.remove('modal-active');returnFocus?.focus();}
-document.querySelectorAll('[data-open-sim],a[href="#simulador"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();returnFocus=el;simulator.classList.add('is-open');document.body.classList.add('modal-active');$('ageNow').focus();if(latest)draw(progress);}));
+document.querySelectorAll('[data-open-sim],a[href="#simulador"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();if(simulator.classList.contains('is-open'))return;returnFocus=el;measure('simulator_open','retiro',el.dataset.measureLocation);simulator.classList.add('is-open');document.body.classList.add('modal-active');$('ageNow').focus();if(latest)draw(progress);}));
 $('closeSimulator').addEventListener('click',closeSimulator);
 document.addEventListener('keydown',e=>{if(!simulator.classList.contains('is-open')||$('contactDialog').open||$('credentialDialog').open)return;if(e.key==='Escape')closeSimulator();if(e.key==='Tab'){const items=[...simulator.querySelectorAll('button,input,a[href],summary')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 window.addEventListener('resize',()=>draw(progress));
 const contact=$('contactDialog');
-let contactContext='general';
+let contactContext='general',contactLocation='hero';
+const contactClicks=new WeakMap();
+function measureContact(el,service,location){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service==='simulador'?'retiro':service,location);}
 const contactCopy={
  general:{title:'Agenda una asesoría',intro:'Coordinamos tu asesoría directamente por WhatsApp.'},
  retiro:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
@@ -107,7 +110,7 @@ function updateLink(){
  else $('contactContinue').removeAttribute('href');
 }
 document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e=>{
- e.preventDefault();contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';
+ e.preventDefault();contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';contactLocation=el.dataset.measureLocation;contactClicks.delete($('contactContinue'));
  const copy=contactCopy[contactContext];$('contactTitle').textContent=copy.title;$('contactIntro').textContent=copy.intro;$('contactIntro').parentElement.hidden=!copy.intro;$('contactExtras').replaceChildren();
  if(contactContext==='seguros'){
   const fieldset=document.createElement('fieldset');fieldset.className='protection-options';
@@ -120,7 +123,8 @@ document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e
  }
  $('contactMessage').value=messages[contactContext];updateLink();contact.showModal();
 }));
-$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true')e.preventDefault();});
+$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true'){e.preventDefault();return;}measureContact(e.currentTarget,contactContext,contactLocation);});
+document.querySelectorAll('[data-wa-social]').forEach(el=>el.addEventListener('click',()=>measureContact(el,'general',el.dataset.measureLocation)));
 $('contactMessage').addEventListener('input',updateLink);$('closeContact').addEventListener('click',()=>contact.close());
 $('menuToggle').addEventListener('click',()=>{$('menuToggle').setAttribute('aria-expanded',String($('navLinks').classList.toggle('open')));});
 $('navLinks').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{$('navLinks').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
