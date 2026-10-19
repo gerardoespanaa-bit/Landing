@@ -4,9 +4,9 @@ Se aplican las indicaciones de “Ediciones Página Web (2).pdf”: navegación 
 
 La galería muestra la foto original al pulsar Allianz, la foto de birrete al pulsar estudios y una vista del certificado AMIB al pulsar AMIB, con acceso al PDF completo. El documento recibido indica del 4 de junio de 2026 al 4 de junio de 2029. Esto no es una consulta en tiempo real a un registro de autorizaciones. El texto académico dice únicamente “Estudios en Escuela Bancaria y Comercial (EBC)”, sin afirmar título expedido.
 
-## Pendientes materiales
+## Consideraciones de revisión
 
-- La ruta virtual de Google Drive de la cédula CNSF devolvió acceso denegado incluso con autorización para el archivo y su carpeta. Se conserva un estado de revisión en asesoría al seleccionar CNSF. Hace falta adjuntar una copia accesible para integrar y revisar el documento.
+- Se integra la copia local de la cédula CNSF recibida: categoría A (Riesgos personales y familiares), número M401339, vigencia indicada del 21/10/2025 al 21/10/2028. Se muestran las dos caras y un PDF público; CURP, RFC y QR se ocultan mediante regeneración a partir de imágenes saneadas, sin texto o recursos recuperables del PDF original. El original no se sube al repositorio. Las fechas son documentales, sin afirmar una consulta en tiempo real al registro.
 - A petición del propietario, el encabezado del resultado dice “libre de impuestos*”. El asterisco remite a una aclaración visible de requisitos y límites de exención, y los detalles explican que el motor no calcula ISR ni garantiza un saldo neto exento. Se conserva saldoTotal sin modificar el motor o fabricar parámetros fiscales.
 - El chip de 30% de descuento y el texto de cotización instantánea se incluyen por indicación del propietario. La vigencia, elegibilidad y condiciones de la promoción requieren confirmación comercial al cotizar; no se inventan fechas o coberturas aplicables.
 
@@ -17,3 +17,5 @@ Foto del vehículo: Nissan Sentra 2024, [comunicado de Nissan México](https://m
 ## Comprobaciones
 
 `node test.cjs` pasa las cinco combinaciones financieras existentes; no se modifica engine.js. Chrome/Playwright: 1440, 1100, 900, 768, 620, 390 y 320 px; barra y redes visibles, sin desbordamiento; galería y retorno a fotografía; múltiples opciones de seguros y bloqueo sin selección; reinicio correcto entre servicios; mensajes y URL al número confirmado; detalles cerrados inicialmente; simulador operativo; sin errores JavaScript ni recursos locales rotos. No se enviaron mensajes de WhatsApp.
+
+La vista CNSF se comprobó en escritorio y móvil: ambas caras cargan, el visor se desplaza y el PDF público abre con dos páginas. La copia pública fue renderizada y revisada visualmente, y carece de texto seleccionable subyacente.
