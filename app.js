@@ -1,6 +1,6 @@
 'use strict';
 const WHATSAPP_NUMBER='524423777762';
-const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.',simulador:'Hola, Gerardo. Quiero revisar mi proyección de retiro contigo.',retiro:'Hola, Gerardo. Me interesa una proyección de plan de retiro.',seguros:'Hola, Gerardo. Quiero revisar seguros de gastos médicos mayores, vida o residencial.',bolsa:'Hola, Gerardo. Quiero asesoría para invertir en bolsa.',auto:'Hola, Gerardo. Quiero revisar un seguro para mi auto.'};
+const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.',simulador:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',retiro:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',seguros:'Hola Gerardo, quiero revisar una protección y su cotización',bolsa:'Hola Gerardo, me gustaría una asesoría para invertir en bolsa',auto:'Hola Gerardo, quisiera revisar una cotización para un auto'};
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 let latest=null,frameId=0,progress=1,returnFocus=null;
@@ -40,8 +40,46 @@ $('closeSimulator').addEventListener('click',closeSimulator);
 document.addEventListener('keydown',e=>{if(!simulator.classList.contains('is-open')||$('contactDialog').open)return;if(e.key==='Escape')closeSimulator();if(e.key==='Tab'){const items=[...simulator.querySelectorAll('button,input,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 window.addEventListener('resize',()=>draw(progress));
 const contact=$('contactDialog');
-function updateLink(){$('contactContinue').href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent($('contactMessage').value.trim()||messages.general)}`;}
-document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();$('contactMessage').value=messages[el.dataset.wa]||messages.general;updateLink();contact.showModal();}));
+let contactContext='general';
+const contactCopy={
+ general:{title:'Agenda una asesoría',intro:'Coordinamos tu asesoría directamente por WhatsApp.'},
+ retiro:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
+ simulador:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
+ seguros:{title:'Asesora tu protección',intro:''},
+ bolsa:{title:'Agenda una asesoría',intro:'Aprende los primeros pasos necesarios para comenzar a invertir en bolsa y al sentirte listo realiza tu primera compra de la mano de un asesor.'},
+ auto:{title:'¡Cotiza de inmediato con descuento!',intro:'Obtén una cotización instantánea mandando por mensaje los siguientes datos:'}
+};
+function protectionSelection(){return [...$('contactExtras').querySelectorAll('input:checked')].map(input=>input.value);}
+function updateLink(){
+ const enabled=contactContext!=='seguros'||protectionSelection().length>0;
+ $('contactContinue').setAttribute('aria-disabled',String(!enabled));
+ if(enabled)$('contactContinue').href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent($('contactMessage').value.trim()||messages.general)}`;
+ else $('contactContinue').removeAttribute('href');
+}
+document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e=>{
+ e.preventDefault();contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';
+ const copy=contactCopy[contactContext];$('contactTitle').textContent=copy.title;$('contactIntro').textContent=copy.intro;$('contactIntro').parentElement.hidden=!copy.intro;$('contactExtras').replaceChildren();
+ if(contactContext==='seguros'){
+  const fieldset=document.createElement('fieldset');fieldset.className='protection-options';
+  const legend=document.createElement('legend');legend.textContent='¿Qué quieres proteger?';fieldset.append(legend);
+  for(const value of ['Residencial','Vida','Gastos Médicos']){const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=value;input.name='protection';label.append(input,document.createTextNode(value));fieldset.append(label);}
+  fieldset.addEventListener('change',()=>{const values=protectionSelection();$('contactMessage').value=values.length?`Hola Gerardo, quiero revisar una protección de ${values.join(', ')} y su cotización`:messages.seguros;updateLink();});$('contactExtras').append(fieldset);
+ }else if(contactContext==='auto'){
+  const list=document.createElement('ul');for(const text of ['Marca','Modelo','Año','Código postal','Edad del conductor']){const item=document.createElement('li');item.textContent=text;list.append(item);}$('contactExtras').append(list);
+  const note=document.createElement('p');note.className='auto-conditions';note.textContent='Consulta las condiciones del descuento y su disponibilidad al cotizar.';$('contactExtras').append(note);
+ }
+ $('contactMessage').value=messages[contactContext];updateLink();contact.showModal();
+}));
+$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true')e.preventDefault();});
 $('contactMessage').addEventListener('input',updateLink);$('closeContact').addEventListener('click',()=>contact.close());
 $('menuToggle').addEventListener('click',()=>{$('menuToggle').setAttribute('aria-expanded',String($('navLinks').classList.toggle('open')));});
 $('navLinks').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{$('navLinks').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
+
+const profileButtons=[...document.querySelectorAll('[data-profile]')],slides=[...document.querySelectorAll('.profile-slide')];
+profileButtons.forEach(button=>button.addEventListener('click',()=>{
+ const index=Number(button.dataset.profile);$('profileTrack').style.transform=`translateX(-${index*100}%)`;
+ slides.forEach((slide,i)=>{slide.setAttribute('aria-hidden',String(i!==index));slide.inert=i!==index;});
+ profileButtons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+ $('profileStatus').textContent=slides[index].querySelector('figcaption').textContent;
+ if(matchMedia('(max-width: 900px)').matches)$('profileViewer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
+}));

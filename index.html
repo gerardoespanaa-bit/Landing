@@ -72,22 +72,24 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 [hidden]{display:none!important}.simulator-chart.is-visible{height:200px;max-width:640px}.service-card a:after{content:"";position:absolute;inset:0}.service-card .btn{position:static}.service-card:focus-within{outline:3px solid #285b88}.wa-float{background:var(--navy);color:white}dialog{border:1px solid var(--line);border-radius:24px;padding:28px;width:min(520px,calc(100% - 28px));max-height:90dvh;overflow:auto;color:var(--ink)}dialog::backdrop{background:rgba(7,24,43,.68)}dialog textarea{width:100%;min-height:140px;padding:12px;font:inherit;border:1px solid var(--line);border-radius:12px}dialog .btn{margin-top:16px}.sim-shell#simulador{max-height:calc(100dvh - 24px)}:focus-visible{outline:3px solid #5499cf;outline-offset:4px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .social-links{display:flex;align-items:center;gap:8px}.social-links .social-link{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-width:40px;min-height:40px;border:1px solid var(--line);border-radius:999px;color:var(--navy);text-decoration:none;background:white;padding:9px;font-size:.84rem;font-weight:700}.social-link svg{width:18px;height:18px;flex-shrink:0}.social-links .social-link:hover{background:var(--pale);border-color:#9eb9d1}.social-chips{flex-wrap:wrap;margin:0 0 24px}.social-chips .social-link{padding:10px 15px}.nav-links{gap:16px}.social-header{flex-shrink:0}@media(min-width:621px) and (max-width:1200px){.nav-links>a:not(.btn){display:none}}@media(max-width:620px){.social-header{justify-content:flex-start;border-top:1px solid var(--line);padding-top:12px}}
 </style>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+<link rel="stylesheet" href="updates.css">
 </head>
 <body>
 <header class="site-header">
   <div class="container nav">
-    <a class="brand" href="#inicio" aria-label="Gerardo España, inicio">
-      <span class="brand-mark">GE</span>
-      <span>Gerardo España<small>Asesoría financiera y patrimonial</small></span>
-    </a>
+    <a class="brand" href="#inicio" aria-label="Gerardo España, inicio"><img src="assets/logo-barra.svg" width="220" height="63" alt="Gerardo España" class="brand-logo"></a>
+<div class="social-links social-header" aria-label="Perfiles de Gerardo España"><a class="social-link" href="https://www.tiktok.com/@ger.espana" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Gerardo España (abre en otra pestaña)" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 2c.3 2.5 1.7 4 4 4.2v3.4a8 8 0 0 1-4-1.2v7a6.4 6.4 0 1 1-5.5-6.3v3.5a3 3 0 1 0 2 2.8V2z"/></svg></a><a class="social-link" href="https://www.instagram.com/ger.espana/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Gerardo España (abre en otra pestaña)" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a><a class="social-link" href="https://wa.me/message/42SOTDUOUMFGK1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Gerardo España (abre en otra pestaña)" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 15L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.7.7.7-2.7-.2-.4A8 8 0 0 1 12 4zm-3.2 3c-.4 0-1.5.8-1.5 2.4 0 2.6 3.7 6.5 6.8 7 .8.2 2.2-.5 2.5-1.4l.1-1-2.5-1.2-.9 1.1c-1.4-.5-2.6-1.6-3.2-2.9l.8-1L9.8 7z"/></svg></a><a class="social-link" href="https://www.linkedin.com/in/gerardo-espa%C3%B1a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gerardo España (abre en otra pestaña)" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.5 9h3v12h-3zM9 9h3v1.6c.7-1.1 1.8-1.9 3.6-1.9 3.3 0 4.4 2.1 4.4 5.3v7h-3v-6.2c0-1.9-.1-3.4-2.3-3.4S12 13.1 12 14.7V21H9z"/></svg></a></div>
     <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="Abrir menú">Menú</button>
     <nav class="nav-links" id="navLinks">
       <a href="#simulador">Calcula tu retiro</a>
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#servicios">En qué te puedo ayudar</a>
-      <a class="btn btn-primary" href="#" data-wa="general">Agenda una asesoría</a>
-      <div class="social-links social-header" aria-label="Perfiles de Gerardo España"><a class="social-link" href="https://www.tiktok.com/@ger.espana" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Gerardo España (abre en otra pestaña)" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 2c.3 2.5 1.7 4 4 4.2v3.4a8 8 0 0 1-4-1.2v7a6.4 6.4 0 1 1-5.5-6.3v3.5a3 3 0 1 0 2 2.8V2z"/></svg></a><a class="social-link" href="https://www.instagram.com/ger.espana/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Gerardo España (abre en otra pestaña)" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a><a class="social-link" href="https://wa.me/message/42SOTDUOUMFGK1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Gerardo España (abre en otra pestaña)" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 15L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.7.7.7-2.7-.2-.4A8 8 0 0 1 12 4zm-3.2 3c-.4 0-1.5.8-1.5 2.4 0 2.6 3.7 6.5 6.8 7 .8.2 2.2-.5 2.5-1.4l.1-1-2.5-1.2-.9 1.1c-1.4-.5-2.6-1.6-3.2-2.9l.8-1L9.8 7z"/></svg></a><a class="social-link" href="https://www.linkedin.com/in/gerardo-espa%C3%B1a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gerardo España (abre en otra pestaña)" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.5 9h3v12h-3zM9 9h3v1.6c.7-1.1 1.8-1.9 3.6-1.9 3.3 0 4.4 2.1 4.4 5.3v7h-3v-6.2c0-1.9-.1-3.4-2.3-3.4S12 13.1 12 14.7V21H9z"/></svg></a></div>
+
+
     </nav>
+    <a class="btn btn-primary header-cta" href="#" data-wa="general">Agenda una asesoría</a>
   </div>
 </header>
 <main>
@@ -122,15 +124,15 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
         <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Evolución anual del saldo proyectado"></canvas></div><p id="chartSummary" class="result-caption"></p>
         <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
 
-        <a class="btn btn-wa result-cta" href="#" data-wa="simulador">Quiero revisar mi proyección por WhatsApp</a>
+        <a class="btn btn-wa result-cta" href="#" data-wa="simulador">Agendar asesoría para revisar proyección</a>
       </div>
-      <div class="sim-note sim-disclaimer">
+      <details class="sim-note sim-disclaimer"><summary>Detalles de proyección</summary><div class="projection-details">
         <p><strong>Importante sobre esta proyección</strong></p>
         <p>Se utiliza un rendimiento bruto ilustrativo del 10% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
         <p>Se conserva el motor existente, que aplica supuestos de administración (1.5% trimestral sobre saldo inicial), gestión (0.1% mensual), cargo inicial de $500, cargo mensual de 25 UDIS desde el mes 19, UDI fija de $8.81 y una tabla de bono con tasa ilustrativa del 9%. Estos parámetros, su tratamiento de IVA, la elegibilidad del bono y su aplicación después de 25 años no están verificados contra un contrato vigente. La cifra es un escenario técnico provisional; no es una cotización oficial ni confirma los costos o beneficios de un producto. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
         <p><strong>*Posible beneficio fiscal anual:</strong> una tasa de ISR del 20% sería únicamente una referencia, no una devolución asegurada. No se calcula un beneficio fiscal personalizado en este simulador. La deducibilidad está sujeta al límite del 10% de los ingresos acumulables, cinco UMA anuales y los demás requisitos del Artículo 151. El beneficio real puede ser menor o nulo; lo revisaremos contigo en la asesoría.</p>
-        <p>La proyección se muestra antes de impuestos al retiro. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
-      </div>
+        <p>Retiro con beneficios fiscales, sujeto a requisitos y límites de exención. El monto mostrado no descuenta el eventual impuesto al retiro; no representa una garantía de saldo neto libre de impuestos. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
+      </div></details>
     </div>
   </div>
 </section>
@@ -143,16 +145,23 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 </div>
 <section class="content-section about" id="sobre-mi">
   <div class="container about-grid">
-    <div class="profile-card"><div><p class="eyebrow" style="color:#b9d3e8">Tu asesor</p><h3>Gerardo España</h3><p>Asesoría financiera, patrimonial y de seguros.</p></div></div>
+    <div class="profile-viewer" id="profileViewer" aria-label="Fotografía y documentos profesionales">
+      <div class="profile-track" id="profileTrack">
+        <figure class="profile-slide" aria-hidden="false"><img src="gerardo-espana.png" alt="Gerardo España, asesor financiero y patrimonial"><figcaption>Gerardo España · Tu asesor</figcaption></figure>
+        <figure class="profile-slide" aria-hidden="true" inert><img src="assets/foto-birrete.jpg" alt="Gerardo España con birrete en la Escuela Bancaria y Comercial" loading="lazy"><figcaption>Estudios en Escuela Bancaria y Comercial</figcaption></figure>
+        <figure class="profile-slide document-slide" aria-hidden="true" inert><a href="assets/certificado-amib.pdf" target="_blank" rel="noopener noreferrer" aria-label="Abrir certificado AMIB completo en otra pestaña"><img src="assets/certificado-amib.png" alt="Certificado AMIB de Gerardo Lopez España, Serie 210. Del 4 de junio de 2026 al 4 de junio de 2029." loading="lazy"></a><figcaption>AMIB · Serie 210 <a href="assets/certificado-amib.pdf" target="_blank" rel="noopener noreferrer">Ver documento completo ↗</a></figcaption></figure>
+        <figure class="profile-slide document-slide pending-document" aria-hidden="true" inert><div><span aria-hidden="true">▤</span><h3>Cédula de agente CNSF</h3><p>Documento disponible para revisión en asesoría.</p></div><figcaption>Cédula A · Verificación documental pendiente</figcaption></figure>
+      </div><p class="sr-only" id="profileStatus" aria-live="polite">Fotografía de Gerardo España</p>
+    </div>
     <div>
       <p class="eyebrow">Sobre mí</p>
       <h2>Decisiones financieras con más claridad.</h2>
       <p class="muted">Te ayudo a revisar opciones de retiro, inversión y protección patrimonial de acuerdo con tus objetivos.</p>
       <div class="credential-list">
-        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><div><strong>Estudios en Finanzas y Banca</strong><p>Escuela Bancaria y Comercial (EBC). Estudios concluidos; titulación pendiente.</p></div></div>
-        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="m8.2 13-1 8 4.8-2.5 4.8 2.5-1-8"/></svg></span><div><strong>AMIB Figura 3 · Serie 210</strong><p>Asesor en Estrategias de Inversión. Credencial comunicada; vigencia pendiente de verificación documental.</p></div></div>
-        <div class="credential"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></span><div><strong>Cédula de agente de seguros CNSF</strong><p>Cédula A. Los datos de registro se compartirán y verificarán en asesoría.</p></div></div>
-        <div class="credential"><span class="credential-icon">A</span><div><strong>Agente de Allianz</strong><p>Referencia profesional comunicada; documentación y vigencia por verificar.</p></div></div>
+        <button type="button" class="credential" data-profile="1" aria-controls="profileTrack" aria-pressed="false"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="credential-copy"><strong>Estudios en Finanzas y Banca</strong><span class="credential-description">Estudios en Escuela Bancaria y Comercial (EBC).</span></span></button>
+        <button type="button" class="credential" data-profile="2" aria-controls="profileTrack" aria-pressed="false"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="m8.2 13-1 8 4.8-2.5 4.8 2.5-1-8"/></svg></span><span class="credential-copy"><strong>AMIB Figura 3 · Serie 210</strong><span class="credential-description">Asesor en Estrategias de Inversión. Certificado del 4 de junio de 2026 al 4 de junio de 2029.</span></span></button>
+        <button type="button" class="credential" data-profile="3" aria-controls="profileTrack" aria-pressed="false"><span class="credential-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></span><span class="credential-copy"><strong>Cédula de agente de seguros CNSF</strong><span class="credential-description">Cédula A. Los datos de registro se compartirán y verificarán en asesoría.</span></span></button>
+        <button type="button" class="credential" data-profile="0" aria-controls="profileTrack" aria-pressed="true"><span class="credential-icon">A</span><span class="credential-copy"><strong>Agente de Allianz</strong><span class="credential-description">Referencia profesional comunicada; documentación y vigencia por verificar.</span></span></button>
       </div>
 <div class="social-links social-chips" aria-label="Perfiles de Gerardo España"><a class="social-link" href="https://www.tiktok.com/@ger.espana" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Gerardo España (abre en otra pestaña)" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 2c.3 2.5 1.7 4 4 4.2v3.4a8 8 0 0 1-4-1.2v7a6.4 6.4 0 1 1-5.5-6.3v3.5a3 3 0 1 0 2 2.8V2z"/></svg><span>TikTok</span></a><a class="social-link" href="https://www.instagram.com/ger.espana/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Gerardo España (abre en otra pestaña)" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg><span>Instagram</span></a><a class="social-link" href="https://wa.me/message/42SOTDUOUMFGK1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Gerardo España (abre en otra pestaña)" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 15L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.7.7.7-2.7-.2-.4A8 8 0 0 1 12 4zm-3.2 3c-.4 0-1.5.8-1.5 2.4 0 2.6 3.7 6.5 6.8 7 .8.2 2.2-.5 2.5-1.4l.1-1-2.5-1.2-.9 1.1c-1.4-.5-2.6-1.6-3.2-2.9l.8-1L9.8 7z"/></svg><span>WhatsApp</span></a><a class="social-link" href="https://www.linkedin.com/in/gerardo-espa%C3%B1a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gerardo España (abre en otra pestaña)" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.5 9h3v12h-3zM9 9h3v1.6c.7-1.1 1.8-1.9 3.6-1.9 3.3 0 4.4 2.1 4.4 5.3v7h-3v-6.2c0-1.9-.1-3.4-2.3-3.4S12 13.1 12 14.7V21H9z"/></svg><span>LinkedIn</span></a></div>
       <a class="btn btn-wa" href="#" data-wa="general">Agenda una asesoría</a>
@@ -171,25 +180,25 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/><path d="M8 3 6 5M16 3l2 2"/></svg></div>
         <h3>Proyección de plan de retiro</h3>
         <p>Revisa tus objetivos de retiro, el tiempo disponible y la aportación que podrías destinar a un plan de ahorro.</p>
-        <a class="btn btn-wa" href="#" data-wa="retiro">Agenda una asesoría</a>
+        <a class="service-link" href="#" data-wa="retiro">Conoce más <span aria-hidden="true">&gt;</span></a>
       </article>
       <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1000&q=85)">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></svg></div>
         <h3>Prevención de riesgos y seguros</h3>
         <p>Explora opciones de gastos médicos mayores, seguro de vida y seguro residencial para proteger tu patrimonio y a tu familia.</p>
-        <a class="btn btn-wa" href="#" data-wa="seguros">Agenda una asesoría</a>
+        <a class="service-link" href="#" data-wa="seguros">Conoce más <span aria-hidden="true">&gt;</span></a>
       </article>
       <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1000&q=85)">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 6-7"/><path d="M16 6h4v4"/></svg></div>
         <h3>Asesoría para invertir en bolsa</h3>
         <p>Conoce alternativas del mercado bursátil y revisa cómo se relacionan con tus objetivos y tu perfil de riesgo.</p>
-        <a class="btn btn-wa" href="#" data-wa="bolsa">Agenda una asesoría</a>
+        <a class="service-link" href="#" data-wa="bolsa">Conoce más <span aria-hidden="true">&gt;</span></a>
       </article>
-      <article class="service-card has-photo" style="background-image:url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=85)">
+      <article class="service-card has-photo" style="background-image:url(assets/sentra-2024.jpg)">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 11 1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M3 11h18v7H3z"/><path d="M6 18v2m12-2v2M6 14h.01M18 14h.01"/></svg></div>
-        <h3>Seguro de auto</h3>
+        <span class="discount-badge">30% de descuento</span><h3>Seguro de auto</h3>
         <p>Revisa alternativas de cobertura para tu vehículo de acuerdo con tus necesidades y condiciones.</p>
-        <a class="btn btn-wa" href="#" data-wa="auto">Agenda una asesoría</a>
+        <a class="service-link" href="#" data-wa="auto">Conoce más <span aria-hidden="true">&gt;</span></a>
       </article>
     </div>
   </div>
@@ -213,5 +222,5 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <script src="engine.js" defer></script>
 <script src="app.js" defer></script>
 
-<dialog id="contactDialog" aria-labelledby="contactTitle"><button class="modal-close" id="closeContact" aria-label="Cerrar contacto">×</button><h2 id="contactTitle">Agenda una asesoría</h2><p>Coordinamos tu asesoría directamente por WhatsApp.</p><p>Destino: +52 442 377 7762</p><label for="contactMessage">Tu mensaje</label><textarea id="contactMessage" maxlength="2000"></textarea><a class="btn btn-primary" id="contactContinue" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a></dialog></body>
+<dialog id="contactDialog" aria-labelledby="contactTitle"><button class="modal-close" id="closeContact" aria-label="Cerrar contacto">×</button><h2 id="contactTitle">Agenda una asesoría</h2><p><span id="contactIntro">Coordinamos tu asesoría directamente por WhatsApp.</span></p><div id="contactExtras"></div><p>Destino: +52 442 377 7762</p><label for="contactMessage">Tu mensaje</label><textarea id="contactMessage" maxlength="2000"></textarea><a class="btn btn-primary" id="contactContinue" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a></dialog></body>
 </html>
