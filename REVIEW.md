@@ -7,7 +7,7 @@ La galería muestra la foto original al pulsar Allianz, la foto de birrete al pu
 ## Pendientes materiales
 
 - La ruta virtual de Google Drive de la cédula CNSF devolvió acceso denegado incluso con autorización para el archivo y su carpeta. Se conserva un estado de revisión en asesoría al seleccionar CNSF. Hace falta adjuntar una copia accesible para integrar y revisar el documento.
-- No se etiqueta el saldo como totalmente libre de impuestos. El motor devuelve saldoTotal y no calcula el impuesto personal al retiro. Cumplir la edad de retiro no implica exención ilimitada; se agrega el texto “Retiro con beneficios fiscales, sujeto a requisitos y límites de exención”. No se modifica el motor ni se fabrican parámetros fiscales.
+- A petición del propietario, el encabezado del resultado dice “libre de impuestos*”. El asterisco remite a una aclaración visible de requisitos y límites de exención, y los detalles explican que el motor no calcula ISR ni garantiza un saldo neto exento. Se conserva saldoTotal sin modificar el motor o fabricar parámetros fiscales.
 - El chip de 30% de descuento y el texto de cotización instantánea se incluyen por indicación del propietario. La vigencia, elegibilidad y condiciones de la promoción requieren confirmación comercial al cotizar; no se inventan fechas o coberturas aplicables.
 
 Referencia fiscal: [SAT, artículo 93](https://wwwmat.sat.gob.mx/articulo/15199/articulo-93) y [SAT, efectos fiscales de planes personales de retiro](https://sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2025/rmf/compiladas/Compilado_Segunda_Modificacion_RMF_2025-07042025.pdf), regla 3.17.6. El excedente de la exención puede estar sujeto a ISR aun cumpliendo requisitos de permanencia.
