@@ -1,19 +1,23 @@
 # Landing de Gerardo España
 
-Sitio estático sin dependencias de producción. `index.html` contiene la página y estilos; `engine.js` conserva la simulación financiera original; `app.js` maneja formularios, gráfica y contacto. Publicación prevista en GitHub Pages después de aprobar y fusionar el PR.
+Sitio estático sin dependencias de producción. index.html contiene las secciones y estilos base; updates.css contiene ajustes visuales. engine.js conserva el motor financiero original; projection-metrics.js calcula la referencia fiscal anual, y app.js maneja gráfica, contacto, controles y galería.
 
-## Diagnóstico y validación
+## Comprobaciones
 
-En el commit `a3dbba8`, la interfaz leía `latestSimulation.annual`, pero `simulate()` devuelve un arreglo. Esto producía un arreglo vacío y un resultado de cero. `6fbb465` ya corrigió esa lectura; todavía quedaban secuencias literales `\n` que invalidaban el script de contacto y varias reglas CSS, y el monto se ocultaba durante la animación. La interfaz ahora valida explícitamente el arreglo, su longitud y saldos finitos, sin convertir errores en cero.
+Ejecutar node test.cjs para las cinco combinaciones financieras existentes y node test-metrics.cjs para la referencia fiscal anual, límite de cinco UMA e inputs inválidos. simulate() devuelve un arreglo anual; la interfaz lo valida y nunca presupone .annual ni convierte errores en cero. La proyección se calcula antes de animar durante cuatro segundos y permite recalcular.
 
-Ejecutar `node test.cjs`: cinco combinaciones (18/2000/65, 35/2000/65, 64/2000/65, 40/5000/70, 18/1000000/90), aportaciones acumuladas, sensibilidad al monto y reproducción independiente del primer año con cargos.
+## Supuestos
 
-## Límites del escenario
+Se conservan cargos, IVA, UDI fija de 8.81 y tabla/tasa de bono del motor existente. No hay documentación contractual que los valide. Se muestra saldoTotal y no se calcula ISR personal al retiro. La etiqueta “Libre de impuestos”, solicitada por el propietario, representa el escenario de disposiciones dentro de requisitos y límites de exención explicado en Detalles de proyección; no un saldo neto fiscal personalizado.
 
-Se conservan los cargos, tratamiento de IVA, UDI fija de 8.81 y tabla/tasa de bono del motor original. No existe documentación contractual en el repositorio que los valide. La gráfica usa `saldoTotal` antes de impuestos, nunca `saldoNeto` ni beneficio fiscal. Se desactiva el cálculo fiscal interno en esta interfaz (`isrPct: 0`); no se reinvierte un beneficio fiscal. No se utilizan las afirmaciones de exención del motor para comunicar resultados.
+El plazo del motor se limita a 25 años; el horizonte de aportaciones hasta la edad elegida no garantiza un plazo contractual equivalente. Rendimiento bruto ilustrativo del 10% efectivo anual, aportaciones al inicio del mes y sin ajuste por inflación. No se reinvierte el beneficio fiscal.
 
-El plazo enviado al motor se limita a 25 años, conservando las aportaciones hasta la edad elegida. No implica renovación o continuidad contractual garantizada; la aplicación de cargos y bono más allá del contrato requiere revisión. La tasa bruta es 10% efectivo anual, con aportaciones al inicio de cada mes según el motor existente. Ni los costos ni los rendimientos constituyen una cotización oficial.
+La referencia fiscal anual usa 25% de la aportación anual hasta cinco UMA de 2026 ($213,973.20). Supone ingresos suficientes para cumplir además el límite del 10% de ingresos acumulables y los demás requisitos. Sin ingresos ni régimen fiscal no es una devolución calculada: puede ser menor o nula. No se muestra el beneficio total por plazo.
 
-Referencia fiscal: [SAT, aportaciones complementarias de retiro](https://www.sat.gob.mx/minisitio/DeduccionesPersonales/aportaciones_complementarias.html). La referencia de ISR del 20% no es un cálculo personalizado y está sujeta a requisitos y límites.
+Fuentes: [SAT, aportaciones de retiro](https://www.sat.gob.mx/minisitio/DeduccionesPersonales/aportaciones_complementarias.html) e [INEGI, UMA 2026](https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/uma/uma2026.pdf). Actualizar valores y requisitos para años posteriores.
 
-Teléfono corregido y confirmado por Gerardo: `+52 442 377 7762`. Se verifican estructura de URL y mensajes, con número confirmado por el propietario. No se enviaron mensajes. AMIB, CNSF y relación con Allianz se comunican con vigencia/documentación pendiente de verificación; EBC indica titulación pendiente.
+## Documentos y contacto
+
+Las credenciales se muestran en un visor modal de imágenes, sin enlaces ni pestañas PDF. Se retiran los PDF del árbol actual; las imágenes pueden guardarse o capturarse y el historial público puede conservar versiones anteriores. La copia CNSF omite CURP, RFC y QR. Las fechas provienen de documentos recibidos, sin consulta de registro en vivo.
+
+WhatsApp confirmado: +52 442 377 7762. El 30% de descuento de auto es texto comercial proporcionado por el propietario; las condiciones se consultan al cotizar. No se enviaron mensajes durante las pruebas.
