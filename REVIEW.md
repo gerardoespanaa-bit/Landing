@@ -20,10 +20,18 @@ Chrome/Playwright a 1440, 1100, 900, 768, 620, 390 y 320 px: portada, altura de 
 
 ## Corrección de visibilidad y mensajes del formulario
 
-Se reprodujo en la página publicada la causa de los banners aparentemente ausentes: con ventana de 1366×768 px, empezaban en y=736.9 y terminaban en y=863.5, fuera del área inicial visible del popup. Ahora usan fondo dorado claro, tarjetas contrastantes y desplazamiento automático al finalizar para mostrarlos completos. Se conservan solo plazo, aportaciones acumuladas y beneficio fiscal anual de referencia; el total fiscal del plazo sigue excluido.
+Se reprodujo en la página publicada la causa de los banners aparentemente ausentes: con ventana de 1366×768 px, empezaban en y=736.9 y terminaban en y=863.5, fuera del área inicial visible del popup. Ahora son tres chips compactos e independientes con fondo azul oscuro, texto blanco y desplazamiento automático al finalizar para mostrarlos completos. Se conservan solo plazo, aportaciones acumuladas y beneficio fiscal anual de referencia; el total fiscal del plazo sigue excluido.
 
 Se elimina reportValidity() y la validación automática del navegador en este formulario mediante novalidate. La validación propia cubre campos vacíos, números, enteros, mínimos y máximos, con banners en español y aria-invalid. Impide calcular con inicio menor de 18, retiro menor de 65 o aportación mensual menor de $2,000; no aumenta silenciosamente la aportación escrita. Los controles de edad y ArrowDown muestran los avisos solicitados al llegar al límite.
 
 El favicon PNG es una copia exacta de la imagen adjuntada por el propietario; se genera también ICO para compatibilidad. Los enlaces usan nombres nuevos y se versionan app.js, updates.css y projection-metrics.js para evitar mezclar recursos anteriores almacenados en caché.
 
 Validación de esta corrección: Chrome en locale en-US a 1366×768, 390×844 y 320×680; todos los mensajes de mínimos y vacíos en español, sin eventos de validación nativa, sin cálculo inválido, banners horizontales completos dentro de la ventana después de animar, $6,000 anuales para $2,000 mensuales, $15,000 para $5,000, detalles de ISR del 25%, recálculo e iconos nuevos disponibles. Sin errores JavaScript ni desbordamiento. La referencia fiscal y el motor financiero permanecen sin cambios.
+
+## Animación final y chips compactos
+
+Al completar la gráfica y fijar el importe final, el número hace un pop de 0.52 s y se emiten 24 pequeñas partículas de confeti hacia ambos lados. La capa es decorativa, no intercepta clics y se vacía a los 1.1 s; también se limpia al cambiar entradas, recalcular o cerrar el simulador. La animación no altera el importe final ni la gráfica. Con preferencia de movimiento reducido no se crean partículas ni se anima el número.
+
+Plazo, Aportaciones y Beneficio Fiscal usan tarjetas más pequeñas, cada una con fondo azul oscuro y tipografía blanca, separadas por espacio. El contenedor de la fila es transparente, sin borde ni relleno común. Se conserva el acomodo horizontal y los valores existentes.
+
+Verificación Chrome a 1366×768, 390×844 y 320×680: sin pop antes del final, partículas en ambas direcciones y limpieza automática, recálculo con nueva celebración, cierre y reapertura sin partículas residuales, tres chips alineados y compactos sin desbordamiento. También se verifican movimiento reducido y mínimo de $2,000 con aviso en español. Sin dependencias nuevas ni cambios financieros.
