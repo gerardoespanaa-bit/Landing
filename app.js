@@ -25,28 +25,48 @@ function draw(t){
  $('retirementAmount').textContent=money(value);
 }
 function cancel(){cancelAnimationFrame(frameId);button.disabled=false;button.textContent='Calcular mi proyección';$('calculatingMessage').hidden=true;}
-form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;cancel();$('calculationError').hidden=true;
+form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm())return;cancel();$('calculationError').hidden=true;
  try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch(error){panel.hidden=true;$('calculationError').textContent=error.message;$('calculationError').hidden=false;return;}
  panel.hidden=false;$('projectionMetrics').hidden=true;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
  const start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:4000;
- function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} años`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;}}
+ function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} años`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;requestAnimationFrame(()=>{if(simulator.classList.contains('is-open'))$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
  frameId=requestAnimationFrame(frame);
 });
 form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});
 const minimumAgeMessages={ageNow:'¡La edad mínima de inicio son 18 años!',ageRetirement:'Cotizador permite edad mínima a los 65. Si te interesa retirarte antes agenda una asesoría para ver tu proyección.'};
-let ageMessages=new Map();
-function renderAgeMessages(){const notice=$('ageNotice');notice.replaceChildren();for(const text of ageMessages.values()){const p=document.createElement('p');p.textContent=text;notice.append(p);}notice.hidden=ageMessages.size===0;}
-for(const id of Object.keys(minimumAgeMessages)){
- const input=$(id),minimum=Number(input.min);
- function validateMinimum(){if(input.value!==''&&Number.isFinite(input.valueAsNumber)&&input.valueAsNumber<minimum)ageMessages.set(id,minimumAgeMessages[id]);else ageMessages.delete(id);renderAgeMessages();}
- input.addEventListener('input',validateMinimum);
- input.addEventListener('invalid',validateMinimum);
- input.addEventListener('blur',()=>{if(input.value!==''&&Number.isFinite(input.valueAsNumber)&&input.valueAsNumber<minimum){input.value=String(minimum);ageMessages.set(id,minimumAgeMessages[id]);renderAgeMessages();}});
- input.addEventListener('keydown',event=>{if(event.key==='ArrowDown'&&input.valueAsNumber<=minimum){event.preventDefault();ageMessages.set(id,minimumAgeMessages[id]);renderAgeMessages();}});
+const projectionInputs=['ageNow','monthlyContribution','ageRetirement'].map($);
+const fieldMessages=new Map();
+function projectionInputError(input,required=true){
+ const id=input.id,isMonthly=id==='monthlyContribution',value=input.valueAsNumber;
+ if(input.validity.badInput)return isMonthly?'Escribe una aportación mensual válida en pesos.':'Escribe una edad válida en años enteros.';
+ if(input.value==='')return required?({ageNow:'Escribe tu edad actual.',monthlyContribution:'Escribe tu aportación mensual en pesos.',ageRetirement:'Escribe la edad a la que deseas retirarte.'}[id]):'';
+ if(!Number.isFinite(value))return isMonthly?'Escribe una aportación mensual válida en pesos.':'Escribe una edad válida en años enteros.';
+ if(value<Number(input.min))return isMonthly?'¡La aportación mensual mínima es de $2,000 MXN!':minimumAgeMessages[id];
+ if(value>Number(input.max))return isMonthly?'La aportación mensual máxima es de $1,000,000 MXN.':id==='ageNow'?'La edad actual debe ser de 18 a 64 años.':'La edad de retiro no puede superar los 90 años.';
+ if(!Number.isInteger(value))return isMonthly?'Escribe la aportación mensual en pesos enteros.':'Escribe la edad en años enteros.';
+ return '';
+}
+function renderValidationMessages(){
+ const notice=$('ageNotice');notice.replaceChildren();
+ for(const text of fieldMessages.values()){const p=document.createElement('p');p.textContent=text;notice.append(p);}
+ notice.hidden=fieldMessages.size===0;
+ for(const input of projectionInputs)input.setAttribute('aria-invalid',String(Boolean(projectionInputError(input,false)||(input.value===''&&fieldMessages.has(input.id)))));
+}
+function validateProjectionForm(){
+ fieldMessages.clear();let first=null;
+ for(const input of projectionInputs){const message=projectionInputError(input);if(message){fieldMessages.set(input.id,message);first??=input;}}
+ renderValidationMessages();
+ if(first){first.focus();$('ageNotice').scrollIntoView({block:'nearest',behavior:'instant'});return false;}
+ return true;
+}
+for(const input of projectionInputs){
+ input.addEventListener('input',()=>{const message=projectionInputError(input,false);if(message)fieldMessages.set(input.id,message);else fieldMessages.delete(input.id);renderValidationMessages();});
+ input.addEventListener('invalid',event=>event.preventDefault());
+ input.addEventListener('keydown',event=>{if(event.key==='ArrowDown'&&input.valueAsNumber<=Number(input.min)){event.preventDefault();fieldMessages.set(input.id,input.id==='monthlyContribution'?'¡La aportación mensual mínima es de $2,000 MXN!':minimumAgeMessages[input.id]);renderValidationMessages();}});
 }
 document.querySelectorAll('[data-age-step]').forEach(step=>step.addEventListener('click',()=>{
  const input=$(step.dataset.ageStep),delta=Number(step.dataset.delta),minimum=Number(input.min),maximum=Number(input.max),current=input.valueAsNumber;
- if(delta<0&&Number.isFinite(current)&&current<=minimum){input.value=String(minimum);ageMessages.set(input.id,minimumAgeMessages[input.id]);renderAgeMessages();return;}
+ if(delta<0&&Number.isFinite(current)&&current<=minimum){fieldMessages.set(input.id,minimumAgeMessages[input.id]);renderValidationMessages();return;}
  input.value=String(Math.min(maximum,Math.max(minimum,Number.isFinite(current)?current+delta:minimum)));
  input.dispatchEvent(new Event('input',{bubbles:true}));
 }));
