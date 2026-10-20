@@ -1,6 +1,6 @@
-# Preparación de privacidad y medición
+# Privacidad y medición con consentimiento avanzado
 
-Estado actual: los fragmentos oficiales de GTM están publicados y GA4 sigue sin activarse. El PR #9 contiene el aviso actualizado con el CRM en Lovable, contratación mediante Allianz DAF y procedimiento y criterio de conservación confirmados por el propietario. El merge publicará el aviso sin marcas de borrador; no activa medición. El seguimiento operativo está en [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md).
+Cambios preparados el 20 de octubre de 2026 en una rama para revisión. No se publica el sitio ni el contenedor desde esta tarea.
 
 ## Datos y procedimiento confirmados
 
@@ -20,66 +20,58 @@ Estado actual: los fragmentos oficiales de GTM están publicados y GA4 sigue sin
 
 La rama no modifica el CRM ni valida técnicamente su borrado, respaldos o controles de acceso. La aprobación del procedimiento no se presenta como una automatización implementada. Las tres etapas quedan diferenciadas y los avisos de Allianz no se sustituyen por el del asesor.
 
-## IDs reales recibidos y estado técnico
+## Instalación unificada y modo avanzado
 
-No se requieren contraseñas. El propietario ya proporcionó:
+- Contenedor real **GTM-KMG6BPKF**; flujo de Analytics **G-VSNRQ7H8JL**. No se añaden identificadores nuevos ni una instalación directa de gtag.js.
+- En ambas páginas, el primer comando establece los cuatro consentimientos como denegados. Después se ejecutan de forma síncrona la configuración y el arranque de preferencias, antes del único fragmento de GTM.
+- Se elimina la lista vacía que bloqueaba etiquetas y el antiguo cargador alternativo. Si el arranque está deshabilitado, es inválido o no carga, el script de GTM no arranca. El iframe oficial noscript se conserva como primer contenido del body; no ejecuta las etiquetas JavaScript de GA4. No configurar etiquetas de imagen/Custom HTML que eludan el consentimiento en esa ruta.
+- Modo avanzado elegido por el propietario: se carga GTM y puede ejecutarse GA4 antes de aceptar y después de rechazar; Google puede recibir señales limitadas sin cookies analíticas. El rechazo no promete ausencia total de solicitudes. Las preferencias actualizan analytics_storage; ad_storage, ad_user_data y ad_personalization siempre siguen denegados.
+- Elección local de hasta 180 días, validación de caducidad y sincronización entre pestañas. Se usa una clave v2 para solicitar una nueva elección bajo este modo. Si el almacenamiento está bloqueado, la elección se aplica durante la página actual y se vuelve a pedir en una visita posterior.
+- Aceptar o rechazar no recarga, no inicia otro contenedor, no vuelve a ejecutar el page_view y no reproduce interacciones anteriores. Al retirar aceptación se intenta borrar las cookies _ga accesibles en el dominio/ruta. No se borran datos históricos de Google.
+- El aviso y el panel de preferencias describen este tratamiento. La revisión del PR incluye esa actualización antes de publicarla. No constituye una revisión jurídica externa.
 
-1. Contenedor **GTM-KMG6BPKF**: instalado mediante los fragmentos oficiales de `index.html`.
-2. Medición **G-VSNRQ7H8JL**: reservada para configuración posterior dentro de GTM, sin instalación directa de GA4.
+## Eventos y datos permitidos
 
-El archivo preparatorio `measurement-config.js` conserva campos vacíos, `enabled:false` y `privacyApproved:false`. Esto mantiene desactivado su flujo de eventos; no impide la carga oficial de GTM desde el HTML. No cambiar esos valores sin adaptar el cargador alternativo para evitar duplicados y resolver la restricción de etiquetas y el consentimiento. Los apartados técnicos siguientes son una guía pendiente de adaptar y validar, no una instalación activa ni un mecanismo de elección ya implementado.
-
-## Eventos y reglas de conteo
-
-| Evento de dataLayer/GA4 | Cuándo ocurre | Servicio | Ubicación |
+| Evento | Momento | Servicio | Ubicación |
 |---|---|---|---|
-| `simulator_open` | Al abrir realmente el simulador | `retiro` | `header`, `hero` o `footer` |
-| `simulator_complete` | Al terminar la animación de un cálculo válido | `retiro` | `simulator` |
-| `whatsapp_contact` | Al pulsar Continuar o un enlace social directo | `general`, `retiro`, `seguros`, `bolsa` o `auto` | Ubicación original del botón |
+| simulator_open | Al abrir realmente el simulador | retiro | header, hero o footer |
+| simulator_complete | Al finalizar un cálculo válido y su animación | retiro | simulator |
+| whatsapp_contact | Al continuar a WhatsApp o pulsar un enlace social directo | general, retiro, seguros, bolsa o auto | Ubicación original del botón |
 
-Parámetros de negocio permitidos: **solo** `service` y `button_location`. Ubicaciones adicionales: `services`, `about`, `cta_band`, `floating`. Las etiquetas proceden de listas cerradas; no se derivan del texto del botón, mensaje, teléfono o URL. La visita utiliza `landing_page_view` como disparador interno para un único `page_view`, con ubicación canónica sin consulta ni fragmento y referente vacío.
+Únicos parámetros de negocio: **service** y **button_location**, desde listas cerradas. Las otras ubicaciones permitidas son services, about, cta_band y floating. No hay edades, ingresos, importes, saldos, teléfonos, mensajes, URLs de WhatsApp ni datos del formulario en los eventos propios. Las interacciones también se entregan al contenedor con consentimiento denegado; sus etiquetas de Google deben aplicar ese estado, sin conceder permisos por medir un clic.
 
-Abrir el diálogo de contacto no cuenta como clic a WhatsApp. El enlace deshabilitado de seguros no cuenta. Un doble clic al mismo enlace dentro de 800 ms cuenta una vez. Un cálculo inválido o interrumpido no cuenta; recalcular y completar otro cálculo sí representa otra interacción. No se usa un activador genérico de clics en paralelo. Un clic de WhatsApp no acredita que se envió un mensaje, hubo una cita o una venta.
+Abrir el diálogo de contacto no es una conversión. Doble clic en el mismo enlace dentro de 800 ms cuenta una vez; cálculo inválido, animación cancelada y redimensionado no producen finalizaciones. Una nueva proyección completada sí cuenta. Un clic de WhatsApp no confirma mensaje, cita ni venta.
 
-## Configuración requerida dentro de GTM y GA4
+El arranque publica parámetros de página saneados antes de GTM y los establece también como valores globales: page_location canónica sin consulta/fragmento, page_referrer vacío y título fijo. No se emite el antiguo landing_page_view: **la etiqueta principal genera el único page_view**. No crear en paralelo una etiqueta manual de page_view. Al excluir consultas y referente se limita la atribución por campañas; no se afirma que Google Ads o su atribución estén configurados.
 
-El código del repositorio no puede configurar una propiedad o un contenedor de una cuenta de Google. Completar estas instrucciones en el contenedor real **antes de activarlo en el sitio**:
+## Configurar Google antes de publicar el contenedor
 
-1. Crear variables de capa de datos (versión 2) para `measurement_id`, `page_location`, `page_referrer`, `page_title`, `service` y `button_location`. Los cuatro primeros se establecen antes del arranque del contenedor.
-2. Crear **una sola etiqueta de Google**, con ID `{{DLV measurement_id}}`, activador **Initialization – All Pages**, una vez por página. Parámetros de configuración: `send_page_view:false`, `page_location:{{DLV page_location}}`, `page_referrer:{{DLV page_referrer}}`, `page_title:{{DLV page_title}}`, `allow_google_signals:false`, `allow_ad_personalization_signals:false`. No añadir otra instalación directa `gtag.js`.
-3. Crear una etiqueta GA4 de evento con nombre `page_view`, ID `{{DLV measurement_id}}`, activador personalizado **exacto** `landing_page_view`. Incluir explícitamente los tres parámetros de página anteriores. Una activación por evento.
-4. Crear una etiqueta GA4 de evento con nombre `{{Event}}`, ID `{{DLV measurement_id}}`, activador personalizado con expresión regular **`^(simulator_open|simulator_complete|whatsapp_contact)$`**. Incluir únicamente `service`, `button_location` y los tres parámetros de página saneados. Una activación por evento. No capturar valores de formularios o del DOM.
-5. En GA4, desactivar la medición mejorada automática del flujo para esta implementación, incluidos clics salientes, formularios y cambios de historial. Desactivar también recopilación de datos proporcionados por usuarios, User-ID, Google Signals y funciones publicitarias. No crear etiquetas de captura automática, Custom HTML, Ads o conversiones mejoradas en este contenedor sin otra revisión. Revisar que no existan configuraciones heredadas que vuelvan a capturar URLs o campos.
-6. Registrar `service` y `button_location` como dimensiones personalizadas de evento si se usarán en informes. Si se elige `whatsapp_contact` como evento clave, documentar que representa intención de contacto, no un lead confirmado.
+El PR prepara el sitio; no cambia ni publica la cuenta de Google. La etiqueta principal existe en el espacio de trabajo del propietario, según sus capturas, pero no se ha auditado la versión guardada ni publicado desde esta tarea.
 
-La medición automática de enlaces podría capturar `link_url` con el mensaje editable de WhatsApp; por eso debe permanecer desactivada. La API local descarta eventos o valores fuera de las listas permitidas y no incluye edades, importes, saldos, teléfono, mensajes, `link_url`, consulta de URL ni referente. La configuración externa del contenedor también debe respetar estas restricciones.
+1. **Primero, en GA4**, Administrar → Flujos de datos → Landing PPR: desactivar **Medición mejorada**, en especial clics salientes, formularios, búsqueda, descargas y cambios de historial. Un clic saliente automático puede mandar link_url con teléfono y mensaje. Desactivar también datos proporcionados por usuarios/User-ID y no habilitar Google Signals o personalización publicitaria. Si la etiqueta nueva ofrece detección automática de eventos, mantenerla desactivada. Es requisito antes de Enviar; no basta con que el código local omita esos datos.
+2. En GTM crear variables de capa de datos **versión 2** para page_location, page_referrer, page_title, service y button_location (ejemplo de nombre: DLV - page_location). No usar Click URL, Form Element, texto de botones ni variables del DOM como parámetros.
+3. **Editar la etiqueta existente GA4 - Etiqueta principal; no crear otra.** ID G-VSNRQ7H8JL, Initialization – All Pages, una vez por página, sin excepciones ni consentimiento adicional. Sus comprobaciones integradas respetan Consent Mode. Añadir en configuración page_location={{DLV - page_location}}, page_referrer={{DLV - page_referrer}}, page_title={{DLV - page_title}}, allow_google_signals=false, allow_ad_personalization_signals=false. Mantener el envío automático inicial de page_view (send_page_view=true si se define explícitamente). No añadir User-ID, user_data, identificadores de usuario, formularios o parámetros de WhatsApp.
+4. Para los tres eventos propios, crear **una** etiqueta Google Analytics: evento de GA4 con ID G-VSNRQ7H8JL, nombre de evento {{Event}} y activador de evento personalizado con expresión regular exacta **^(simulator_open|simulator_complete|whatsapp_contact)$**. Parámetros: service={{DLV - service}}, button_location={{DLV - button_location}} y los tres parámetros saneados de página. Una vez por evento y sin consentimiento adicional; no añadir un activador genérico de clics en paralelo. Si ya existe una etiqueta equivalente, editarla.
+5. Registrar service y button_location como dimensiones de evento para informes si se necesitan. No crear a la vez otra etiqueta de conversión Ads para la misma acción ni importar la misma conversión dos veces. Vincular Ads y definir conversiones queda para una fase posterior.
 
-Fuentes: [etiqueta de Google mediante GTM](https://support.google.com/tagmanager/answer/14842872?hl=en), [medición mejorada](https://support.google.com/analytics/answer/9216061?hl=es), [parámetros de configuración](https://developers.google.com/analytics/devguides/collection/ga4/reference/config) y [evitar información identificable](https://support.google.com/analytics/answer/6366371?hl=es).
+## Validación antes de Enviar
 
-## Consentimiento y activación controlada
+1. Revisar el PR y desplegar el sitio solo mediante el merge aprobado por el propietario. El CNAME y el dominio comprado se conservan. Si se dispone de una vista de prueba accesible, se puede revisar antes del merge. El servidor local también sirve para GTM Preview.
+2. Abrir Vista previa de GTM contra https://xn--gerardoespaa-khb.com/ (tras desplegar) o el servidor de prueba. Confirmar una sola carga del contenedor y la etiqueta principal ejecutada. Inspeccionar Consentimiento: por defecto cuatro estados denied. Aceptar debe cambiar solo analytics_storage a granted; rechazar o retirar lo devuelve a denied. Volver a visitar y comprobar la preferencia.
+3. En Analytics, verificar que Medición mejorada sigue desactivada. En Network/collect revisar que no aparece link_url, teléfono, mensaje, valores del simulador, consulta ni fragmento en dl, ni referente completo en dr. Las peticiones técnicas inevitablemente revelan información de conexión al proveedor; no se afirma anonimato absoluto.
+4. Probar los tres eventos y todas las ubicaciones, rechazar/aceptar/retirar, doble clic, entradas inválidas, recálculo, cancelación y resize. Un page_view por carga; aceptar/rechazar no debe añadir otro. En modo avanzado pueden existir señales sin cookies con denied: no exigir cero tráfico.
+5. En GA4 DebugView comprobar los eventos **con analítica aceptada** y una sesión con debug_mode=true solo en vista previa. Con analytics_storage denegado Google puede no mostrarlos en DebugView; usar Tag Assistant y la red para ese estado. No confundir ausencia en DebugView con ausencia de solicitudes.
+6. Revisar los tres cambios pendientes del espacio de trabajo del propietario antes de publicar; esta tarea no inspeccionó su contenido completo. Publicar el contenedor únicamente tras aprobar la configuración y la validación; salir de vista previa y retirar ajustes de depuración permanentes.
 
-Con los IDs ya recibidos, falta aprobar el aviso y adaptar conjuntamente el cargador, las restricciones y la configuración del contenedor. No basta con completar `measurement-config.js` o cambiar sus indicadores a `true`: eso puede combinar dos cargadores. La activación requiere otra revisión técnica y operativa. No usar IDs de pruebas en producción.
+**Estado de evidencia:** las pruebas de código usan un contenedor interceptado, sin enviar eventos a Google. No acreditan entrega real en GA4, una sesión Tag Assistant del código nuevo ni DebugView. La versión pública anterior fue observada por el propietario en Tag Assistant y tenía GA4 no activada. La validación final de la nueva versión queda pendiente de la configuración privada y la publicación autorizada.
 
-El comportamiento del prototipo que se describe a continuación está desactivado y requiere adaptación antes de usarse. No acredita que se haya implementado un mecanismo operativo de consentimiento.
+## Pruebas reproducibles
 
-El panel analítico se muestra únicamente cuando la configuración está completa. Aceptar habilita `analytics_storage`; `ad_storage`, `ad_user_data` y `ad_personalization` permanecen denegados. Rechazar mantiene bloqueado el contenedor completo, sin pings de medición. El consentimiento es básico: GTM no se carga antes de aceptar. Se omite intencionalmente el iframe `noscript` para no cargar medición saltándose la elección del usuario.
+- node test-consent-init.cjs: preferencias inválidas/caducadas/futuras, almacenamiento bloqueado, rutas, idempotencia y cambios entre pestañas.
+- node test.cjs y node test-metrics.cjs: cálculos y referencia fiscal existentes.
+- node test-measurement.cjs: integración en Chrome con Playwright, contenedor interceptado, consentimiento, eventos, todos los contactos, cinco escenarios, móvil, animación y datos excluidos. Configurar PLAYWRIGHT_MODULE y CHROME_PATH si esos programas no están en las rutas predeterminadas; QA_OUTPUT guarda evidencia.
 
-La preferencia local dura hasta 180 días. «Preferencias de medición» permite revisarla desde el pie y desde el aviso; al revocar se actualiza el estado, se intenta borrar las cookies `_ga` accesibles del sitio y se recarga para retirar las etiquetas ya cargadas. La revocación no borra datos históricos en Google. No se implementa atribución o seguimiento publicitario de Google Ads; requeriría definir consentimientos y configuración en otra revisión.
-
-Referencia: [modo de consentimiento](https://developers.google.com/tag-platform/security/guides/consent).
-
-## Verificación final con IDs reales: pendiente
-
-**No realizada en Tag Assistant ni en GA4 DebugView:** los IDs ya están confirmados, pero falta la configuración de cuentas, integración unificada y consentimiento. Las pruebas de eventos del PR #7 usaron un contenedor simulado e interceptado. El PR #8 verificó la carga real del contenedor vacío. Ninguna prueba sustituye la validación final de GA4 y sus eventos.
-
-1. Con el aviso aprobado e IDs reales en una vista de prueba, abrir GTM → Vista previa y conectar Tag Assistant a esa vista. No publicar en `main` para hacer la prueba. Puede utilizarse un servidor local accesible en el navegador de la sesión de vista previa.
-2. En un navegador limpio, antes de aceptar y tras rechazar, confirmar cero cargas de GTM y Analytics. Aceptar y confirmar una sola carga de contenedor y un único `page_view`. Revisar estado de consentimiento analítico concedido y publicitario denegado.
-3. Abrir el simulador desde cada ubicación, intentar una entrada inválida, completar un cálculo, cambiar el tamaño de pantalla, recalcular y cancelar una animación. Verificar una emisión por interacción completada y ninguna al redibujar o cancelar.
-4. Abrir cada diálogo de contacto: cero `whatsapp_contact`. Seleccionar seguros y continuar: uno. Probar doble clic y ambos enlaces sociales sin enviar mensajes. Verificar servicio y ubicación correctos.
-5. Habilitar depuración de GA4 únicamente en la sesión de prueba, por ejemplo con `debug_mode:true` en una configuración de vista previa no publicada. En DebugView comprobar nombres, conteos y parámetros. Inspeccionar además las solicitudes `collect`: ni el mensaje de prueba ni el teléfono ni `wa.me` deben aparecer. Revisar `page_location` sin consulta/fragmento y `page_referrer` vacío, y ausencia de valores del simulador.
-6. Revocar aceptación y comprobar que cesa la medición tras recarga, sin perder el uso del simulador ni contacto. Repetir en móvil y revisar navegación al aviso y regreso. Salir de la depuración y retirar cualquier ajuste de prueba antes de publicar el contenedor.
-
-Guardar evidencia de Tag Assistant y DebugView con fecha, contenedor/versión y resultado; no marcar la verificación como completa sin ella. Fuentes: [Tag Assistant y vista previa](https://support.google.com/tagmanager/answer/6107056?hl=es) y [GA4 DebugView](https://support.google.com/analytics/answer/7201382?hl=es).
+Fuentes: [Consent Mode avanzado y orden de arranque](https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced), [comprobaciones integradas y etiquetas bloqueadas](https://support.google.com/analytics/answer/12962079?hl=es), [medición mejorada y link_url](https://support.google.com/analytics/answer/9216061?hl=es), [parámetros de página](https://developers.google.com/analytics/devguides/collection/ga4/reference/config), [vista previa](https://support.google.com/tagmanager/answer/6107056?hl=es), [DebugView](https://support.google.com/analytics/answer/7201382?hl=es).
 
 ## Supuestos financieros pendientes, fuera del alcance de este cambio
 
@@ -88,4 +80,4 @@ Guardar evidencia de Tag Assistant y DebugView con fecha, contenedor/versión y 
 - Referencia fiscal al 25%, límites por UMA e ingresos, elegibilidad y posible devolución: revisar situación fiscal y año aplicable.
 - Escenario «Libre de impuestos»: verificar modalidad, requisitos y límites de retiro. El motor no calcula ISR personal y la interfaz muestra `saldoTotal`.
 
-Se conserva el cálculo existente. El único cambio del resultado es gramatical: «1 año».
+Se conserva el cálculo existente. «1 año» ya estaba corregido y se conserva.

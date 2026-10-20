@@ -1,4 +1,6 @@
-# Instalación de Google Tag Manager
+# Instalación inicial de Google Tag Manager (registro del PR #8)
+
+Actualización del 20 de octubre de 2026: este documento conserva el alcance histórico de la instalación inicial. La rama actual elimina la restricción temporal, unifica el cargador y conecta consentimiento avanzado. Para el estado actual, configuración privada y pruebas pendientes, seguir [PRIVACIDAD-Y-MEDICION.md](PRIVACIDAD-Y-MEDICION.md); no volver a introducir la lista vacía o el cargador alternativo descritos aquí.
 
 Alcance de esta propuesta: instalar el contenedor **GTM-KMG6BPKF** en la landing actual, sin configurar GA4, eventos, conversiones ni campañas. El ID **G-VSNRQ7H8JL**, proporcionado por el propietario, queda reservado para una configuración posterior dentro de GTM. No se añade `gtag.js` ni una llamada de configuración de GA4.
 
