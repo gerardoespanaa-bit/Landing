@@ -38,7 +38,7 @@ Utilizar el enlace cuando la versión del aviso esté publicada. Estas plantilla
 
 **Antes de pedir datos para evaluación:**
 
-> Para preparar tu evaluación necesito información sobre tu situación y objetivos. Antes de compartirla, revisa el aviso de privacidad: https://gerardoespanaa-bit.github.io/Landing/aviso-de-privacidad.html. Te explicaré cuáles son los datos necesarios para tu caso y cómo se registran. La autorización para ese tratamiento es distinta de aceptar la cita.
+> Para preparar tu evaluación necesito información sobre tu situación y objetivos. Antes de compartirla, revisa el aviso de privacidad: https://xn--gerardoespaa-khb.com/aviso-de-privacidad.html. Te explicaré cuáles son los datos necesarios para tu caso y cómo se registran. La autorización para ese tratamiento es distinta de aceptar la cita.
 
 **Ejemplo para registrar una autorización específica:**
 
@@ -52,10 +52,10 @@ Las prácticas del CRM y Allianz DAF provienen de las confirmaciones del propiet
 
 La referencia normativa es la [LFPDPPP vigente](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf), incluidos consentimiento, información previa y derechos ARCO. La redacción no declara una certificación jurídica, técnica o de seguridad del negocio o de sus sistemas.
 
-## GA4: siguiente fase separada
+## Actualización técnica del 20 de octubre de 2026
 
-GTM ya carga desde la landing, pero GA4, los eventos y las preferencias preparadas continúan desactivados. Los IDs reales ya fueron recibidos. No se cambian `measurement-config.js`, `measurement.js`, el HTML de la landing ni la restricción de etiquetas en este PR.
+La rama de consentimiento avanzado elimina el bloqueo de etiquetas, unifica GTM, conecta las preferencias del visitante y actualiza la sección 7 del aviso. El merge de esa rama desplegará la integración; la configuración y publicación del contenedor siguen siendo tareas separadas del propietario. La fase de preparación descrita al inicio de este documento corresponde al aviso anterior (PR #9).
 
-Activar analítica requiere unificar el cargador, conectar la elección del visitante, revisar la ruta sin JavaScript y configurar y comprobar el contenedor y GA4 con Tag Assistant y DebugView. Aprobar la política de atención de prospectos no otorga consentimiento analítico a los visitantes. No añadir a eventos mensajes, teléfonos, URLs de WhatsApp ni valores financieros.
+El modo avanzado permite señales limitadas sin cookies con consentimiento analítico denegado; no promete cero comunicaciones con Google. Publicidad permanece denegada. Las instrucciones actuales de configuración, exclusión de datos y validación están en [PRIVACIDAD-Y-MEDICION.md](PRIVACIDAD-Y-MEDICION.md).
 
-El merge de este PR publicará el aviso actualizado. No activará GA4, no modificará el simulador y no automatizará la operación del CRM.
+No se ha verificado la nueva versión con Tag Assistant o GA4 DebugView ni se ha publicado desde esta tarea. Aprobar la política de prospectos no otorga consentimiento analítico a los visitantes. No se modifican los procedimientos del CRM o Allianz ni los cálculos del simulador.
