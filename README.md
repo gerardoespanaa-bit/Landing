@@ -24,7 +24,7 @@ WhatsApp confirmado: +52 442 377 7762. El 30% de descuento de auto es texto come
 
 ## Privacidad y medición preparadas
 
-`aviso-de-privacidad.html` distingue visita y primer contacto, evaluación y contratación de PPR. Sigue en revisión; 12 meses desde el último contacto es una propuesta de conservación sin aprobar ni implementar. Se accede desde el pie, el contacto por WhatsApp y Sobre mí. Consultar [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md) para prácticas confirmadas, entrega previa del aviso, consentimiento financiero, solicitudes ARCO, sistemas y eliminación pendientes. No publicar este borrador como aviso definitivo.
+`aviso-de-privacidad.html` distingue visita y primer contacto, evaluación registrada en el CRM propio alojado en Lovable y contratación gestionada por el asesor con el cliente mediante Allianz DAF. Incluye el criterio de 12 meses para prospectos sin contratación y el procedimiento de atención confirmados por el propietario, sin afirmar borrado automático ni un portal de privacidad. El texto ya no lleva marcas de borrador y se aplicará al publicarse. Se accede desde el pie, el contacto por WhatsApp y Sobre mí. [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md) documenta confirmaciones y seguimiento operativo; este PR no modifica el CRM.
 
 El HTML carga GTM mediante los fragmentos oficiales del PR #8, con estados de consentimiento denegados y restricción de etiquetas. GA4 y el flujo alternativo de `measurement.js` siguen desactivados; `measurement-config.js` conserva campos vacíos. Los IDs reales ya fueron recibidos. Unificar la integración antes de activar medición; no operar ambos cargadores. No se modifica el motor financiero.
 

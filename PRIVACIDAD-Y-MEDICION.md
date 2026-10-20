@@ -1,33 +1,24 @@
 # Preparación de privacidad y medición
 
-Estado actual: el propietario fusionó los PR #7 y #8 y publicó el borrador inicial y los fragmentos oficiales de GTM. **GA4 sigue sin activarse.** Esta revisión del aviso por etapas se prepara para un nuevo PR y no se publica automáticamente. Los pendientes operativos y la propuesta de conservación se detallan en [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md). No se modifican `engine.js`, `projection-metrics.js` ni sus supuestos.
+Estado actual: los fragmentos oficiales de GTM están publicados y GA4 sigue sin activarse. El PR #9 contiene el aviso actualizado con el CRM en Lovable, contratación mediante Allianz DAF y procedimiento y criterio de conservación confirmados por el propietario. El merge publicará el aviso sin marcas de borrador; no activa medición. El seguimiento operativo está en [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md).
 
-## Datos del aviso
-
-Confirmados por el propietario:
+## Datos y procedimiento confirmados
 
 | Dato | Confirmación |
 |---|---|
-| Responsable | Gerardo López España |
+| Responsable | Gerardo López España, persona física; nombre profesional Gerardo España |
 | Domicilio | Plaza Nazas, Av. Fray Luis de León 7092, Local 27B, Colinas del Cimatario, C. P. 76090, Santiago de Querétaro, Querétaro, México |
-| Atención | El responsable recibe los contactos personalmente |
-| Comunicación de datos | No comparte los datos con aseguradoras, otros asesores ni terceros para fines comerciales; revisar por separado proveedores técnicos |
-| Finalidad | Agendar una cita de evaluación y presentar una propuesta de solución financiera |
-| Evaluación | Tras interés y aceptación de sesión: edad, ocupación, ingresos aproximados, capacidad de ahorro, aportación mensual deseada, retiro objetivo y objetivos financieros; registro en sistema aún por identificar |
-| PPR | Contratación separada, con datos y documentos adicionales por precisar |
-| Conservación sin contratación | Propuesta de 12 meses desde el último contacto, no aprobada ni implementada |
+| Correo | gerardoespanaa@gmail.com |
+| Finalidades | Contacto, cita, evaluación y propuesta solicitada; si el cliente decide contratar, gestión de la formalización con Allianz |
+| Evaluación | Edad, ocupación, ingresos aproximados, capacidad de ahorro, aportación mensual deseada, retiro objetivo y objetivos financieros, según el caso |
+| CRM | Propio, alojado en Lovable |
+| Contratación | Gestionada por el asesor con el cliente mediante Allianz DAF |
+| Destinataria de contratación | Allianz México, S.A., Compañía de Seguros |
 | Publicidad | No se enviará inicialmente |
-| Correo de privacidad | gerardoespanaa@gmail.com |
+| Conservación sin contratación | 12 meses desde el último contacto, según criterio aprobado por el propietario y obligaciones de conservación o bloqueo aplicables |
+| ARCO y revocación | Procedimiento por correo confirmado por el propietario; no se ofrece automatización ni portal |
 
-Pendientes de aprobación antes de fusionar/publicar:
-
-- Aprobar el procedimiento propuesto para solicitudes de privacidad, incluida la acreditación segura de identidad, atención, respuesta, revocación y límites de uso. ARCO significa acceso, rectificación, cancelación y oposición al tratamiento. El correo ya está confirmado; el proceso aún debe aprobarse y poder cumplirse.
-- Completar los datos y destinatarios de contratación; identificar el sistema que registra la evaluación. La información de evaluación ya confirmada se distingue de los datos adicionales de PPR. No se crean formularios ni registros de consentimiento en esta revisión.
-- Plazos de conservación, medidas aplicables y mecanismo para informar cambios al aviso.
-- Revisión de proveedores técnicos y sus funciones: GitHub Pages, WhatsApp, Google Fonts, Unsplash y Google Analytics/Tag Manager si se activan. No confundirlos con compartir contactos con otra aseguradora o asesor.
-- Aprobación final del texto y fecha de entrada en vigor. La página lleva `noindex` y marcas de borrador: retirarlas solo después de completar y aprobar los pendientes. No fusionar el borrador como aviso definitivo.
-
-El texto se organiza tomando como referencia los artículos 14–16 de la [LFPDPPP](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf). La revisión pendiente comprende las prácticas reales, no solo el contenido de la página.
+La rama no modifica el CRM ni valida técnicamente su borrado, respaldos o controles de acceso. La aprobación del procedimiento no se presenta como una automatización implementada. Las tres etapas quedan diferenciadas y los avisos de Allianz no se sustituyen por el del asesor.
 
 ## IDs reales recibidos y estado técnico
 
