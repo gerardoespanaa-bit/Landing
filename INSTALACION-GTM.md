@@ -6,7 +6,7 @@ Alcance de esta propuesta: instalar el contenedor **GTM-KMG6BPKF** en la landing
 
 `index.html` incluye una única copia del script oficial en `<head>`, después de la codificación y de la configuración preventiva de consentimiento. El fragmento oficial `<noscript>` es el primer elemento después de abrir `<body>`. Ambos utilizan el mismo ID real. No hay inyección adicional mediante un archivo externo.
 
-En `main`, punto de partida de esta rama, no se encontró instalación previa de GA4 ni GTM. El PR #7 sigue en borrador y contiene un cargador alternativo aún no fusionado; **no combinar ambos cargadores**. Si se retoma ese PR, habrá que adaptarlo a esta instalación antes de activarlo. Esta propuesta parte directamente de `main` y no publica el borrador de privacidad.
+La instalación original del PR #8 partió de un `main` sin GA4 ni GTM. Los PR #7 y #8 ya están fusionados: existe el cargador oficial y permanece desactivado el cargador alternativo preparatorio. **No operar ambos cargadores** al activar analítica; antes hay que unificarlos. El aviso se actualiza por separado en el PR #9.
 
 Referencia de los dos fragmentos: [instalación oficial del contenedor web](https://support.google.com/tagmanager/answer/14847097?hl=en).
 
@@ -18,7 +18,7 @@ No se agrega un botón de aceptación ni se concede consentimiento automáticame
 
 **Límite del fragmento sin JavaScript:** el iframe oficial no ejecuta la configuración JavaScript de consentimiento ni la lista local. En la verificación, la versión pública 1 del contenedor tenía cero etiquetas, reglas y predicados, y su respuesta sin JavaScript no produjo solicitudes de medición. Antes de publicar etiquetas en el contenedor, debe revisarse expresamente esta ruta: no habilitar píxeles o etiquetas que puedan ejecutarse sin JavaScript sin un mecanismo de consentimiento adecuado. Esta entrega no modifica ni publica la configuración de la cuenta GTM.
 
-Cargar GTM hace una solicitud técnica a Google incluso sin medición activa. El aviso definitivo debe reflejar los proveedores y prácticas reales. La aprobación del aviso continúa pendiente en el PR #7.
+Cargar GTM hace una solicitud técnica a Google incluso sin medición activa. El aviso definitivo debe reflejar los proveedores y prácticas reales. El aviso actualizado y las confirmaciones del propietario se incorporan al PR #9. Su publicación no activa analítica ni cambia esta restricción.
 
 Referencias: [configuración de consentimiento](https://developers.google.com/tag-platform/security/guides/consent) y [restricción de tipos de etiquetas](https://developers.google.com/tag-platform/tag-manager/restrict). Google recomienda plantillas y políticas para una gestión más completa; esta restricción temporal no sustituye una solución de consentimiento.
 
@@ -33,4 +33,4 @@ La comprobación del contenedor se realiza en una vista local con acceso al scri
 
 Resultado del 19 de octubre de 2026: Chrome cargó el contenedor real una sola vez por página y el respaldo sin JavaScript obtuvo respuesta 200. Se probaron escritorio de 1366 × 768 y anchos de 320, 390 y 768 píxeles, los cinco escenarios financieros existentes, nueve botones de contacto y dos enlaces sociales. No hubo errores JavaScript, desbordamiento horizontal ni solicitudes de Analytics/Ads. Las pruebas locales del motor y de la referencia fiscal también pasaron. `app.js`, `engine.js`, `projection-metrics.js`, `updates.css` y el HTML fuera de los bloques añadidos permanecen idénticos a `main`.
 
-Para una fase posterior: terminar y aprobar el aviso, configurar una solución de consentimiento, adaptar el PR #7 sin duplicar el cargador, configurar GA4 únicamente desde GTM y comprobar consentimiento y eventos con Tag Assistant y DebugView. Recibir los IDs no supone aprobar ni activar esa fase.
+Para una fase posterior a la actualización del aviso: configurar una solución de consentimiento analítico, adaptar el cargador preparatorio del PR #7 sin duplicar el oficial, configurar GA4 únicamente desde GTM y comprobar consentimiento y eventos con Tag Assistant y DebugView. Aprobar el procedimiento de prospectos no otorga consentimiento analítico a los visitantes ni activa esa fase.

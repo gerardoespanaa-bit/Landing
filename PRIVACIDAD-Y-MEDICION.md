@@ -1,39 +1,33 @@
 # Preparación de privacidad y medición
 
-Estado de esta entrega: borrador de aviso y código preparado, **sin publicar y sin medición activa**. La rama no habilita campañas ni garantiza aprobación por Google Ads. No se modifican `engine.js`, `projection-metrics.js` ni sus supuestos.
+Estado actual: los fragmentos oficiales de GTM están publicados y GA4 sigue sin activarse. El PR #9 contiene el aviso actualizado con el CRM en Lovable, contratación mediante Allianz DAF y procedimiento y criterio de conservación confirmados por el propietario. El merge publicará el aviso sin marcas de borrador; no activa medición. El seguimiento operativo está en [REVISION-PRIVACIDAD.md](REVISION-PRIVACIDAD.md).
 
-## Datos del aviso
-
-Confirmados por el propietario:
+## Datos y procedimiento confirmados
 
 | Dato | Confirmación |
 |---|---|
-| Responsable | Gerardo López España |
+| Responsable | Gerardo López España, persona física; nombre profesional Gerardo España |
 | Domicilio | Plaza Nazas, Av. Fray Luis de León 7092, Local 27B, Colinas del Cimatario, C. P. 76090, Santiago de Querétaro, Querétaro, México |
-| Atención | El responsable recibe los contactos personalmente |
-| Comunicación de datos | No comparte los datos con aseguradoras, otros asesores ni terceros para fines comerciales; revisar por separado proveedores técnicos |
-| Finalidad | Agendar una cita de evaluación y presentar una propuesta de solución financiera |
+| Correo | gerardoespanaa@gmail.com |
+| Finalidades | Contacto, cita, evaluación y propuesta solicitada; si el cliente decide contratar, gestión de la formalización con Allianz |
+| Evaluación | Edad, ocupación, ingresos aproximados, capacidad de ahorro, aportación mensual deseada, retiro objetivo y objetivos financieros, según el caso |
+| CRM | Propio, alojado en Lovable |
+| Contratación | Gestionada por el asesor con el cliente mediante Allianz DAF |
+| Destinataria de contratación | Allianz México, S.A., Compañía de Seguros |
 | Publicidad | No se enviará inicialmente |
-| Correo de privacidad | gerardoespanaa@gmail.com |
+| Conservación sin contratación | 12 meses desde el último contacto, según criterio aprobado por el propietario y obligaciones de conservación o bloqueo aplicables |
+| ARCO y revocación | Procedimiento por correo confirmado por el propietario; no se ofrece automatización ni portal |
 
-Pendientes de aprobación antes de fusionar/publicar:
+La rama no modifica el CRM ni valida técnicamente su borrado, respaldos o controles de acceso. La aprobación del procedimiento no se presenta como una automatización implementada. Las tres etapas quedan diferenciadas y los avisos de Allianz no se sustituyen por el del asesor.
 
-- Aprobar el procedimiento propuesto para solicitudes de privacidad, incluida la acreditación segura de identidad, atención, respuesta, revocación y límites de uso. ARCO significa acceso, rectificación, cancelación y oposición al tratamiento. El correo ya está confirmado; el proceso aún debe aprobarse y poder cumplirse.
-- Categorías que se solicitan después del primer contacto, especialmente información financiera, patrimonial o de salud; aviso y consentimiento específico si corresponde. No se proponen formularios nuevos en esta rama.
-- Plazos de conservación, medidas aplicables y mecanismo para informar cambios al aviso.
-- Revisión de proveedores técnicos y sus funciones: GitHub Pages, WhatsApp, Google Fonts, Unsplash y Google Analytics/Tag Manager si se activan. No confundirlos con compartir contactos con otra aseguradora o asesor.
-- Aprobación final del texto y fecha de entrada en vigor. La página lleva `noindex` y marcas de borrador: retirarlas solo después de completar y aprobar los pendientes. No fusionar el borrador como aviso definitivo.
+## IDs reales recibidos y estado técnico
 
-El texto se organiza tomando como referencia los artículos 14–16 de la [LFPDPPP](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf). La revisión pendiente comprende las prácticas reales, no solo el contenido de la página.
+No se requieren contraseñas. El propietario ya proporcionó:
 
-## IDs de Google: qué falta
+1. Contenedor **GTM-KMG6BPKF**: instalado mediante los fragmentos oficiales de `index.html`.
+2. Medición **G-VSNRQ7H8JL**: reservada para configuración posterior dentro de GTM, sin instalación directa de GA4.
 
-No se requieren contraseñas. Se necesitan dos identificadores reales del propietario:
-
-1. **GTM-…:** en Google Tag Manager, crear o abrir el contenedor **Web** de la landing y copiar su ID mostrado en el espacio de trabajo.
-2. **G-…:** en Google Analytics, crear o abrir la propiedad GA4 y su flujo **Web** para la landing; en Administrar → Flujos de datos → flujo web, copiar el ID de medición.
-
-Entregar esos dos IDs cuando estén disponibles. No se han sustituido por valores inventados. El archivo `measurement-config.js` tiene ambos vacíos y `enabled:false`, `privacyApproved:false`. El motor no carga GTM, no crea `dataLayer` y no guarda eventos de usuarios mientras falte cualquiera de esas condiciones o el usuario no acepte analítica. No hay cola retroactiva de eventos previos a la aceptación.
+El archivo preparatorio `measurement-config.js` conserva campos vacíos, `enabled:false` y `privacyApproved:false`. Esto mantiene desactivado su flujo de eventos; no impide la carga oficial de GTM desde el HTML. No cambiar esos valores sin adaptar el cargador alternativo para evitar duplicados y resolver la restricción de etiquetas y el consentimiento. Los apartados técnicos siguientes son una guía pendiente de adaptar y validar, no una instalación activa ni un mecanismo de elección ya implementado.
 
 ## Eventos y reglas de conteo
 
@@ -64,7 +58,9 @@ Fuentes: [etiqueta de Google mediante GTM](https://support.google.com/tagmanager
 
 ## Consentimiento y activación controlada
 
-Cuando se apruebe el aviso, se revisen las etiquetas y se cuente con los IDs, completar `measurement-config.js`. Solo entonces poner `privacyApproved:true` y `enabled:true` en una revisión posterior. No usar IDs de pruebas en producción.
+Con los IDs ya recibidos, falta aprobar el aviso y adaptar conjuntamente el cargador, las restricciones y la configuración del contenedor. No basta con completar `measurement-config.js` o cambiar sus indicadores a `true`: eso puede combinar dos cargadores. La activación requiere otra revisión técnica y operativa. No usar IDs de pruebas en producción.
+
+El comportamiento del prototipo que se describe a continuación está desactivado y requiere adaptación antes de usarse. No acredita que se haya implementado un mecanismo operativo de consentimiento.
 
 El panel analítico se muestra únicamente cuando la configuración está completa. Aceptar habilita `analytics_storage`; `ad_storage`, `ad_user_data` y `ad_personalization` permanecen denegados. Rechazar mantiene bloqueado el contenedor completo, sin pings de medición. El consentimiento es básico: GTM no se carga antes de aceptar. Se omite intencionalmente el iframe `noscript` para no cargar medición saltándose la elección del usuario.
 
@@ -74,7 +70,7 @@ Referencia: [modo de consentimiento](https://developers.google.com/tag-platform/
 
 ## Verificación final con IDs reales: pendiente
 
-**No realizada en Tag Assistant ni en GA4 DebugView:** faltan los IDs y la configuración de las cuentas. Las pruebas locales usan un contenedor simulado e interceptado, sin enviar eventos a Google. No sustituyen esta comprobación final.
+**No realizada en Tag Assistant ni en GA4 DebugView:** los IDs ya están confirmados, pero falta la configuración de cuentas, integración unificada y consentimiento. Las pruebas de eventos del PR #7 usaron un contenedor simulado e interceptado. El PR #8 verificó la carga real del contenedor vacío. Ninguna prueba sustituye la validación final de GA4 y sus eventos.
 
 1. Con el aviso aprobado e IDs reales en una vista de prueba, abrir GTM → Vista previa y conectar Tag Assistant a esa vista. No publicar en `main` para hacer la prueba. Puede utilizarse un servidor local accesible en el navegador de la sesión de vista previa.
 2. En un navegador limpio, antes de aceptar y tras rechazar, confirmar cero cargas de GTM y Analytics. Aceptar y confirmar una sola carga de contenedor y un único `page_view`. Revisar estado de consentimiento analítico concedido y publicitario denegado.
