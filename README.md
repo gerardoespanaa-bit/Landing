@@ -4,6 +4,8 @@ Sitio estático sin dependencias de producción. index.html contiene las seccion
 
 ## Comprobaciones
 
+Para la corrección de atribución propuesta, ejecutar `node test-attribution.cjs` y `node test-consent-init.cjs`. [ATRIBUCION-SEGURA.md](ATRIBUCION-SEGURA.md) documenta las listas cerradas, los referentes y los límites. Se reutilizan las etiquetas existentes; no publicar ni fusionar la rama sin aprobación. Registrar el ID real de la campaña en `adsCampaignIds` antes de un lanzamiento aprobado; la lista permanece vacía mientras no existe una campaña verificada.
+
 Ejecutar node test.cjs para las cinco combinaciones financieras existentes y node test-metrics.cjs para la referencia fiscal anual, límite de cinco UMA e inputs inválidos. simulate() devuelve un arreglo anual; la interfaz lo valida y nunca presupone .annual ni convierte errores en cero. La proyección se calcula antes de animar durante cuatro segundos y permite recalcular.
 
 ## Supuestos
@@ -31,3 +33,4 @@ La integración usa un solo cargador de GTM en la landing y en el aviso. Los est
 Consultar [PRIVACIDAD-Y-MEDICION.md](PRIVACIDAD-Y-MEDICION.md) para configurar y validar el contenedor privado antes de publicarlo. Desactivar en GA4 la medición mejorada de clics salientes y formularios: puede recoger URLs de WhatsApp con mensajes. El código sanea sus parámetros propios, pero no controla lo que se añada en la cuenta de Google. Siguen pendientes Tag Assistant y DebugView de la nueva versión; no se presenta una prueba local como verificación de recepción real en GA4.
 
 `node test-measurement.cjs` ejecuta pruebas de navegador de activación, consentimiento, cargas únicas, eventos, exclusión de datos privados, cálculos, contacto y móvil. Requiere Playwright instalado en el entorno de desarrollo y Chrome; no añade dependencias de producción. Se puede indicar `PLAYWRIGHT_MODULE` con la ruta al módulo existente y `CHROME_PATH` con la ruta del ejecutable. `QA_OUTPUT` permite guardar capturas y resultados fuera del repositorio. Las solicitudes de GTM y WhatsApp se interceptan: estas pruebas no envían eventos a Google ni mensajes y no equivalen a DebugView.
+
