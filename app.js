@@ -1,6 +1,6 @@
 'use strict';
 const WHATSAPP_NUMBER='524423777762';
-const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer cómo puedes ayudarme.',simulador:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',retiro:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',seguros:'Hola Gerardo, quiero revisar una protección y su cotización',bolsa:'Hola Gerardo, me gustaría una asesoría para invertir en bolsa',auto:'Hola Gerardo, quisiera revisar una cotización para un auto'};
+const messages={general:'Hola, Gerardo. Quiero agendar una asesoría gratis y conocer cómo puedes ayudarme.',simulador:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',retiro:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',seguros:'Hola Gerardo, quiero revisar una protección y su cotización',bolsa:'Hola Gerardo, me gustaría una asesoría para invertir en bolsa',auto:'Hola Gerardo, quisiera revisar una cotización para un auto'};
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 let latest=null,frameId=0,progress=1,returnFocus=null;
@@ -47,7 +47,7 @@ form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm
  frameId=requestAnimationFrame(frame);
 });
 form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});
-const minimumAgeMessages={ageNow:'¡La edad mínima de inicio son 18 años!',ageRetirement:'Cotizador permite edad mínima a los 65. Si te interesa retirarte antes agenda una asesoría para ver tu proyección.'};
+const minimumAgeMessages={ageNow:'¡La edad mínima de inicio son 18 años!',ageRetirement:'Cotizador permite edad mínima a los 65. Si te interesa retirarte antes agenda una asesoría gratis para ver tu proyección.'};
 const projectionInputs=['ageNow','monthlyContribution','ageRetirement'].map($);
 const fieldMessages=new Map();
 function projectionInputError(input,required=true){
@@ -95,11 +95,11 @@ let contactContext='general',contactLocation='hero',contactButtonId=null;
 const contactClicks=new WeakMap();
 function measureContact(el,service,location,buttonId){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service==='simulador'?'retiro':service,location,{button_id:buttonId});}
 const contactCopy={
- general:{title:'Agenda una asesoría',intro:'Coordinamos tu asesoría directamente por WhatsApp.'},
- retiro:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
- simulador:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
+ general:{title:'Agenda una asesoría gratis',intro:'Coordinamos tu asesoría inicial gratis directamente por WhatsApp.'},
+ retiro:{title:'Agenda una asesoría gratis',intro:'Agenda una asesoría gratis para revisar los detalles, letras chiquitas y beneficios del plan.'},
+ simulador:{title:'Agenda una asesoría gratis',intro:'Agenda una asesoría gratis para revisar los detalles, letras chiquitas y beneficios del plan.'},
  seguros:{title:'Asesora tu protección',intro:''},
- bolsa:{title:'Agenda una asesoría',intro:'Aprende los primeros pasos necesarios para comenzar a invertir en bolsa y al sentirte listo realiza tu primera compra de la mano de un asesor.'},
+ bolsa:{title:'Agenda una asesoría gratis',intro:'Aprende los primeros pasos necesarios para comenzar a invertir en bolsa y al sentirte listo realiza tu primera compra de la mano de un asesor.'},
  auto:{title:'¡Cotiza de inmediato con descuento!',intro:'Obtén una cotización instantánea mandando por mensaje los siguientes datos:'}
 };
 function protectionSelection(){return [...$('contactExtras').querySelectorAll('input:checked')].map(input=>input.value);}
