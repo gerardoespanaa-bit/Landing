@@ -93,7 +93,7 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
    assert(new URL(await page.locator('#contactContinue').getAttribute('href')).searchParams.get('text').includes('PRIVATE_TEST_MESSAGE'));
    // Two synchronous click activations exercise dedup without sending a message.
    await page.locator('#contactContinue').evaluate(el=>{el.addEventListener('click',e=>e.preventDefault(),{capture:true});el.click();el.click();});
-   const wa=(await business(page)).filter(e=>e.event==='whatsapp_contact');assert.equal(wa.length,before+1);assert.deepEqual(wa.at(-1),{event:'whatsapp_contact',service:service==='simulador'?'retiro':service,button_location:location});
+   const wa=(await business(page)).filter(e=>e.event==='whatsapp_contact');assert.equal(wa.length,before+1);assert.deepEqual(wa.at(-1),{event:'whatsapp_contact',service:service==='simulador'?'retiro':service,button_location:location,button_id:await trigger.getAttribute('data-measure-id'),action_type:null});
    await page.locator('#closeContact').click();if(service==='simulador')await page.keyboard.press('Escape');
    // A new dialog can be opened immediately for a distinct service.
   }
@@ -102,7 +102,7 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   }
   const layer=await page.evaluate(()=>JSON.parse(JSON.stringify(window.dataLayer))),serialized=JSON.stringify(layer);
   for(const secret of ['PRIVATE_TEST','4423777762','wa.me','email=','TEST_PERSON'])assert(!serialized.includes(secret));
-  report.events=await business(page);assert(report.events.every(e=>Object.keys(e).sort().join(',')==='button_location,event,service'));
+  report.events=await business(page);assert(report.events.every(e=>Object.keys(e).sort().join(',')==='action_type,button_id,button_location,event,service'));
   assert.equal(await page.evaluate(()=>window.LandingMeasurement.track('arbitrary_event','general','header')),false);assert.equal(await page.evaluate(()=>window.LandingMeasurement.track('whatsapp_contact','private_message','header')),false);
   report.checks.push('All nine CTAs and two social links: service/location, no dialog-open conversion, blocked insurance excluded, duplicate click suppressed, no private test values in dataLayer');
   await page.context().addCookies([{name:'_ga',value:'test',url:base}]);
@@ -123,3 +123,4 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   assert.deepEqual(report.errors,[]);report.result='passed';console.log(JSON.stringify({result:report.result,checks:report.checks,events:report.events.length},null,2));
  }finally{for(const ctx of contexts)await ctx.close();await browser.close();await new Promise(resolve=>server.close(resolve));if(output)fs.writeFileSync(path.join(output,'verification.json'),JSON.stringify(report,null,2));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});
+
