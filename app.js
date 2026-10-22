@@ -4,7 +4,7 @@ const messages={general:'Hola, Gerardo. Quiero agendar una asesoría y conocer c
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 let latest=null,frameId=0,progress=1,returnFocus=null;
-const measure=(name,service,location)=>{try{window.LandingMeasurement?.track(name,service,location);}catch{/* Measurement must never block the calculator or contact. */}};
+const measure=(name,service,location,details)=>{try{window.LandingMeasurement?.track(name,service,location,details);}catch{/* Measurement must never block the calculator or contact. */}};
 function project(age,monthly,retire){
  if(!Number.isInteger(age)||age<18||age>64||!Number.isInteger(retire)||retire<65||retire>90||!Number.isFinite(monthly)||monthly<2000||monthly>1000000)throw Error('Revisa las edades y una aportación mensual entre $2,000 y $1,000,000.');
  const years=retire-age;
@@ -85,15 +85,15 @@ document.querySelectorAll('[data-age-step]').forEach(step=>step.addEventListener
  input.dispatchEvent(new Event('input',{bubbles:true}));
 }));
 const simulator=$('simulador');
-function closeSimulator(){const interrupted=button.disabled;cancel();if(interrupted){latest=null;panel.hidden=true;panel.setAttribute('aria-busy','false');}simulator.classList.remove('is-open');document.body.classList.remove('modal-active');returnFocus?.focus();}
+function closeSimulator(){if(simulator.classList.contains('is-open'))measure('ui_click','retiro','simulator',{button_id:'simulator_close',action_type:'close'});const interrupted=button.disabled;cancel();if(interrupted){latest=null;panel.hidden=true;panel.setAttribute('aria-busy','false');}simulator.classList.remove('is-open');document.body.classList.remove('modal-active');returnFocus?.focus();}
 document.querySelectorAll('[data-open-sim],a[href="#simulador"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();if(simulator.classList.contains('is-open'))return;returnFocus=el;measure('simulator_open','retiro',el.dataset.measureLocation);simulator.classList.add('is-open');document.body.classList.add('modal-active');$('ageNow').focus();if(latest)draw(progress);}));
 $('closeSimulator').addEventListener('click',closeSimulator);
 document.addEventListener('keydown',e=>{if(!simulator.classList.contains('is-open')||$('contactDialog').open||$('credentialDialog').open)return;if(e.key==='Escape')closeSimulator();if(e.key==='Tab'){const items=[...simulator.querySelectorAll('button,input,a[href],summary')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 window.addEventListener('resize',()=>draw(progress));
 const contact=$('contactDialog');
-let contactContext='general',contactLocation='hero';
+let contactContext='general',contactLocation='hero',contactButtonId=null;
 const contactClicks=new WeakMap();
-function measureContact(el,service,location){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service==='simulador'?'retiro':service,location);}
+function measureContact(el,service,location,buttonId){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service==='simulador'?'retiro':service,location,{button_id:buttonId});}
 const contactCopy={
  general:{title:'Agenda una asesoría',intro:'Coordinamos tu asesoría directamente por WhatsApp.'},
  retiro:{title:'Agenda una asesoría',intro:'Agenda una asesoría para revisar los detalles, letras chiquitas y beneficios del plan.'},
@@ -110,7 +110,7 @@ function updateLink(){
  else $('contactContinue').removeAttribute('href');
 }
 document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e=>{
- e.preventDefault();contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';contactLocation=el.dataset.measureLocation;contactClicks.delete($('contactContinue'));
+ e.preventDefault();if(contact.open)return;contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';contactLocation=el.dataset.measureLocation;contactButtonId=el.dataset.measureId;contactClicks.delete($('contactContinue'));
  const copy=contactCopy[contactContext];$('contactTitle').textContent=copy.title;$('contactIntro').textContent=copy.intro;$('contactIntro').parentElement.hidden=!copy.intro;$('contactExtras').replaceChildren();
  if(contactContext==='seguros'){
   const fieldset=document.createElement('fieldset');fieldset.className='protection-options';
@@ -121,20 +121,20 @@ document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e
   const list=document.createElement('ul');for(const text of ['Marca','Modelo','Año','Código postal','Edad del conductor']){const item=document.createElement('li');item.textContent=text;list.append(item);}$('contactExtras').append(list);
   const note=document.createElement('p');note.className='auto-conditions';note.textContent='Consulta las condiciones del descuento y su disponibilidad al cotizar.';$('contactExtras').append(note);
  }
- $('contactMessage').value=messages[contactContext];updateLink();contact.showModal();
+ $('contactMessage').value=messages[contactContext];updateLink();contact.showModal();measure('ui_click',contactContext==='simulador'?'retiro':contactContext,contactLocation,{button_id:contactButtonId,action_type:'open_contact'});
 }));
-$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true'){e.preventDefault();return;}measureContact(e.currentTarget,contactContext,contactLocation);});
-document.querySelectorAll('[data-wa-social]').forEach(el=>el.addEventListener('click',()=>measureContact(el,'general',el.dataset.measureLocation)));
+$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true'){e.preventDefault();return;}measureContact(e.currentTarget,contactContext,contactLocation,contactButtonId);});
+document.querySelectorAll('[data-wa-social]').forEach(el=>el.addEventListener('click',()=>measureContact(el,'general',el.dataset.measureLocation,el.dataset.measureId)));
 $('contactMessage').addEventListener('input',updateLink);$('closeContact').addEventListener('click',()=>contact.close());
-$('menuToggle').addEventListener('click',()=>{$('menuToggle').setAttribute('aria-expanded',String($('navLinks').classList.toggle('open')));});
+$('menuToggle').addEventListener('click',()=>{const open=$('navLinks').classList.toggle('open');$('menuToggle').setAttribute('aria-expanded',String(open));measure('ui_click','general','header',{button_id:'mobile_menu',action_type:open?'open':'close'});});
 $('navLinks').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{$('navLinks').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
 
 const profileButtons=[...document.querySelectorAll('[data-profile]')],slides=[...document.querySelectorAll('.profile-slide')];
 profileButtons.forEach(button=>button.addEventListener('click',()=>{
- const index=Number(button.dataset.profile);$('profileTrack').style.transform=`translateX(-${index*100}%)`;
+ const changed=button.getAttribute('aria-pressed')!=='true';const index=Number(button.dataset.profile);$('profileTrack').style.transform=`translateX(-${index*100}%)`;
  slides.forEach((slide,i)=>{slide.setAttribute('aria-hidden',String(i!==index));slide.inert=i!==index;});
  profileButtons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
- $('profileStatus').textContent=slides[index].querySelector('figcaption').textContent;
+ $('profileStatus').textContent=slides[index].querySelector('figcaption').textContent;if(changed)measure('ui_click','general','about',{button_id:['profile_allianz','profile_education','profile_amib','profile_cnsf'][index],action_type:'select'});
  if(matchMedia('(max-width: 900px)').matches)$('profileViewer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
 }));
 
@@ -143,6 +143,18 @@ const credentialDocuments={amib:{title:'Certificado AMIB · Serie 210',images:[[
 document.querySelectorAll('[data-document]').forEach(trigger=>trigger.addEventListener('click',()=>{
  const key=trigger.dataset.document,documentData=credentialDocuments[key];$('credentialTitle').textContent=documentData.title;const content=$('credentialContent');content.replaceChildren();content.classList.toggle('is-cnsf',key==='cnsf');
  for(const [src,alt] of documentData.images){const img=document.createElement('img');img.src=src;img.alt=alt;content.append(img);}
- credentialDialog.showModal();document.body.classList.add('credential-active');content.scrollTop=0;
+ credentialDialog.showModal();document.body.classList.add('credential-active');content.scrollTop=0;measure('ui_click','general','about',{button_id:key==='amib'?'credential_amib':'credential_cnsf',action_type:'open'});
 }));
-$('closeCredential').addEventListener('click',()=>credentialDialog.close());credentialDialog.addEventListener('close',()=>document.body.classList.remove('credential-active'));
+$('closeCredential').addEventListener('click',()=>credentialDialog.close());credentialDialog.addEventListener('close',()=>{document.body.classList.remove('credential-active');measure('ui_click','general','about',{button_id:'credential_close',action_type:'close'});});
+
+
+// Informational actions only. Never read form values, messages or generated projections.
+contact.addEventListener('close',()=>measure('ui_click',contactContext==='simulador'?'retiro':contactContext,contactLocation,{button_id:contactButtonId,action_type:'close_contact'}));
+const projectionDetails=document.querySelector('.sim-disclaimer');
+let detailsWereOpen=projectionDetails.open;
+projectionDetails.addEventListener('toggle',()=>{if(projectionDetails.open===detailsWereOpen)return;detailsWereOpen=projectionDetails.open;measure('ui_click','retiro','simulator',{button_id:'projection_details',action_type:detailsWereOpen?'open':'close'});});
+document.querySelectorAll('[data-ui-id]').forEach(el=>el.addEventListener('click',()=>{
+ const id=el.dataset.uiId;
+ const location=id.startsWith('footer_')?'footer':id.startsWith('social_about_')?'about':'header';
+ measure('ui_click','general',location,{button_id:id,action_type:id.startsWith('social_')?'external_link':'navigate'});
+}));
