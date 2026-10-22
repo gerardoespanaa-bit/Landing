@@ -75,7 +75,7 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
  for(const item of win.dataLayer.filter(item=>item[0]==='consent'))for(const ad of ['ad_storage','ad_user_data','ad_personalization'])assert.equal(item[2][ad],'denied');
  assert(!win.dataLayer.some(item=>item[0]==='config'||item[0]==='event'));
  vm.runInContext(read('measurement.js'),ctx);
- for(const event of ['simulator_open','simulator_complete','whatsapp_contact'])assert.equal(win.LandingMeasurement.track(event,'retiro','simulator'),true);
+ for(const [event,location,details] of [['simulator_open','hero'],['simulator_complete','simulator'],['whatsapp_contact','simulator',{button_id:'wa_simulator_results'}]])assert.equal(win.LandingMeasurement.track(event,'retiro',location,details),true);
  assert.equal(win.dataLayer.filter(item=>item.event).length,3);
  for(const event of ['simulator_open','simulator_complete','whatsapp_contact'])assert.equal(win.dataLayer.filter(item=>item.event===event).length,1);
 });
@@ -87,3 +87,4 @@ check('HTML retains one loader, denied defaults, outgoing referrer protection an
  }
 });
 console.log('\n'+checks+' attribution checks passed. Offline only; not real-click or GA4 delivery verification.');
+
