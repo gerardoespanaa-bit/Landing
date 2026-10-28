@@ -1,12 +1,42 @@
-.privacy-link{color:inherit;text-underline-offset:3px}.contact-privacy{font-size:.8rem;color:#52687c;margin:16px 0}.privacy-access{margin:10px 0 0;font-size:.8rem;color:#52687c}.measurement-preferences{border:0;background:none;color:inherit;padding:0;font:inherit;font-size:.82rem;text-decoration:underline;cursor:pointer}.measurement-consent[hidden],.measurement-preferences[hidden]{display:none!important}.measurement-consent{position:fixed;bottom:14px;left:14px;z-index:150;width:min(520px,calc(100% - 28px));padding:12px;background:white;color:#172b3e;border:1px solid #dfe7ef;border-radius:14px;box-shadow:0 8px 24px #0d294426;font:400 .8125rem/1.45 "DM Sans",sans-serif}
-.measurement-consent p{margin:0 0 8px}
-.consent-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.consent-footer>a{color:#153f68;font-weight:600;text-underline-offset:3px}
-.consent-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;flex:0 0 auto}
-.consent-actions button{box-sizing:border-box;min-height:44px;min-width:130px;border:1px solid #153f68;border-radius:999px;padding:8px 12px;background:#f4f7fb;color:#153f68;font:700 .8125rem "DM Sans",sans-serif;cursor:pointer}
-.consent-actions button:hover{background:#e7eef5}
-@media(max-width:620px){.measurement-consent{left:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px)}.consent-footer{align-items:stretch;flex-direction:column;gap:8px}.consent-actions button{flex:1;min-width:0}.consent-actions{width:100%}}
+.privacy-link{color:inherit;text-underline-offset:3px}.contact-privacy{font-size:.8rem;color:#52687c;margin:16px 0}.privacy-access{margin:10px 0 0;font-size:.8rem;color:#52687c}.measurement-preferences{border:0;background:none;color:inherit;padding:0;font:inherit;font-size:.82rem;text-decoration:underline;cursor:pointer}
+.measurement-consent[hidden],.measurement-preferences[hidden]{display:none!important}
+.measurement-consent{position:fixed;bottom:14px;left:14px;z-index:150;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;width:min(560px,calc(100% - 28px));max-height:70vh;overflow:auto;padding:16px;background:white;color:#172b3e;border:1px solid #dfe7ef;border-radius:14px;box-shadow:0 8px 24px #0d294426;font:400 .8125rem/1.55 "DM Sans",sans-serif}
+.measurement-consent p{margin:0}
+.consent-preferences-link{color:#153f68;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.measurement-consent button,.consent-actions button{box-sizing:border-box;min-height:44px;border:1px solid #cbd8e4;border-radius:999px;padding:10px 20px;background:#f4f7fb;color:#153f68;font:700 .875rem "DM Sans",sans-serif;cursor:pointer}
+.measurement-consent .consent-primary,.consent-actions .consent-primary{background:#153f68;color:white;border-color:#153f68;box-shadow:0 5px 12px #153f6826}
+.measurement-consent .consent-primary:hover,.consent-actions .consent-primary:hover{background:#0e2e4d;border-color:#0e2e4d}
+.consent-actions button:not(.consent-primary):hover{background:#e7eef5}
+dialog.measurement-details{box-sizing:border-box;width:min(560px,calc(100% - 28px));max-height:85dvh;margin:auto;padding:24px;border:1px solid #dfe7ef;border-radius:20px;background:white;color:#172b3e;overflow:auto;font:400 .875rem/1.6 "DM Sans",sans-serif;box-shadow:0 20px 60px #0d294440}
+.measurement-details::backdrop{background:rgba(7,24,43,.52)}
+.measurement-details-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.measurement-details-header h2{margin:0;color:#153f68;font-size:1.25rem;line-height:1.3;letter-spacing:-.02em}
+.measurement-details-close{flex:0 0 40px;width:40px;height:40px;border:1px solid #dfe7ef;border-radius:50%;background:#f4f7fb;color:#153f68;font:400 1.5rem/1 system-ui;cursor:pointer}
+.measurement-category{padding:14px 16px;margin:12px 0;border:1px solid #dfe7ef;border-radius:12px;background:#f6f9fc}
+.measurement-category h3{margin:0 0 6px;color:#153f68;font-size:.95rem;letter-spacing:0}
+.measurement-category p{margin:0}
+.measurement-details-note{font-size:.8125rem;color:#52687c}
+.measurement-details>.privacy-link{color:#153f68;font-size:.8125rem}
+.measurement-details .consent-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:20px}
+.measurement-details .consent-actions button{min-width:115px}
+.measurement-consent :focus-visible,.measurement-details :focus-visible,.measurement-preferences:focus-visible{outline:3px solid #285b88;outline-offset:3px}
+@media(max-width:620px){.measurement-consent{left:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);gap:12px;padding:14px}.measurement-consent button{padding-inline:18px}dialog.measurement-details{padding:20px}.measurement-details .consent-actions button{flex:1;min-width:0}}
 .privacy-page{margin:0;background:#f6f9fc;color:#172b3e;font:400 1rem/1.65 system-ui,sans-serif}.privacy-page *{box-sizing:border-box}.privacy-wrap{width:min(880px,calc(100% - 32px));margin:auto}.privacy-header{padding:22px 0;background:white;border-bottom:1px solid #dfe7ef}.privacy-header a{display:inline-flex;align-items:center;gap:14px;color:#153f68;text-decoration:none;font-weight:700}.privacy-header img{width:180px;max-width:60vw}.privacy-document{margin:32px auto;padding:clamp(20px,4vw,42px);background:white;border:1px solid #dfe7ef;border-radius:22px}.privacy-page h1,.privacy-page h2{color:#153f68;line-height:1.25}.privacy-page h1{font-size:clamp(1.9rem,6vw,2.6rem)}.privacy-page h2{font-size:1.2rem;margin-top:30px}.privacy-page a{color:#153f68}.privacy-draft{padding:16px;border:1px solid #d4b574;border-radius:12px;background:#fff8e8}.pending{font-weight:700;color:#755415}.privacy-page li{margin:8px 0}.privacy-footer{padding:0 0 40px}.privacy-page :focus-visible{outline:3px solid #285b88;outline-offset:4px}
 
 /* Keep preferences usable on short mobile screens without changing the landing layout. */
 .measurement-consent{box-sizing:border-box;max-height:70vh;overflow-y:auto}.measurement-consent :focus-visible,.measurement-preferences:focus-visible{outline:3px solid #285b88;outline-offset:3px}
+
+
+
+/* Independent purpose controls. Native checkboxes remain usable by touch and keyboard. */
+.measurement-consent .consent-identity{margin-top:8px;font-size:.75rem;color:#52687c}
+.consent-identity a{color:#153f68;text-underline-offset:3px}
+.measurement-option{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;font-weight:700;color:#153f68;cursor:pointer}
+.measurement-option span{min-width:0}.measurement-option small{display:block;font-size:.75rem;font-weight:400;color:#52687c}
+.measurement-option input{flex:0 0 22px;width:22px;height:22px;margin:0;accent-color:#153f68;cursor:pointer}
+.measurement-option input:disabled{cursor:default}.measurement-category>.measurement-option+p{margin-top:8px}
+.measurement-details .consent-actions button{min-height:46px;font-size:.875rem}
+dialog.measurement-details[open]{display:flex;flex-direction:column;overflow:hidden}
+.measurement-details-header{flex:0 0 auto}.measurement-details-content{min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 4px 10px 0}
+.measurement-details-content>.privacy-link{color:#153f68;font-size:.8125rem}
+.measurement-details .consent-actions{flex:0 0 auto;margin-top:0;padding-top:14px;border-top:1px solid #dfe7ef;background:white}

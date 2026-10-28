@@ -30,21 +30,35 @@
  controlsAt('general','about',['credential_amib','credential_cnsf'],['open']);
  controlsAt('general','about',['credential_close'],['close']);
  const banner=document.getElementById('measurementConsent'),manage=document.getElementById('measurementPreferences');
+ const preferences=document.getElementById('measurementDetails'),preferencesLink=document.getElementById('openMeasurementPreferences');
+ const analytics=document.getElementById('consentAnalytics'),advertising=document.getElementById('consentAdvertising');
  let returnFocus=null;
- function close(){
-  if(banner)banner.hidden=true;
-  if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});
-  returnFocus=null;
+ function syncConsentUI(){
+  const saved=consent.getPreferences();
+  banner.hidden=Boolean(preferences.open)||saved!==null;
+  analytics.checked=saved?.analytics===true;advertising.checked=saved?.advertising===true;
  }
- if(consent&&banner&&manage){
-  manage.hidden=false;banner.hidden=consent.getChoice()!==null;
-  manage.addEventListener('click',()=>{
-   returnFocus=manage;banner.hidden=false;banner.querySelector('button').focus();
+ if(consent&&typeof consent.getPreferences==='function'&&banner&&manage&&preferences&&preferencesLink&&analytics&&advertising){
+  manage.hidden=false;syncConsentUI();
+  function openPreferences(opener){
+   returnFocus=opener;
+   if(!preferences.open)preferences.showModal();
+   syncConsentUI();preferences.querySelector('[data-close-measurement]').focus();
+  }
+  manage.addEventListener('click',()=>openPreferences(manage));
+  preferencesLink.addEventListener('click',event=>{event.preventDefault();openPreferences(preferencesLink);});
+  preferences.querySelector('[data-close-measurement]').addEventListener('click',()=>preferences.close());
+  preferences.addEventListener('close',()=>{
+   syncConsentUI();const target=returnFocus===preferencesLink&&banner.hidden?manage:returnFocus;
+   if(target?.isConnected)target.focus({preventScroll:true});returnFocus=null;
   });
-  banner.querySelectorAll('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>{
-   if(consent.choose(button.dataset.analyticsChoice))close();
+  for(const surface of [banner,preferences])surface.querySelectorAll('[data-consent-action]').forEach(button=>button.addEventListener('click',()=>{
+   const action=button.dataset.consentAction;
+   const selected=action==='accept-measurement'?{analytics:true,advertising:true}:action==='essential'?{analytics:false,advertising:false}:action==='save'?{analytics:analytics.checked,advertising:advertising.checked}:null;
+   if(!selected||!consent.choose(selected))return;
+   if(preferences.open)preferences.close();syncConsentUI();
   }));
-  window.addEventListener('landing:consent-change',()=>{banner.hidden=consent.getChoice()!==null;});
+  window.addEventListener('landing:consent-change',syncConsentUI);
  }
  function track(name,service,location,details){
   if(!consent||!events.has(name)||!services.has(service)||!locations.has(location))return false;
@@ -63,4 +77,6 @@
  }
  window.LandingMeasurement=Object.freeze({track});
 })();
+
+
 

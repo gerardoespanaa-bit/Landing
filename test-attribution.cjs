@@ -9,7 +9,7 @@ function check(name,fn){fn();checks++;console.log('PASS '+name);}
 function boot(query='',{referrer='',choice=null,path='/',campaignIds}={}){
  const url=new URL(path+query,origin),listeners={};
  const win={dataLayer:[],addEventListener:(n,cb)=>listeners[n]=cb,dispatchEvent:()=>{}};
- const ctx={window:win,location:url,document:{baseURI:url.href,referrer,cookie:'',getElementById:()=>null},localStorage:{getItem:()=>choice?JSON.stringify({choice,updatedAt:Date.now()}):null,setItem:()=>{}},CustomEvent:class{},URL};
+ const ctx={window:win,location:url,document:{baseURI:url.href,referrer,cookie:'',getElementById:()=>null},localStorage:{getItem:k=>k===key&&choice?JSON.stringify({choice,updatedAt:Date.now()}):null,setItem:()=>{},removeItem:()=>{}},CustomEvent:class{},URL};
  vm.createContext(ctx);vm.runInContext(config,ctx);
  if(campaignIds!==undefined)win.LANDING_MEASUREMENT_CONFIG={...win.LANDING_MEASUREMENT_CONFIG,adsCampaignIds:campaignIds};
  vm.runInContext(bootstrap,ctx);
@@ -81,10 +81,11 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
 });
 check('HTML retains one loader, denied defaults, outgoing referrer protection and cache versions',()=>{
  for(const name of ['index.html','aviso-de-privacidad.html']){
-  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);assert(!html.includes('gtag/js'));assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=3'));
+  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);assert(!html.includes('gtag/js'));assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=4'));
   assert(html.includes('<meta name="referrer" content="no-referrer">'));
   for(const permission of ['analytics_storage','ad_storage','ad_user_data','ad_personalization'])assert(new RegExp(permission+":'denied'").test(html));
  }
 });
 console.log('\n'+checks+' attribution checks passed. Offline only; not real-click or GA4 delivery verification.');
+
 

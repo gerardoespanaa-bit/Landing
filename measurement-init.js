@@ -5,41 +5,35 @@
  if(window.LandingConsent)return;
  const config=window.LANDING_MEASUREMENT_CONFIG||{};
  if(config.enabled!==true||config.gtmContainerId!=='GTM-KMG6BPKF'||config.ga4MeasurementId!=='G-VSNRQ7H8JL')return;
- const storageKey='landing-analytics-consent-v2',maxAge=180*86400000;
- const choices=new Set(['granted','denied']);
+ const storageKey='landing-privacy-consent-v3',legacyKey='landing-analytics-consent-v2',maxAge=180*86400000;
+ const noticeVersion='privacy-2026-10-28-v3';
+ function fresh(saved){const age=Date.now()-saved.updatedAt;return Number.isFinite(saved.updatedAt)&&age>=0&&age<maxAge;}
  function read(raw){
-  try{
-   const saved=JSON.parse(raw),age=Date.now()-saved.updatedAt;
-   return choices.has(saved.choice)&&Number.isFinite(saved.updatedAt)&&age>=0&&age<maxAge?saved.choice:null;
-  }catch{return null;}
+  try{const saved=JSON.parse(raw);if(saved.version!==3||saved.noticeVersion!==noticeVersion||typeof saved.analytics!=='boolean'||typeof saved.advertising!=='boolean'||!fresh(saved))return null;return Object.freeze({analytics:saved.analytics,advertising:saved.advertising});}catch{return null;}
  }
- let choice=null;
- try{choice=read(localStorage.getItem(storageKey));}catch{}
+ function readLegacy(raw){
+  try{const saved=JSON.parse(raw);if(!['granted','denied'].includes(saved.choice)||!fresh(saved))return null;return Object.freeze({analytics:saved.choice==='granted',advertising:false});}catch{return null;}
+ }
+ let preferences=null;
+ try{const raw=localStorage.getItem(storageKey);preferences=raw===null?readLegacy(localStorage.getItem(legacyKey)):read(raw);}catch{}
  window.dataLayer=window.dataLayer||[];
  function command(){window.dataLayer.push(arguments);}
- function clearAnalyticsCookies(){
+ function clearCookies(pattern){
   const paths=new Set(['/']),segments=location.pathname.split('/').filter(Boolean);
   if(!location.pathname.endsWith('/'))segments.pop();
   let path='';for(const segment of segments){path+='/'+segment;paths.add(path);paths.add(path+'/');}
-  const names=document.cookie.split(';').map(cookie=>cookie.trim().split('=')[0]).filter(name=>/^_ga(?:_|$)/.test(name));
-  for(const name of names)for(const path of paths)for(const domain of ['',`; domain=${location.hostname}`,`; domain=.${location.hostname}`]){
-   document.cookie=`${name}=; Max-Age=0; path=${path}${domain}; SameSite=Lax`;
-  }
+  const names=document.cookie.split(';').map(cookie=>cookie.trim().split('=')[0]).filter(name=>pattern.test(name));
+  for(const name of names)for(const path of paths)for(const domain of ['',`; domain=${location.hostname}`,`; domain=.${location.hostname}`])document.cookie=`${name}=; Max-Age=0; path=${path}${domain}; SameSite=Lax`;
  }
- function apply(next){
-  choice=next;
-  command('consent','update',{
-   analytics_storage:choice==='granted'?'granted':'denied',
-   ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'
-  });
-  if(choice!=='granted')clearAnalyticsCookies();
-  window.dispatchEvent(new CustomEvent('landing:consent-change'));
+ function state(){return {analytics_storage:preferences?.analytics?'granted':'denied',ad_storage:preferences?.advertising?'granted':'denied',ad_user_data:preferences?.advertising?'granted':'denied',ad_personalization:'denied'};}
+ function removeOptionalStorage(){
+  if(!preferences?.analytics)clearCookies(/^_ga(?:_|$)/);
+  if(!preferences?.advertising){clearCookies(/^_(?:gcl|gac)_/);try{localStorage.removeItem('_gcl_ls');}catch{}}
  }
- // The inline default is already denied. Restore a valid saved choice before GTM starts.
- if(choice==='granted')command('consent','update',{
-  analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'
- });
- else clearAnalyticsCookies();
+ function apply(next){preferences=next;command('consent','update',state());removeOptionalStorage();window.dispatchEvent(new CustomEvent('landing:consent-change'));}
+ // Restore each purpose independently; an old analytics-only decision never grants advertising.
+ if(preferences)command('consent','update',state());
+ removeOptionalStorage();
  // Campaign metadata is closed vocabulary, never user-entered keyword/message text.
  // New campaigns/sources need an explicit review of these values before launch.
  const utmValues={
@@ -108,16 +102,21 @@
  });
  window.dataLayer.push({...page});
  window.LandingConsent=Object.freeze({
-  getChoice:()=>choice,
+  getChoice:()=>preferences===null?null:preferences.analytics?'granted':'denied',
+  getPreferences:()=>preferences,
   choose(next){
-   if(!choices.has(next))return false;
-   try{localStorage.setItem(storageKey,JSON.stringify({choice:next,updatedAt:Date.now()}));}catch{}
-   apply(next);return true;
+   // Compatibility calls retain their original analytics-only scope.
+   if(next==='granted')next={analytics:true,advertising:false};
+   else if(next==='denied')next={analytics:false,advertising:false};
+   if(!next||typeof next!=='object'||Object.keys(next).sort().join(',')!=='advertising,analytics'||typeof next.analytics!=='boolean'||typeof next.advertising!=='boolean')return false;
+   const selected=Object.freeze({analytics:next.analytics,advertising:next.advertising});
+   try{localStorage.setItem(storageKey,JSON.stringify({version:3,noticeVersion,...selected,updatedAt:Date.now()}));localStorage.removeItem(legacyKey);}catch{}
+   apply(selected);return true;
   }
  });
- // A preference changed in another tab also applies to this already-open page.
  window.addEventListener('storage',event=>{
-  if(event.key===storageKey||event.key===null)apply(read(event.newValue));
+  if(event.key===storageKey)apply(read(event.newValue));
+  else if(event.key===null)apply(null);
+  else if(event.key===legacyKey){try{if(localStorage.getItem(storageKey)===null)apply(readLegacy(event.newValue));}catch{apply(null);}}
  });
 })();
-
