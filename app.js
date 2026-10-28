@@ -17,11 +17,26 @@ function draw(t){
  const ctx=chart.getContext('2d'),w=chart.clientWidth,h=chart.clientHeight,dpr=window.devicePixelRatio||1;
  if(!w||!h)return;
  chart.width=w*dpr;chart.height=h*dpr;ctx.scale(dpr,dpr);
- const vals=[0,...latest.rows.map(r=>r.saldoTotal)],max=Math.max(...vals),pad=14;
- const point=(i,v)=>[pad+(w-2*pad)*i/(vals.length-1),h-pad-(h-2*pad)*v/max];
+ const vals=[0,...latest.rows.map(r=>r.saldoTotal)];
+ const contributions=[0,...latest.rows.map(r=>r.aportacionAcumulada)];
+ // Both series share a scale, including years where contributions exceed the balance.
+ const max=Math.max(...vals,...contributions),pad=14,years=latest.rows.length;
+ const point=(i,v)=>[pad+(w-2*pad)*i/years,h-pad-(h-2*pad)*v/max];
  ctx.strokeStyle='#ffffff25';for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(pad,h*i/4);ctx.lineTo(w-pad,h*i/4);ctx.stroke();}
- const position=t*(vals.length-1),i=Math.min(Math.floor(position),vals.length-1),fraction=position-i;
+ const position=Math.max(0,Math.min(1,t))*years,i=Math.min(Math.floor(position),years),fraction=position-i;
  const value=vals[i]+((vals[i+1]??vals[i])-vals[i])*fraction;
+ const step=(w-2*pad)/years,barWidth=Math.max(1,Math.min(14,step*.62)),barWindow=barWidth/step;
+ // Reveal each annual contribution bar from the baseline as the curve reaches it.
+ ctx.save();ctx.beginPath();ctx.rect(pad,pad,(w-2*pad)*Math.max(0,Math.min(1,t)),h-2*pad);ctx.clip();
+ ctx.fillStyle='#9eb7ce80';
+ for(let year=1;year<=years;year++){
+  const growth=Math.max(0,Math.min(1,(position-year+barWindow)/barWindow));
+  if(growth===0)break;
+  const [x,y]=point(year,contributions[year]*growth);
+  ctx.fillRect(x-barWidth,y,barWidth,h-pad-y);
+ }
+ ctx.restore();
+ // Keep the existing total-balance curve and amount counter above the bars.
  ctx.beginPath();ctx.moveTo(...point(0,0));for(let j=1;j<=i;j++)ctx.lineTo(...point(j,vals[j]));ctx.lineTo(...point(position,value));ctx.strokeStyle='#a7d9ff';ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
  $('retirementAmount').textContent=money(value);
 }
