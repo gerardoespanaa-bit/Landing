@@ -19,24 +19,48 @@ function draw(t){
  chart.width=w*dpr;chart.height=h*dpr;ctx.scale(dpr,dpr);
  const vals=[0,...latest.rows.map(r=>r.saldoTotal)];
  const contributions=[0,...latest.rows.map(r=>r.aportacionAcumulada)];
- // Both series share a scale, including years where contributions exceed the balance.
- const max=Math.max(...vals,...contributions),pad=14,years=latest.rows.length;
- const point=(i,v)=>[pad+(w-2*pad)*i/years,h-pad-(h-2*pad)*v/max];
- ctx.strokeStyle='#ffffff25';for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(pad,h*i/4);ctx.lineTo(w-pad,h*i/4);ctx.stroke();}
- const position=Math.max(0,Math.min(1,t))*years,i=Math.min(Math.floor(position),years),fraction=position-i;
+ const max=Math.max(...vals,...contributions),years=latest.rows.length,phase=Math.max(0,Math.min(1,t));
+ const compactMoney=n=>'$'+(n>=1e9?(n/1e9).toFixed(1)+' mil M':n>=1e6?(n/1e6).toFixed(1)+' M':n>=1e3?(n/1e3).toFixed(0)+' mil':n.toFixed(0));
+ const levels=Array.from({length:5},(_,n)=>max*n/4);
+ ctx.font=`${w<420?10:11}px "DM Sans",sans-serif`;
+ const left=Math.ceil(Math.max(...levels.map(n=>ctx.measureText(compactMoney(n)).width)))+12,right=w-12,top=23,bottom=h-37;
+ const plotWidth=right-left,plotHeight=bottom-top;
+ if(plotWidth<=0||plotHeight<=0)return;
+ const point=(i,v)=>[left+plotWidth*i/years,bottom-plotHeight*v/max];
+ const position=phase*years,i=Math.min(Math.floor(position),years),fraction=position-i;
  const value=vals[i]+((vals[i+1]??vals[i])-vals[i])*fraction;
- const step=(w-2*pad)/years,barWidth=Math.max(1,Math.min(14,step*.62)),barWindow=barWidth/step;
- // Reveal each annual contribution bar from the baseline as the curve reaches it.
- ctx.save();ctx.beginPath();ctx.rect(pad,pad,(w-2*pad)*Math.max(0,Math.min(1,t)),h-2*pad);ctx.clip();
- ctx.fillStyle='#9eb7ce80';
+ const contributionValue=contributions[i]+((contributions[i+1]??contributions[i])-contributions[i])*fraction;
+ const revealedMax=Math.max(value,contributionValue,...vals.slice(0,i+1),...contributions.slice(0,i+1));
+ const headX=point(position,value)[0];
+ // Reveal axes, monetary levels and year marks along with the existing drawing.
+ ctx.lineWidth=1;ctx.strokeStyle='#ffffff80';ctx.beginPath();ctx.moveTo(left,point(0,revealedMax)[1]);ctx.lineTo(left,bottom);ctx.lineTo(headX,bottom);ctx.stroke();
+ ctx.fillStyle='#d6e5f2';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('MXN',left,2);
+ ctx.textAlign='right';ctx.textBaseline='middle';
+ for(const level of levels){
+  if(level>revealedMax)continue;
+  const y=point(0,level)[1];
+  ctx.strokeStyle='#ffffff25';ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(headX,y);ctx.stroke();
+  ctx.strokeStyle='#ffffff80';ctx.beginPath();ctx.moveTo(left-4,y);ctx.lineTo(left,y);ctx.stroke();
+  ctx.fillText(compactMoney(level),left-7,y);
+ }
+ const desired=Math.max(2,Math.min(6,Math.floor(plotWidth/55))),rawStep=Math.ceil(years/desired);
+ const tickStep=[1,2,5,10,20,25,50,100].find(n=>n>=rawStep)||rawStep;
+ const yearMarks=[0];for(let year=tickStep;year<years;year+=tickStep)yearMarks.push(year);
+ if(yearMarks.length>1&&(years-yearMarks.at(-1))*plotWidth/years<34)yearMarks.pop();yearMarks.push(years);
+ ctx.textBaseline='top';
+ for(const year of yearMarks){
+  if(year>position)continue;
+  const x=point(year,0)[0];ctx.strokeStyle='#ffffff80';ctx.beginPath();ctx.moveTo(x,bottom);ctx.lineTo(x,bottom+4);ctx.stroke();
+  ctx.textAlign=year===years?'right':year===0?'left':'center';ctx.fillText(String(year),x,bottom+7);
+ }
+ ctx.textAlign='right';ctx.fillText('Años de proyección',right,h-13);
+ const step=plotWidth/years,barWidth=Math.max(1,Math.min(14,step*.62)),barWindow=barWidth/step;
+ ctx.save();ctx.beginPath();ctx.rect(left,top,plotWidth*phase,plotHeight);ctx.clip();ctx.fillStyle='#9eb7ce80';
  for(let year=1;year<=years;year++){
-  const growth=Math.max(0,Math.min(1,(position-year+barWindow)/barWindow));
-  if(growth===0)break;
-  const [x,y]=point(year,contributions[year]*growth);
-  ctx.fillRect(x-barWidth,y,barWidth,h-pad-y);
+  const growth=Math.max(0,Math.min(1,(position-year+barWindow)/barWindow));if(growth===0)break;
+  const [x,y]=point(year,contributions[year]*growth);ctx.fillRect(x-barWidth,y,barWidth,bottom-y);
  }
  ctx.restore();
- // Keep the existing total-balance curve and amount counter above the bars.
  ctx.beginPath();ctx.moveTo(...point(0,0));for(let j=1;j<=i;j++)ctx.lineTo(...point(j,vals[j]));ctx.lineTo(...point(position,value));ctx.strokeStyle='#a7d9ff';ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
  $('retirementAmount').textContent=money(value);
 }
@@ -58,7 +82,7 @@ form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm
  try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch(error){panel.hidden=true;$('calculationError').textContent=error.message;$('calculationError').hidden=false;return;}
  panel.hidden=false;$('projectionMetrics').hidden=true;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
  const start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:4000;
- function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos*`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}.`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} ${latest.years===1?'año':'años'}`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;measure('simulator_complete','retiro','simulator');celebrateProjection();requestAnimationFrame(()=>{if(simulator.classList.contains('is-open'))$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
+ function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos*`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}. Eje horizontal: años de proyección. Eje vertical: pesos mexicanos (MXN).`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} ${latest.years===1?'año':'años'}`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;measure('simulator_complete','retiro','simulator');celebrateProjection();requestAnimationFrame(()=>{if(simulator.classList.contains('is-open'))$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
  frameId=requestAnimationFrame(frame);
 });
 form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});

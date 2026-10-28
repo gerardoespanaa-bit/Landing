@@ -80,14 +80,18 @@
  23%{opacity:.6}
 }
 @media(prefers-reduced-motion:no-preference){
- #inicio .hero-copy>[data-open-sim],#resultPanel .result-cta,.cta-band .btn{animation:ppr-action-pulse 7s ease-in-out infinite;transform-origin:center}
+ #inicio .hero-copy>[data-open-sim],#resultPanel .result-cta,.cta-band .btn{animation:ppr-action-pulse 3s ease-in-out infinite;transform-origin:center}
  #inicio .hero-copy>[data-open-sim]:hover,#inicio .hero-copy>[data-open-sim]:focus-visible,
  #resultPanel .result-cta:hover,#resultPanel .result-cta:focus-visible,
  .cta-band .btn:hover,.cta-band .btn:focus-visible{animation-play-state:paused}
- .header-cta:before{animation:ppr-header-glow 8s ease-in-out infinite}
+ .header-cta:before{animation:ppr-header-glow 3s ease-in-out infinite}
  .header-cta:hover:before,.header-cta:focus-visible:before{animation-play-state:paused}
 }
 @media(prefers-reduced-motion:reduce){
  #inicio .hero-copy>[data-open-sim],#resultPanel .result-cta,.cta-band .btn,.header-cta:before{animation:none}
  .header-cta:before{opacity:0}
 }
+
+/* Slightly larger icons only in the top bar. */
+.social-header .social-link{min-width:34px;min-height:40px}
+.social-header .social-link svg{width:22px;height:22px}
