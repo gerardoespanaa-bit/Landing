@@ -1,6 +1,6 @@
 # Privacidad y medición con consentimiento avanzado
 
-Cambios preparados el 20 de octubre de 2026 en una rama para revisión. No se publica el sitio ni el contenedor desde esta tarea.
+Actualizado para el PR #23 el 28 de octubre de 2026. Rama en borrador, sin merge, publicación ni cambios en Google Ads. Las instrucciones históricas de instalación se conservan como referencia; no deben repetirse.
 
 ## Datos y procedimiento confirmados
 
@@ -25,9 +25,9 @@ La rama no modifica el CRM ni valida técnicamente su borrado, respaldos o contr
 - Contenedor real **GTM-KMG6BPKF**; flujo de Analytics **G-VSNRQ7H8JL**. No se añaden identificadores nuevos ni una instalación directa de gtag.js.
 - En ambas páginas, el primer comando establece los cuatro consentimientos como denegados. Después se ejecutan de forma síncrona la configuración y el arranque de preferencias, antes del único fragmento de GTM.
 - Se elimina la lista vacía que bloqueaba etiquetas y el antiguo cargador alternativo. Si el arranque está deshabilitado, es inválido o no carga, el script de GTM no arranca. El iframe oficial noscript se conserva como primer contenido del body; no ejecuta las etiquetas JavaScript de GA4. No configurar etiquetas de imagen/Custom HTML que eludan el consentimiento en esa ruta.
-- Modo avanzado elegido por el propietario: se carga GTM y puede ejecutarse GA4 antes de aceptar y después de rechazar; Google puede recibir señales limitadas sin cookies analíticas. El rechazo no promete ausencia total de solicitudes. Las preferencias actualizan analytics_storage; ad_storage, ad_user_data y ad_personalization siempre siguen denegados.
-- Elección local de hasta 180 días, validación de caducidad y sincronización entre pestañas. Se usa una clave v2 para solicitar una nueva elección bajo este modo. Si el almacenamiento está bloqueado, la elección se aplica durante la página actual y se vuelve a pedir en una visita posterior.
-- Aceptar o rechazar no recarga, no inicia otro contenedor, no vuelve a ejecutar el page_view y no reproduce interacciones anteriores. Al retirar aceptación se intenta borrar las cookies _ga accesibles en el dominio/ruta. No se borran datos históricos de Google.
+- Se conserva Consent Mode avanzado: antes de elegir o al rechazar pueden enviarse señales limitadas sin cookies opcionales. analytics_storage sigue Analítica; ad_storage y ad_user_data siguen Medición publicitaria. ad_personalization permanece denied. allow_google_signals y allow_ad_personalization_signals continúan en false.
+- Clave landing-privacy-consent-v3: dos booleanos, versión del aviso y fecha; validez máxima 180 días, caducidad y sincronización entre pestañas. La clave anterior v2 solo puede restaurar su permiso analítico, nunca publicidad. Un registro inválido no concede nada. Sin almacenamiento, la elección dura la página actual.
+- Las elecciones no recargan, no inician otro contenedor ni reproducen interacciones. Revocar actualiza los cuatro estados y elimina, cuando son accesibles, cookies _ga del uso analítico rechazado y _gcl_/_gac_ y _gcl_ls del uso publicitario rechazado. No elimina datos históricos ni cookies de otros dominios.
 - El aviso y el panel de preferencias describen este tratamiento. La revisión del PR incluye esa actualización antes de publicarla. No constituye una revisión jurídica externa.
 
 ## Eventos y datos permitidos
@@ -38,7 +38,7 @@ La rama no modifica el CRM ni valida técnicamente su borrado, respaldos o contr
 | simulator_complete | Al finalizar un cálculo válido y su animación | retiro | simulator |
 | whatsapp_contact | Al continuar a WhatsApp o pulsar un enlace social directo | general, retiro, seguros, bolsa o auto | Ubicación original del botón |
 
-Únicos parámetros de negocio: **service** y **button_location**, desde listas cerradas. Las otras ubicaciones permitidas son services, about, cta_band y floating. No hay edades, ingresos, importes, saldos, teléfonos, mensajes, URLs de WhatsApp ni datos del formulario en los eventos propios. Las interacciones también se entregan al contenedor con consentimiento denegado; sus etiquetas de Google deben aplicar ese estado, sin conceder permisos por medir un clic.
+Parámetros de negocio desde vocabulario cerrado: service, button_location, button_id y action_type cuando corresponda. ui_click cubre interacciones informativas útiles. No se añaden valores del formulario, datos financieros, teléfonos, correos, mensajes ni URLs de WhatsApp. La función de eventos y sus listas permitidas permanecen idénticas.
 
 Abrir el diálogo de contacto no es una conversión. Doble clic en el mismo enlace dentro de 800 ms cuenta una vez; cálculo inválido, animación cancelada y redimensionado no producen finalizaciones. Una nueva proyección completada sí cuenta. Un clic de WhatsApp no confirma mensaje, cita ni venta.
 
@@ -57,13 +57,13 @@ La auditoría del 20/10/2026 comprobó las dos etiquetas existentes y la recepci
 ## Validación antes de Enviar
 
 1. Revisar el PR y desplegar el sitio solo mediante el merge aprobado por el propietario. El CNAME y el dominio comprado se conservan. Si se dispone de una vista de prueba accesible, se puede revisar antes del merge. El servidor local también sirve para GTM Preview.
-2. Abrir Vista previa de GTM contra https://xn--gerardoespaa-khb.com/ (tras desplegar) o el servidor de prueba. Confirmar una sola carga del contenedor y la etiqueta principal ejecutada. Inspeccionar Consentimiento: por defecto cuatro estados denied. Aceptar debe cambiar solo analytics_storage a granted; rechazar o retirar lo devuelve a denied. Volver a visitar y comprobar la preferencia.
+2. En una URL de prueba con este PR, conectar Tag Assistant. Comprobar las seis rutas de la tabla siguiente, una sola carga de GTM y una etiqueta principal. No usar el sitio publicado anterior como evidencia de este PR ni publicar para probar sin autorización.
 3. En Analytics, verificar que Medición mejorada sigue desactivada. En Network/collect revisar que no aparecen link_url, teléfono, mensaje, valores del simulador, parámetros arbitrarios ni fragmentos en dl; solo los identificadores admitidos y el vocabulario UTM cerrado. En dr solo puede aparecer el origen de un dominio conocido, sin ruta ni consulta. Las peticiones técnicas inevitablemente revelan información de conexión al proveedor; no se afirma anonimato absoluto.
 4. Probar los tres eventos y todas las ubicaciones, rechazar/aceptar/retirar, doble clic, entradas inválidas, recálculo, cancelación y resize. Un page_view por carga; aceptar/rechazar no debe añadir otro. En modo avanzado pueden existir señales sin cookies con denied: no exigir cero tráfico.
 5. En GA4 DebugView comprobar los eventos **con analítica aceptada** y una sesión con debug_mode=true solo en vista previa. Con analytics_storage denegado Google puede no mostrarlos en DebugView; usar Tag Assistant y la red para ese estado. No confundir ausencia en DebugView con ausencia de solicitudes.
 6. La auditoría terminó con cero cambios pendientes en GTM. Esta corrección del sitio no exige publicar otra versión del contenedor. Publicar la landing únicamente tras aprobar el PR; después salir de vista previa y no dejar depuración permanente.
 
-**Estado de evidencia:** la auditoría de la versión publicada verificó recepción de los tres eventos en Tag Assistant y GA4, una vez por acción probada. Las pruebas de la corrección de esta rama son locales y no acreditan entrega del código nuevo a GA4 ni atribución de clics reales. La validación en producción queda pendiente de revisión, publicación autorizada y acceso/vinculación a Ads. No sustituir estas limitaciones por el resultado de la auditoría anterior.
+**Estado de evidencia del PR #23 actualizado:** 124 casos offline aprobados: 23 de arranque/almacenamiento, 15 de interfaz y 86 de atribución/privacidad. No equivalen a prueba de navegador ni de Tag Assistant. Escritorio, móvil, estados aplicados por el contenedor real y recepción del nuevo flujo en GA4 están pendientes: no existe una vista HTTPS de pruebas y el navegador no accede a la vista local. Google Ads, GTM publicado y GA4 no se han modificado.
 
 ## Pruebas reproducibles
 
@@ -82,4 +82,29 @@ Fuentes: [Consent Mode avanzado y orden de arranque](https://developers.google.c
 - Escenario «Libre de impuestos»: verificar modalidad, requisitos y límites de retiro. El motor no calcula ISR personal y la interfaz muestra `saldoTotal`.
 
 Se conserva el cálculo existente. «1 año» ya estaba corregido y se conserva.
+
+
+## Dos pantallas y estados esperados
+
+El primer Ok acepta las dos finalidades informadas. Aquí solo abre el panel. Los interruptores se restauran desde una decisión válida, o empiezan apagados sin ella. En el panel Ok guarda los interruptores y Solo esenciales guarda ambos en false. Cerrar o Escape descarta cambios sin aceptar. Los botones del panel están fuera de su zona desplazable. El enlace permanente se llama Preferencias de privacidad.
+
+| Recorrido | analytics_storage | ad_storage | ad_user_data | ad_personalization |
+|---|---|---|---|---|
+| Sin decisión | denied | denied | denied | denied |
+| Ok inicial | granted | granted | granted | denied |
+| Solo esenciales | denied | denied | denied | denied |
+| Solo analítica | granted | denied | denied | denied |
+| Analítica y medición publicitaria | granted | granted | granted | denied |
+| Solo medición publicitaria | denied | granted | granted | denied |
+| Revocación total | denied | denied | denied | denied |
+
+Ejecutar todos los recorridos en escritorio y móvil. En Tag Assistant comprobar la pestaña Consentimiento después del comando y en el siguiente evento, no solo el dataLayer. Verificar persistencia, cambio parcial, revocación, ausencia de remarketing, una etiqueta principal y que el evento siguiente respete los estados. No generar clics de anuncios, mensajes o citas de prueba. El test de integración de navegador queda adaptado pero no se ejecutó en esta revisión.
+
+## Observaciones jurídicas delimitadas
+
+La LFPDPPP mexicana exige consentimiento libre, específico e informado y revocación; sus artículos 14–16 regulan los avisos. Se añade identificación, acceso directo al aviso integral y en el panel domicilio, datos y finalidades. No se identificó en esos artículos una regla literal de rechazo en la primera capa; eso no certifica la validez de cualquier diseño. [Texto oficial](https://www.ordenjuridico.gob.mx/Documentos/Federal/html/wo125102.html).
+
+Si resultan aplicables reglas europeas, una primera capa con aceptación sin rechazo equivalente presenta una incompatibilidad concreta con el criterio mayoritario de las autoridades del EDPB. Requeriría adaptación antes de tratar ese tráfico bajo esas reglas. No se introduce aquí geolocalización ni se presume que segmentar anuncios a México excluya todas las visitas extranjeras. [EDPB, apartados 3 y 5](https://www.edpb.europa.eu/system/files/2023-01/edpb_20230118_report_cookie_banner_taskforce_en.pdf), [ámbito de la política de Google](https://www.google.com/about/company/user-consent-policy/).
+
+El registro local de preferencias no constituye una bitácora central ni una certificación jurídica. Consent Mode no sustituye la base válida para las señales técnicas anteriores a la elección. La aceptación de medición no autoriza evaluaciones financieras, envío de datos de contacto, conversiones mejoradas ni nuevas integraciones. [Implementación y revocación](https://developers.google.com/tag-platform/security/guides/consent).
 

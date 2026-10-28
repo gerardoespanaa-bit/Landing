@@ -31,31 +31,32 @@
  controlsAt('general','about',['credential_close'],['close']);
  const banner=document.getElementById('measurementConsent'),manage=document.getElementById('measurementPreferences');
  const preferences=document.getElementById('measurementDetails'),preferencesLink=document.getElementById('openMeasurementPreferences');
+ const analytics=document.getElementById('consentAnalytics'),advertising=document.getElementById('consentAdvertising');
  let returnFocus=null;
  function syncConsentUI(){
-  if(banner)banner.hidden=Boolean(preferences?.open)||consent.getChoice()!==null;
+  const saved=consent.getPreferences();
+  banner.hidden=Boolean(preferences.open)||saved!==null;
+  analytics.checked=saved?.analytics===true;advertising.checked=saved?.advertising===true;
  }
- if(consent&&banner&&manage&&preferences&&preferencesLink){
+ if(consent&&typeof consent.getPreferences==='function'&&banner&&manage&&preferences&&preferencesLink&&analytics&&advertising){
   manage.hidden=false;syncConsentUI();
   function openPreferences(opener){
-   returnFocus=opener;banner.hidden=true;
+   returnFocus=opener;
    if(!preferences.open)preferences.showModal();
-   preferences.querySelector('[data-close-measurement]').focus();
+   syncConsentUI();preferences.querySelector('[data-close-measurement]').focus();
   }
   manage.addEventListener('click',()=>openPreferences(manage));
   preferencesLink.addEventListener('click',event=>{event.preventDefault();openPreferences(preferencesLink);});
   preferences.querySelector('[data-close-measurement]').addEventListener('click',()=>preferences.close());
-  // Native dialog keeps keyboard focus inside and lets Escape close without choosing.
   preferences.addEventListener('close',()=>{
-   syncConsentUI();
-   const target=returnFocus===preferencesLink&&banner.hidden?manage:returnFocus;
-   if(target?.isConnected)target.focus({preventScroll:true});
-   returnFocus=null;
+   syncConsentUI();const target=returnFocus===preferencesLink&&banner.hidden?manage:returnFocus;
+   if(target?.isConnected)target.focus({preventScroll:true});returnFocus=null;
   });
-  for(const surface of [banner,preferences])surface.querySelectorAll('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>{
-   if(!consent.choose(button.dataset.analyticsChoice))return;
-   if(preferences.open)preferences.close();
-   syncConsentUI();
+  for(const surface of [banner,preferences])surface.querySelectorAll('[data-consent-action]').forEach(button=>button.addEventListener('click',()=>{
+   const action=button.dataset.consentAction;
+   const selected=action==='accept-measurement'?{analytics:true,advertising:true}:action==='essential'?{analytics:false,advertising:false}:action==='save'?{analytics:analytics.checked,advertising:advertising.checked}:null;
+   if(!selected||!consent.choose(selected))return;
+   if(preferences.open)preferences.close();syncConsentUI();
   }));
   window.addEventListener('landing:consent-change',syncConsentUI);
  }
@@ -76,5 +77,6 @@
  }
  window.LandingMeasurement=Object.freeze({track});
 })();
+
 
 

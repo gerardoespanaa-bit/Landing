@@ -26,3 +26,17 @@ dialog.measurement-details{box-sizing:border-box;width:min(560px,calc(100% - 28p
 /* Keep preferences usable on short mobile screens without changing the landing layout. */
 .measurement-consent{box-sizing:border-box;max-height:70vh;overflow-y:auto}.measurement-consent :focus-visible,.measurement-preferences:focus-visible{outline:3px solid #285b88;outline-offset:3px}
 
+
+
+/* Independent purpose controls. Native checkboxes remain usable by touch and keyboard. */
+.measurement-consent .consent-identity{margin-top:8px;font-size:.75rem;color:#52687c}
+.consent-identity a{color:#153f68;text-underline-offset:3px}
+.measurement-option{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;font-weight:700;color:#153f68;cursor:pointer}
+.measurement-option span{min-width:0}.measurement-option small{display:block;font-size:.75rem;font-weight:400;color:#52687c}
+.measurement-option input{flex:0 0 22px;width:22px;height:22px;margin:0;accent-color:#153f68;cursor:pointer}
+.measurement-option input:disabled{cursor:default}.measurement-category>.measurement-option+p{margin-top:8px}
+.measurement-details .consent-actions button{min-height:46px;font-size:.875rem}
+dialog.measurement-details[open]{display:flex;flex-direction:column;overflow:hidden}
+.measurement-details-header{flex:0 0 auto}.measurement-details-content{min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 4px 10px 0}
+.measurement-details-content>.privacy-link{color:#153f68;font-size:.8125rem}
+.measurement-details .consent-actions{flex:0 0 auto;margin-top:0;padding-top:14px;border-top:1px solid #dfe7ef;background:white}
