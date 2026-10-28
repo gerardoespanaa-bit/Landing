@@ -12,6 +12,13 @@ const server=http.createServer((req,res)=>{
  if(!target.startsWith(root+path.sep)){res.writeHead(403).end();return;}
  fs.readFile(target,(error,data)=>{if(error){res.writeHead(404).end();return;}const ext=path.extname(target);res.setHeader('Content-Type',({'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.ico':'image/x-icon'})[ext]||'application/octet-stream');res.end(data);});
 });
+async function refuseAnalytics(page){
+ if(await page.locator('#measurementDetails').isHidden()){
+  if(await page.locator('#measurementConsent').isVisible())await page.locator('#openMeasurementPreferences').click();
+  else await page.locator('#measurementPreferences').click();
+ }
+ await page.getByRole('button',{name:'Solo esenciales',exact:true}).click();
+}
 const realConfig={enabled:true,gtmContainerId:'GTM-KMG6BPKF',ga4MeasurementId:'G-VSNRQ7H8JL'};
 // The actual container response is replaced by a fixture; no events reach Google.
 const containerFixture="(function(){\n const state=window.__testContainer={consent:{},parameters:{},pageViews:[],events:[]};\n const dl=window.dataLayer;\n function process(item){\n  if(item[0]==='consent')Object.assign(state.consent,item[2]);\n  if(item[0]==='set')Object.assign(state.parameters,item[1]);\n  if(item.event==='gtm.js')state.pageViews.push({consent:{...state.consent},parameters:{...state.parameters}});\n  if(['simulator_open','simulator_complete','whatsapp_contact'].includes(item.event))state.events.push({...item,consent:{...state.consent}});\n }\n dl.forEach(process);const original=dl.push.bind(dl);dl.push=function(...items){items.forEach(process);return original(...items);};\n})();";
@@ -52,10 +59,10 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   assert.equal(await page.evaluate(()=>window.__testContainer.pageViews[0].consent.analytics_storage),'denied');
   assert.equal(await page.evaluate(()=>window.__testContainer.pageViews[0].parameters.page_location),base);
   await page.locator('[data-open-sim]').click();assert.equal((await business(page)).length,1);await page.keyboard.press('Escape');
-  await page.getByRole('button',{name:'Rechazar',exact:true}).click();assert(await page.locator('#measurementConsent').isHidden());
+  await refuseAnalytics(page);assert(await page.locator('#measurementConsent').isHidden());
   await page.reload();assert(await page.locator('#measurementConsent').isHidden());assert.equal(on.requests.length,2);
   assert.equal(await page.evaluate(()=>window.__testContainer.pageViews[0].consent.analytics_storage),'denied');
-  await page.locator('#measurementPreferences').click();await page.getByRole('button',{name:'Aceptar analítica',exact:true}).click();
+  await page.locator('#measurementPreferences').click();await page.getByRole('button',{name:'Ok: permitir cookies analíticas',exact:true}).click();
   assert.equal(on.requests.length,2);assert.equal(await page.evaluate(()=>window.__testContainer.consent.analytics_storage),'granted');
   assert.equal(await page.evaluate(()=>window.__testContainer.pageViews.length),1);
   assert.equal(await page.locator('script[src*="googletagmanager.com/gtm.js"]').count(),1);
@@ -65,9 +72,9 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   const tab=await on.ctx.newPage();await tab.goto(base+'aviso-de-privacidad.html');
   assert.equal(await tab.evaluate(()=>window.__testContainer.pageViews[0].consent.analytics_storage),'granted');
   assert(await tab.locator('#measurementConsent').isHidden());
-  await page.locator('#measurementPreferences').click();await page.getByRole('button',{name:'Rechazar',exact:true}).click();
+  await page.locator('#measurementPreferences').click();await refuseAnalytics(page);
   await tab.waitForFunction(()=>window.__testContainer.consent.analytics_storage==='denied');
-  await tab.locator('#measurementPreferences').click();await tab.getByRole('button',{name:'Aceptar analítica',exact:true}).click();
+  await tab.locator('#measurementPreferences').click();await tab.getByRole('button',{name:'Ok: permitir cookies analíticas',exact:true}).click();
   await page.waitForFunction(()=>window.__testContainer.consent.analytics_storage==='granted');await tab.close();
   report.checks.push('Advanced mode: one GTM per page before choice/after rejection; default denied precedes GTM; safe metadata; accept updates without reload, extra pageview or replay; saved choice and cross-tab updates');
   await page.locator('[data-open-sim]').click();assert.equal((await business(page)).length,1);
@@ -106,7 +113,7 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   assert.equal(await page.evaluate(()=>window.LandingMeasurement.track('arbitrary_event','general','header')),false);assert.equal(await page.evaluate(()=>window.LandingMeasurement.track('whatsapp_contact','private_message','header')),false);
   report.checks.push('All nine CTAs and two social links: service/location, no dialog-open conversion, blocked insurance excluded, duplicate click suppressed, no private test values in dataLayer');
   await page.context().addCookies([{name:'_ga',value:'test',url:base}]);
-  const requestsBefore=on.requests.length;await page.locator('#measurementPreferences').click();await page.getByRole('button',{name:'Rechazar',exact:true}).click();
+  const requestsBefore=on.requests.length;await page.locator('#measurementPreferences').click();await refuseAnalytics(page);
   assert.equal(on.requests.length,requestsBefore);assert.equal(await page.evaluate(()=>window.__testContainer.consent.analytics_storage),'denied');assert(!(await page.context().cookies()).some(c=>c.name==='_ga'));
   const beforeDenied=(await business(page)).length;await page.locator('[data-open-sim]').click();assert.equal((await business(page)).length,beforeDenied+1);await page.keyboard.press('Escape');
   assert.equal(await page.evaluate(()=>window.__testContainer.events.at(-1).consent.analytics_storage),'denied');
@@ -114,13 +121,14 @@ const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',ma
   assert(consentCommands.every(e=>e.ad_storage==='denied'&&e.ad_user_data==='denied'&&e.ad_personalization==='denied'));
   report.checks.push('Revocation updates to denied, clears accessible GA cookie, preserves limited interaction signals and keeps all advertising consent denied');
   await page.goto(base+'aviso-de-privacidad.html');assert((await page.locator('h1').textContent()).includes('Aviso'));assert((await page.locator('main').textContent()).includes('Gerardo López España'));assert((await page.locator('a[href="mailto:gerardoespanaa@gmail.com"]').count())>=1);assert((await page.locator('main').textContent()).includes('señales limitadas'));assert.equal(await page.locator('script[src*="googletagmanager.com/gtm.js"]').count(),1);
-  const mobile=await context(undefined,{viewport:{width:390,height:844}}),mp=await mobile.ctx.newPage();await mp.goto(base);await mp.getByRole('button',{name:'Rechazar',exact:true}).click();assert(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await mp.locator('[data-wa="auto"]').click();assert(await mp.locator('#contactDialog a[href="aviso-de-privacidad.html"]').isVisible());
+  const mobile=await context(undefined,{viewport:{width:390,height:844}}),mp=await mobile.ctx.newPage();await mp.goto(base);await refuseAnalytics(mp);assert(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await mp.locator('[data-wa="auto"]').click();assert(await mp.locator('#contactDialog a[href="aviso-de-privacidad.html"]').isVisible());
   if(output)await mp.screenshot({path:path.join(output,'contacto-movil.png')});await mp.locator('#closeContact').click();await mp.goto(base+'aviso-de-privacidad.html');assert(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(output)await mp.screenshot({path:path.join(output,'aviso-movil.png'),fullPage:true});
   report.checks.push('Updated privacy notice, operational preferences and mobile contact/notice navigation without horizontal overflow');
   // Real motion: cancellation sends no completion; final pop sends exactly one.
-  const motion=await context(undefined,{reducedMotion:'no-preference'}),anim=await motion.ctx.newPage();await anim.goto(base);await anim.getByRole('button',{name:'Aceptar analítica',exact:true}).click();await anim.locator('[data-open-sim]').click();await anim.locator('#calculateButton').click();await anim.waitForTimeout(150);await anim.keyboard.press('Escape');await anim.waitForTimeout(100);assert.equal((await business(anim)).filter(e=>e.event==='simulator_complete').length,0);await anim.locator('[data-open-sim]').click();await anim.locator('#calculateButton').click();await anim.waitForSelector('.amount-pop');assert.equal(await anim.locator('.confetti-piece').count(),24);assert.equal((await business(anim)).filter(e=>e.event==='simulator_complete').length,1);await anim.waitForTimeout(1300);assert.equal(await anim.locator('.confetti-piece').count(),0);
+  const motion=await context(undefined,{reducedMotion:'no-preference'}),anim=await motion.ctx.newPage();await anim.goto(base);await anim.getByRole('button',{name:'Ok: permitir cookies analíticas',exact:true}).click();await anim.locator('[data-open-sim]').click();await anim.locator('#calculateButton').click();await anim.waitForTimeout(150);await anim.keyboard.press('Escape');await anim.waitForTimeout(100);assert.equal((await business(anim)).filter(e=>e.event==='simulator_complete').length,0);await anim.locator('[data-open-sim]').click();await anim.locator('#calculateButton').click();await anim.waitForSelector('.amount-pop');assert.equal(await anim.locator('.confetti-piece').count(),24);assert.equal((await business(anim)).filter(e=>e.event==='simulator_complete').length,1);await anim.waitForTimeout(1300);assert.equal(await anim.locator('.confetti-piece').count(),0);
   report.checks.push('Interrupted animation not counted; real final animation counted once; 24 confetti particles cleaned');
   assert.deepEqual(report.errors,[]);report.result='passed';console.log(JSON.stringify({result:report.result,checks:report.checks,events:report.events.length},null,2));
  }finally{for(const ctx of contexts)await ctx.close();await browser.close();await new Promise(resolve=>server.close(resolve));if(output)fs.writeFileSync(path.join(output,'verification.json'),JSON.stringify(report,null,2));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});
+
 

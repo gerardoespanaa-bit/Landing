@@ -30,21 +30,34 @@
  controlsAt('general','about',['credential_amib','credential_cnsf'],['open']);
  controlsAt('general','about',['credential_close'],['close']);
  const banner=document.getElementById('measurementConsent'),manage=document.getElementById('measurementPreferences');
+ const preferences=document.getElementById('measurementDetails'),preferencesLink=document.getElementById('openMeasurementPreferences');
  let returnFocus=null;
- function close(){
-  if(banner)banner.hidden=true;
-  if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});
-  returnFocus=null;
+ function syncConsentUI(){
+  if(banner)banner.hidden=Boolean(preferences?.open)||consent.getChoice()!==null;
  }
- if(consent&&banner&&manage){
-  manage.hidden=false;banner.hidden=consent.getChoice()!==null;
-  manage.addEventListener('click',()=>{
-   returnFocus=manage;banner.hidden=false;banner.querySelector('button').focus();
+ if(consent&&banner&&manage&&preferences&&preferencesLink){
+  manage.hidden=false;syncConsentUI();
+  function openPreferences(opener){
+   returnFocus=opener;banner.hidden=true;
+   if(!preferences.open)preferences.showModal();
+   preferences.querySelector('[data-close-measurement]').focus();
+  }
+  manage.addEventListener('click',()=>openPreferences(manage));
+  preferencesLink.addEventListener('click',event=>{event.preventDefault();openPreferences(preferencesLink);});
+  preferences.querySelector('[data-close-measurement]').addEventListener('click',()=>preferences.close());
+  // Native dialog keeps keyboard focus inside and lets Escape close without choosing.
+  preferences.addEventListener('close',()=>{
+   syncConsentUI();
+   const target=returnFocus===preferencesLink&&banner.hidden?manage:returnFocus;
+   if(target?.isConnected)target.focus({preventScroll:true});
+   returnFocus=null;
   });
-  banner.querySelectorAll('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>{
-   if(consent.choose(button.dataset.analyticsChoice))close();
+  for(const surface of [banner,preferences])surface.querySelectorAll('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>{
+   if(!consent.choose(button.dataset.analyticsChoice))return;
+   if(preferences.open)preferences.close();
+   syncConsentUI();
   }));
-  window.addEventListener('landing:consent-change',()=>{banner.hidden=consent.getChoice()!==null;});
+  window.addEventListener('landing:consent-change',syncConsentUI);
  }
  function track(name,service,location,details){
   if(!consent||!events.has(name)||!services.has(service)||!locations.has(location))return false;
@@ -63,4 +76,5 @@
  }
  window.LandingMeasurement=Object.freeze({track});
 })();
+
 
