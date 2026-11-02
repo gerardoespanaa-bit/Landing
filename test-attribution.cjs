@@ -81,7 +81,7 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
 });
 check('HTML retains one loader, denied defaults, outgoing referrer protection and cache versions',()=>{
  for(const name of ['index.html','aviso-de-privacidad.html']){
-  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);assert(!html.includes('gtag/js'));assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=4'));
+  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);assert(!html.includes('gtag/js'));assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=5'));
   assert(html.includes('<meta name="referrer" content="no-referrer">'));
   for(const permission of ['analytics_storage','ad_storage','ad_user_data','ad_personalization'])assert(new RegExp(permission+":'denied'").test(html));
  }
