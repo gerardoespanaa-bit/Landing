@@ -68,7 +68,7 @@
    actionType=name==='ui_click'?details?.action_type:null;
    const control=controls.get(buttonId),action=actionType||name;
    if(!control||control.service!==service||control.location!==location||!control.actions.has(action))return false;
-  }else if(service!=='retiro'||(name==='simulator_complete'?location!=='simulator':!['header','hero','footer'].includes(location)))return false;
+  }else if(service!=='retiro'||(name==='simulator_complete'?location!=='simulator':!['header','hero','footer','simulator'].includes(location)))return false;
   // Advanced mode: Google tags apply consent to these allowlisted interactions.
   // No user input, financial amount, phone, message, link URL or retroactive replay.
   // Explicit nulls clear the previous event's values in GTM's data model.
