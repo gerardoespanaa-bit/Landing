@@ -27,7 +27,8 @@
   const fields=config.fields,values={name:contact.name,phone:'+52'+contact.phone,source:sourceLabel(kind,buttonId)};
   if(kind==='simulation'){
    if(!projection)throw Error('Calcula tu proyección antes de continuar.');
-   Object.assign(values,{consent:'true',age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,result8:projection.from.amount,result12:projection.to.amount,simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
+   // Store the requested inputs, never monetary projection results.
+   Object.assign(values,{consent:'true',age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
   }
   values.gclid=preferences?.advertising===true?campaign.gclid||'':'';
   values.utm=JSON.stringify(Object.fromEntries(campaignKeys.filter(key=>key!=='gclid').map(key=>[key,campaign[key]||''])));

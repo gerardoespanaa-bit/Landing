@@ -11,7 +11,7 @@
    state.save(sessionStorage,initial.name,i);
   },invalidated(){current=null;url='';whatsapp.setAttribute('aria-disabled','true');status.hidden=true;}
  });
- $('ageNow').value=initial.inputs.age;$('monthlyContribution').value=initial.inputs.monthly;$('ageRetirement').value=initial.inputs.retire;window.ProjectionCalculator.refresh();
+ $('ageNow').value=initial.inputs.age;$('monthlyContribution').value=initial.inputs.monthly;$('ageRetirement').value=initial.inputs.retire;whatsapp.setAttribute('aria-disabled','true');window.ProjectionCalculator.refresh({animate:true});
  whatsapp.addEventListener('click',e=>{e.preventDefault();if(!current)return;const now=performance.now();if(now-lastClick<800)return;lastClick=now;
   status.hidden=false;status.textContent='Redirigiendo a WhatsApp…';whatsapp.textContent='Redirigiendo a WhatsApp…';
   setTimeout(()=>window.location.assign(url),200);

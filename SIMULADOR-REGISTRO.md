@@ -3,12 +3,12 @@
 Esta versión está preparada para revisión; no publica cambios ni modifica Google Ads. Conserva el motor y los escenarios del 8% y 12%.
 
 ## Recorrido
-- /simulador/: saldo inferior completo en MXN, redondeado al peso; marcador superior ficticio borroso. El resultado de 12% no se escribe en el DOM, atributos, gráfica o texto accesible públicos.
+- /simulador/: saldo inferior completo en MXN, redondeado al peso; marcador superior ficticio borroso. En esta página se calcula únicamente el 8%. El contador superior crece con cifras ficticias desenfocadas; no hay resultado calculado del 12% en el DOM, atributos, gráfica, textos accesibles ni objeto de la proyección pública.
 - Escritorio: importes en una fila con guion. Móvil: inferior arriba, superior después de la gráfica y antes de la leyenda. Autoalineación bajo la barra al calcular; respeta movimiento reducido.
 - El marcador y Ver hasta dónde puedo llegar abren el mismo diálogo nativo accesible. Nombre, teléfono mexicano de diez dígitos y casilla explícita.
 - Casilla de simulación: «Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.»
 - Solo tras confirmación de HubSpot se habilita el acceso y abre /mi-proyeccion/, sin datos personales en su URL.
-- Resultados completos en las mismas posiciones, sin los bloques de diferencia, aplazamiento o aportado/rendimiento. Sus cálculos internos no se reescriben.
+- Al abrir /mi-proyeccion/ después del registro se calcula el 12%. Ambas curvas, sus cifras y los ejes progresan juntas en una escala común; las barras representan las mismas aportaciones. La leyenda muestra «Tendrías desde» en azul claro y «Podrías llegar hasta» en azul, sin porcentajes ni nombres de escenarios. Resultados completos en las mismas posiciones, sin los bloques de diferencia, aplazamiento o aportado/rendimiento. Sus cálculos internos no se reescriben.
 - Quiero llegar a ese número pulsa cada tres segundos, muestra Redirigiendo a WhatsApp y navega al mensaje con los valores actuales. No envía mensajes por sí mismo.
 - Supuestos compartidos visibles, explicación ilustrativa en Detalles de proyección y resumen del producto debajo, sin artículo 185 ni mención de ETF. Las 19 alternativas están descritas como opciones de selección según perfil y metas, no como inversión obligatoria en todas.
 
@@ -32,7 +32,8 @@ Se reutilizan el formulario público existente y sus diez propiedades de Contact
 
 Los parámetros publicitarios siguen sus preferencias vigentes: gclid solo con permiso publicitario; una cookie hubspotutk existente solo con Analítica. La autorización del formulario no concede cookies o publicidad personalizada.
 
-- Simulación: nombre, teléfono, tres entradas, ambos resultados exactos, fecha, gclid y cuatro UTM agrupadas, marcador de consentimiento de simulación y origen.
+- Simulación: nombre, teléfono, tres entradas (edad actual, edad de retiro y aportación mensual), fecha, gclid y cuatro UTM agrupadas, marcador de consentimiento de simulación y origen.
+- Por decisión del titular, no se envían al CRM los resultados monetarios de 8% ni 12%; se conservan las propiedades existentes y sus valores históricos, sin eliminarlos.
 - Asesoría / contratación: nombre, teléfono, parámetros disponibles y origen; consentimiento nativo de procesamiento con el texto de la solicitud. No se envían edades, importes, resultados, fecha de simulación ni marcador de consentimiento financiero inventados.
 - Contexto pageUri limpio; pageName restringido a los tres títulos propios. Sin parámetros arbitrarios ni IP adicional.
 - ppr_origen_lead identifica producto, intención y botón: PPR | Simulación | simulator_range; PPR | Asesoría | wa_hero_advisory; PPR | Solicitud de contratación | product_contract.
@@ -44,7 +45,7 @@ No se instala detección automática por teléfono ni un contador que sume conta
 ## Sesión y seguridad
 Se sustituye la persistencia de 30 días por sessionStorage (ppr-projection-session-v2), hasta cerrar la pestaña y como máximo 24 horas desde el último cálculo. El código retira la marca local antigua. No guarda el teléfono en el almacenamiento de sesión. El acceso no depende de una cuenta de Google.
 
-Una pestaña nueva normalmente requiere registro. Algunos navegadores restauran sesiones cerradas o copian el estado al duplicar pestañas. El bloqueo local es navegación, no autenticación de servidor; un usuario técnico puede eludirlo. /mi-proyeccion/ mantiene el primer script de guardia, documento oculto hasta validar y noindex, nofollow; no se añade a menús o sitemap.
+Una pestaña nueva normalmente requiere registro. Algunos navegadores restauran sesiones cerradas o copian el estado al duplicar pestañas. El bloqueo local es navegación, no autenticación de servidor; un usuario técnico puede eludirlo. Diferir el cálculo evita precalcular el resultado oculto, pero no vuelve secreto el motor público ni impide un cálculo manual en las herramientas del navegador. /mi-proyeccion/ mantiene el primer script de guardia, documento oculto hasta validar y noindex, nofollow; no se añade a menús o sitemap.
 
 Bloqueo del doble envío y del cierre mientras se guarda; errores permiten reintentar. Un envío ya confirmado no se repite en esa página cuando falla el almacenamiento. Recalcular en la página completa no envía nuevos contactos. No hay actualización posterior automática del CRM.
 
@@ -53,6 +54,7 @@ No se cambian GA4, GTM, sus etiquetas, Consent Mode o conversiones de Ads. El c�
 
 ## Pruebas
 Desde el directorio del sitio:
+- node test-projection-animation.cjs
 - node test-projection-flow.cjs
 - node test-lead-dialog.cjs
 - node test-simulator-route.cjs

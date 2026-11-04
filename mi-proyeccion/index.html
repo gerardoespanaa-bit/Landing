@@ -104,7 +104,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
 <link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
 <link rel="stylesheet" href="../simulator-page.css?v=1">
-<link rel="stylesheet" href="../projection-lead.css?v=2">
+<link rel="stylesheet" href="../projection-lead.css?v=3">
 </head>
 <body data-projection-full="true">
 <!-- Google Tag Manager (noscript) -->
@@ -139,7 +139,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div id="ageNotice" class="age-notice" role="alert" hidden></div><p id="calculationError" role="alert" hidden></p><div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
       </form>
 
-      <div class="retirement-result" id="resultPanel" aria-live="polite" hidden><div class="range-from"><p class="result-label">Tendrías desde:</p><div class="amount-stage"><div class="retirement-amount" id="retirementAmount">—</div><div class="confetti-layer" id="projectionConfetti" aria-hidden="true"></div></div></div><span class="range-dash" aria-hidden="true">−</span><div class="scenario-upper"><p class="result-label">Podrías llegar hasta:</p><div class="retirement-amount" id="upperProjectionAmount">—</div></div><div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Saldo proyectado y aportaciones acumuladas en MXN por año de proyección"></canvas></div><div class="projection-legend" aria-label="Series de la gráfica"><span><i class="contributions-key" aria-hidden="true"></i>Aportaciones acumuladas</span><span><i class="balance-key" aria-hidden="true"></i>Saldo total · escenario 8%</span></div><p id="chartSummary" class="sr-only"></p><p class="result-caption" id="retirementCaption"></p><dl class="projection-metrics" id="projectionMetrics" aria-label="Supuestos compartidos por los escenarios 8% y 12%" hidden><div><dt>Plazo</dt><dd id="metricYears">—</dd><small>de proyección</small></div><div><dt>Aportaciones</dt><dd id="metricContributions">—</dd><small>acumuladas</small></div><div><dt>Beneficio Fiscal</dt><dd id="metricTax">—</dd><small>anual de referencia</small></div></dl><button class="btn btn-wa result-cta" id="projectionWhatsAppButton" type="button">Quiero llegar a ese número</button><p id="projectionWhatsAppStatus" role="status" hidden></p></div>
+      <div class="retirement-result" id="resultPanel" aria-live="polite" hidden><div class="range-from"><p class="result-label">Tendrías desde:</p><div class="amount-stage"><div class="retirement-amount" id="retirementAmount">—</div><div class="confetti-layer" id="projectionConfetti" aria-hidden="true"></div></div></div><span class="range-dash" aria-hidden="true">−</span><div class="scenario-upper"><p class="result-label">Podrías llegar hasta:</p><div class="retirement-amount" id="upperProjectionAmount">—</div></div><div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Saldo proyectado y aportaciones acumuladas en MXN por año de proyección"></canvas></div><div class="projection-legend" aria-label="Series de la gráfica"><span><i class="contributions-key" aria-hidden="true"></i>Aportaciones acumuladas</span><span><i class="balance-key" aria-hidden="true"></i>Tendrías desde</span><span><i class="upper-balance-key" aria-hidden="true"></i>Podrías llegar hasta</span></div><p id="chartSummary" class="sr-only"></p><p class="result-caption" id="retirementCaption"></p><dl class="projection-metrics" id="projectionMetrics" aria-label="Supuestos compartidos por los escenarios 8% y 12%" hidden><div><dt>Plazo</dt><dd id="metricYears">—</dd><small>de proyección</small></div><div><dt>Aportaciones</dt><dd id="metricContributions">—</dd><small>acumuladas</small></div><div><dt>Beneficio Fiscal</dt><dd id="metricTax">—</dd><small>anual de referencia</small></div></dl><button class="btn btn-wa result-cta" id="projectionWhatsAppButton" type="button">Quiero llegar a ese número</button><p id="projectionWhatsAppStatus" role="status" hidden></p></div>
 <details class="sim-note sim-disclaimer"><summary>Detalles de proyección</summary><div class="projection-details">
         <p><strong>Importante sobre esta proyección</strong></p>
         <p>Se calculan dos escenarios con rendimientos brutos ilustrativos del 8% y del 12% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
@@ -164,10 +164,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="../engine.js" defer></script>
 <script src="../projection-metrics.js?v=5" defer></script>
 <script src="../app.js?v=14" defer></script>
-<script src="../projection-scenarios.js?v=1" defer></script>
+<script src="../projection-scenarios.js?v=2" defer></script>
 <script src="../projection-state.js?v=2" defer></script>
-<script src="../simulator.js?v=3" defer></script>
-<script src="../projection-results-ui.js?v=2" defer></script>
+<script src="../simulator.js?v=4" defer></script>
+<script src="../projection-results-ui.js?v=3" defer></script>
 
 <dialog id="credentialDialog" class="credential-dialog" aria-labelledby="credentialTitle"><div class="credential-toolbar"><h2 id="credentialTitle">Documento profesional</h2><button type="button" id="closeCredential" class="modal-close" aria-label="Cerrar documento">×</button></div><div id="credentialContent" class="credential-content"></div></dialog><section id="measurementConsent" class="measurement-consent" aria-label="Analítica y medición publicitaria" hidden>
   <div><p>Usamos cookies de analítica y medición publicitaria para entender cómo se utiliza nuestra página, medir los resultados de nuestros anuncios y mejorar tu experiencia. Al pulsar “Ok”, aceptas estos usos. <a id="openMeasurementPreferences" class="consent-preferences-link" href="#measurementDetails" aria-haspopup="dialog">Aquí</a> puedes configurar tus preferencias.</p><p class="consent-identity">Antes de elegir, Google puede recibir señales limitadas sin cookies. Gerardo López España · <a href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a></p></div>
@@ -184,7 +184,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="measurement-details-note">Responsable: Gerardo López España. Domicilio: Plaza Nazas, Av. Fray Luis de León 7092, Local 27B, Colinas del Cimatario, C. P. 76090, Santiago de Querétaro, Querétaro, México. Datos de medición: conexión y navegador, páginas y eventos de uso, cookies e identificadores de clic cuando se permiten. Finalidades opcionales: analítica y medición de anuncios, descritas arriba. Puedes limitar esos usos mediante los interruptores o «Solo esenciales».</p>
   <a class="privacy-link" href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Leer el aviso de privacidad completo</a></div>
   <div class="consent-actions"><button type="button" data-consent-action="essential">Solo esenciales</button><button class="consent-primary" type="button" data-consent-action="save" aria-label="Ok: guardar las preferencias seleccionadas">Ok</button></div>
-</dialog><script src="../hubspot-form-config.js?v=1" defer></script><script src="../hubspot-submission.js?v=2" defer></script><script src="../lead-dialog.js?v=1" defer></script></body>
+</dialog><script src="../hubspot-form-config.js?v=1" defer></script><script src="../hubspot-submission.js?v=3" defer></script><script src="../lead-dialog.js?v=1" defer></script></body>
 </html>
 
 

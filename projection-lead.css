@@ -14,3 +14,5 @@
 .range-from .amount-stage{min-height:0;padding:11px 5px}.scenario-upper>.retirement-amount{padding:11px 5px}
 
 .retirement-result .retirement-amount{margin:0}.range-dash{transform:translateY(14px)}
+
+.projection-legend .upper-balance-key{background:#4c8ff5;width:22px;height:3px;border-radius:2px}
