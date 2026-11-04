@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es" hidden>
+<head>
+<script>
+// Access check is intentionally the first script in head, before consent or tags.
+// This local marker is a navigation gate, not server authentication.
+(function(){document.documentElement.hidden=true;try{var v=JSON.parse(localStorage.getItem('ppr-projection-unlocked-v1')),i=v&&v.inputs,age=Date.now()-(v&&v.savedAt);if(!v||v.version!==1||v.unlocked!==true||!Number.isFinite(v.savedAt)||age<0||age>30*86400000||typeof v.name!=='string'||v.name.trim().length<2||v.name.length>100||/[<>\u0000-\u001f]/.test(v.name)||!i||!Number.isInteger(i.age)||i.age<18||i.age>64||!Number.isInteger(i.retire)||i.retire<65||i.retire>90||!Number.isInteger(i.monthly)||i.monthly<2000||i.monthly>1000000)throw Error();window.PPR_UNLOCKED_STATE={version:1,unlocked:true,name:v.name,inputs:{age:i.age,retire:i.retire,monthly:i.monthly},savedAt:v.savedAt};var clean=new URL('./',window.location.href).href;if(window.location.href!==clean)window.history.replaceState(null,'',clean);document.documentElement.hidden=false;}catch(e){window.location.replace(new URL('../simulador/',window.location.href).href);}})();
+</script>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<!-- Consent defaults must precede every Google tag. -->
+<script>
+(function(w){
+  w.dataLayer=w.dataLayer||[];
+  function command(){w.dataLayer.push(arguments);}
+  command('consent','default',{
+    ad_storage:'denied',analytics_storage:'denied',
+    ad_user_data:'denied',ad_personalization:'denied'
+  });
+})(window);
+</script>
+<script src="../measurement-config.js?v=3"></script>
+<script src="../measurement-init.js?v=6"></script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){if(!w.LandingConsent)return;w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KMG6BPKF');</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#153F68">
+<title>Mi proyección | Gerardo España</title>
+<meta name="description" content="Asesoría de PPR en México con Gerardo España. Conoce cómo funciona un Plan Personal de Retiro, simula un escenario y agenda una asesoría en línea.">
+<link rel="stylesheet" href="../privacy.css?v=5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#153F68;--navy2:#0e2e4d;--blue:#285b88;--ink:#172b3e;--muted:#637588;--line:#dfe7ef;--pale:#edf3f8;--white:#fff;--green:#25D366;--gold:#b78b4a;--radius:22px;--shadow:0 18px 55px rgba(16,48,78,.10)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}body{margin:0;color:var(--ink);font-family:"DM Sans",sans-serif;background:#fff;line-height:1.55}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.035em}h1{font-size:clamp(2.5rem,5vw,4.6rem);line-height:1.04;margin-bottom:20px}h2{font-size:clamp(2rem,3.5vw,3rem);line-height:1.12;margin-bottom:16px}h3{font-size:1.2rem;line-height:1.25}.container{width:min(1160px,calc(100% - 40px));margin:auto}.eyebrow{font-size:.76rem;text-transform:uppercase;letter-spacing:.15em;font-weight:800;color:var(--blue);margin-bottom:13px}.muted{color:var(--muted)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:14px 21px;text-decoration:none;font-weight:800;font-size:.95rem;cursor:pointer;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:var(--navy);color:white;box-shadow:0 10px 24px rgba(21,63,104,.18)}.btn-wa{background:var(--green);color:#073d20;box-shadow:0 10px 24px rgba(37,211,102,.16)}.btn-light{background:white;color:var(--navy);border:1px solid var(--line)}.btn svg{width:19px;height:19px}.site-header{height:76px;position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(223,231,239,.8)}.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-family:Manrope,sans-serif;font-weight:800;line-height:1.05}.brand-mark{width:40px;height:40px;border-radius:13px;background:var(--navy);color:white;display:grid;place-items:center;font-size:1rem;letter-spacing:-.04em}.brand small{display:block;font-family:"DM Sans",sans-serif;color:var(--muted);font-size:.69rem;font-weight:600;letter-spacing:.02em;margin-top:5px}.nav-links{display:flex;align-items:center;gap:25px}.nav-links a{font-size:.88rem;text-decoration:none;color:#43586c;font-weight:700}.nav-links a:hover{color:var(--navy)}.nav-links .btn{color:white;padding:11px 17px}.menu-toggle{display:none;border:1px solid var(--line);background:white;border-radius:12px;padding:9px 12px;color:var(--navy);font-weight:800}
+.hero{padding:66px 0 76px;background:radial-gradient(circle at 88% 6%,#e4eef7 0,transparent 32%),linear-gradient(180deg,#f8fbfe 0,#fff 100%)}.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}.hero-copy{padding:10px 0}.hero-copy h1 span{color:var(--blue)}.hero-copy p{font-size:1.1rem;max-width:510px;color:#52687c;margin-bottom:25px}.hero-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.pill{display:inline-flex;gap:7px;align-items:center;border:1px solid #dce6ef;background:rgba(255,255,255,.75);padding:8px 11px;border-radius:999px;color:#435b70;font-size:.8rem;font-weight:700}.pill svg{width:15px;height:15px;color:#2e7d58}.sim-shell{background:white;border:1px solid #dce6ef;border-radius:26px;padding:13px;box-shadow:var(--shadow);overflow:hidden}.sim-top{display:flex;align-items:center;justify-content:space-between;padding:10px 13px 14px;gap:10px}.sim-top strong{font-family:Manrope,sans-serif;font-size:1.04rem;color:var(--navy)}.live-tag{font-size:.7rem;font-weight:800;color:#26724b;background:#e7f7ed;padding:6px 9px;border-radius:999px}.sim-frame{width:100%;height:780px;border:0;display:block;border-radius:16px;background:#f4f7fb}.sim-note{font-size:.75rem;color:#6a7d8e;padding:11px 13px 3px;margin:0}
+.trust-strip{padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:white}.trust-items{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;color:#4b6277;font-size:.86rem;font-weight:700}.trust-items span{display:flex;align-items:center;gap:8px}.trust-items svg{width:18px;height:18px;color:var(--blue)}
+section.content-section{padding:92px 0}.section-heading{max-width:710px;margin-bottom:38px}.section-heading p{font-size:1.05rem;color:var(--muted)}.about{background:#f6f9fc}.about-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:64px;align-items:start}.profile-card{border-radius:26px;padding:28px;background:linear-gradient(145deg,var(--navy),var(--navy2));color:white;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow)}.profile-monogram{width:78px;height:78px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);border-radius:24px;display:grid;place-items:center;font:800 1.6rem Manrope,sans-serif}.profile-card h3{font-size:1.6rem;margin:22px 0 7px}.profile-card p{color:#d8e5f0;margin:0}.credential-list{display:grid;gap:14px;margin:28px 0 30px}.credential{display:flex;gap:14px;align-items:flex-start;padding:17px 18px;background:white;border:1px solid var(--line);border-radius:16px}.credential-icon{width:38px;height:38px;flex:0 0 38px;background:var(--pale);color:var(--navy);border-radius:12px;display:grid;place-items:center}.credential-icon svg{width:19px;height:19px}.credential strong{display:block;margin-bottom:3px}.credential p{font-size:.9rem;color:var(--muted);margin:0}
+.services{background:white}.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.service-card{border:1px solid var(--line);border-radius:22px;padding:28px;background:white;display:flex;flex-direction:column;min-height:255px;transition:box-shadow .2s,transform .2s}.service-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}.service-icon{width:52px;height:52px;display:grid;place-items:center;background:var(--pale);border-radius:16px;color:var(--navy);margin-bottom:21px}.service-icon svg{width:25px;height:25px}.service-card p{color:var(--muted);font-size:.94rem;flex:1}.service-card .btn{align-self:flex-start;margin-top:8px}.service-card.featured{background:#f6f9fc;border-color:#cad9e7}
+.cta-band{padding:0 0 92px}.cta-inner{background:linear-gradient(120deg,#153f68,#244f77);color:white;border-radius:28px;padding:clamp(28px,5vw,54px);display:flex;align-items:center;justify-content:space-between;gap:30px}.cta-inner h2{max-width:660px;margin-bottom:10px}.cta-inner p{color:#d6e3ef;margin:0;max-width:650px}.cta-inner .btn{flex-shrink:0}.site-footer{background:#0d2944;color:#dce7f0;padding:35px 0}.footer-inner{display:flex;justify-content:space-between;gap:30px;align-items:flex-start}.footer-brand{font:800 1rem Manrope,sans-serif}.footer-note{font-size:.78rem;max-width:700px;color:#b9cad9;margin:12px 0 0}.footer-links{display:flex;gap:16px;flex-wrap:wrap}.footer-links a{color:#e4edf5;text-decoration:none;font-size:.82rem}.wa-float{position:fixed;right:20px;bottom:20px;z-index:60;width:58px;height:58px;border-radius:50%;background:var(--green);color:#064b25;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.18);text-decoration:none}.wa-float svg{width:28px;height:28px}
+@media(max-width:900px){.hero-grid,.about-grid{grid-template-columns:1fr;gap:30px}.hero{padding-top:42px}.hero-copy{max-width:700px}.sim-frame{height:850px}.profile-card{min-height:240px}.nav-links{gap:15px}.nav-links a:not(.btn){display:none}}
+@media(max-width:620px){.container{width:min(100% - 28px,1160px)}.site-header{height:68px}.brand-mark{width:36px;height:36px}.nav-links{display:none;position:absolute;left:14px;right:14px;top:62px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);flex-direction:column;align-items:stretch}.nav-links.open{display:flex}.nav-links a:not(.btn){display:block;padding:8px}.menu-toggle{display:block}.hero{padding:32px 0 48px}.hero-grid{gap:28px}.hero-copy p{font-size:1rem}.sim-shell{padding:8px;border-radius:20px}.sim-frame{height:920px}.sim-top{padding:9px 8px 12px}.content-section{padding:64px 0!important}.section-heading{margin-bottom:26px}.services-grid{grid-template-columns:1fr}.service-card{padding:23px;min-height:0}.cta-band{padding-bottom:64px}.cta-inner{align-items:flex-start;flex-direction:column;border-radius:22px}.footer-inner{flex-direction:column}.wa-float{right:14px;bottom:14px;width:54px;height:54px}}
+
+.calc-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 13px 20px}
+.calc-form label{font-weight:700;color:#344b60;font-size:.84rem;display:grid;gap:7px}
+.calc-form input{width:100%;min-width:0;border:1px solid #d2deea;background:#fbfdff;border-radius:12px;padding:13px 12px;font:600 1rem "DM Sans",sans-serif;color:var(--ink);outline-color:#5a86ad}
+.calc-form label:nth-child(3){grid-column:1/-1}
+.money-input{display:flex;align-items:center;border:1px solid #d2deea;background:#fbfdff;border-radius:12px;padding:0 11px;gap:7px}
+.money-input input{border:0;background:transparent;padding-left:0;padding-right:0;outline:none}
+.money-input b,.money-input small{color:#72879a;font-weight:700}
+.calc-btn{grid-column:1/-1;width:100%;border-radius:13px;min-height:51px}
+.retirement-result{background:linear-gradient(145deg,#153f68,#0e2e4d);border-radius:20px;color:white;padding:24px 22px 22px;margin:0 8px 8px;text-align:center}
+.result-label{font-size:.9rem;color:#d6e5f2;font-weight:700;margin:0 0 5px}
+.retirement-amount{font:800 clamp(2.6rem,5.1vw,4.3rem)/1.05 Manrope,sans-serif;letter-spacing:-.06em;color:#fff;overflow-wrap:anywhere;margin:6px 0 9px}
+.result-caption{color:#d6e5f2;font-size:.78rem;margin:0 auto 12px;max-width:390px}
+.mini-chart-wrap{height:95px;margin:0 auto 13px;max-width:440px}
+#miniGrowthChart{width:100%;height:100%;display:block}
+.result-cta{width:100%;font-size:.87rem;padding:13px 12px}
+.sim-disclaimer{text-align:left;font-size:.78rem;line-height:1.65;color:#53677a;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.sim-disclaimer p{margin:0 0 10px}
+.simulator-chart{display:none;height:140px;max-width:100%;margin:12px auto}
+.simulator-chart.is-visible{display:block}
+.calculating-message{margin:12px 0;color:var(--navy)}
+.service-card{position:relative;overflow:hidden}
+.service-card.has-photo{background-size:cover;background-position:center;color:#fff;min-height:290px;justify-content:flex-end}
+.service-card.has-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,38,62,.08) 0%,rgba(12,38,62,.82) 100%)}
+.service-card.has-photo>*{position:relative;z-index:1}
+.service-card.has-photo .service-icon{background:rgba(255,255,255,.15);color:white;backdrop-filter:blur(8px)}
+.service-card.has-photo p{color:#e5edf5}.service-card.has-photo h3{color:white}
+@media(max-width:620px){.calc-form{grid-template-columns:1fr;padding:10px 8px 16px}.calc-form label:nth-child(3),.calc-btn{grid-column:auto}.retirement-result{padding:23px 15px;margin:0 2px 4px}.retirement-amount{font-size:clamp(2.35rem,11vw,3.4rem)}}
+
+
+.calculating-message{font-weight:700;color:#dceafa;padding:12px 8px;margin:0}.progress-track{display:block;height:7px;background:rgba(255,255,255,.2);border-radius:99px;margin-top:10px;overflow:hidden}.progress-track i{display:block;width:0;height:100%;background:#a7d9ff;border-radius:99px;transition:width .12s linear}
+/* Modal del simulador */
+.sim-shell#simulador{display:none;position:fixed;z-index:1002;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;border-radius:24px;padding:18px;box-shadow:0 30px 100px rgba(5,25,45,.35)}
+.sim-shell#simulador.is-open{display:block}
+body.modal-active{overflow:hidden}
+body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,43,.68);backdrop-filter:blur(5px);z-index:1001}
+.modal-close{position:sticky;top:0;float:right;border:0;background:#edf3f8;color:#153f68;border-radius:999px;width:40px;height:40px;font-size:1.5rem;cursor:pointer;z-index:2}
+.hero-grid{grid-template-columns:1fr 1fr}
+.hero-photo{width:100%;height:560px;object-fit:cover;border-radius:4px 4px 70px 4px;box-shadow:var(--shadow)}
+.hero-copy h1 span{color:#0755c9}
+.hero-copy .eyebrow{color:#0755c9}
+.profile-card{background:#153f68 url('../gerardo-espana.png') center 25%/cover no-repeat;min-height:420px;display:flex;align-items:flex-end;padding:28px;border-radius:22px;overflow:hidden;position:relative;color:white}
+.profile-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(5,26,48,.88))}
+.profile-card>*{position:relative;z-index:1}
+.profile-monogram{display:none}
+.profile-card p,.profile-card h3{color:white}
+.btn-wa{background:#fff;color:#153f68;border:1px solid #dce6ef;box-shadow:none}
+.btn-wa:hover{background:#edf3f8}
+@media(max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-photo{height:420px;grid-row:2}.sim-shell#simulador{padding:10px}.retirement-result{margin:0}.calc-form{grid-template-columns:1fr}.calc-form label:nth-child(3),.calc-btn{grid-column:auto}}
+
+[hidden]{display:none!important}.simulator-chart.is-visible{height:200px;max-width:640px}.service-card a:after{content:"";position:absolute;inset:0}.service-card .btn{position:static}.service-card:focus-within{outline:3px solid #285b88}.wa-float{background:var(--navy);color:white}dialog{border:1px solid var(--line);border-radius:24px;padding:28px;width:min(520px,calc(100% - 28px));max-height:90dvh;overflow:auto;color:var(--ink)}dialog::backdrop{background:rgba(7,24,43,.68)}dialog textarea{width:100%;min-height:140px;padding:12px;font:inherit;border:1px solid var(--line);border-radius:12px}dialog .btn{margin-top:16px}.sim-shell#simulador{max-height:calc(100dvh - 24px)}:focus-visible{outline:3px solid #5499cf;outline-offset:4px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.social-links{display:flex;align-items:center;gap:8px}.social-links .social-link{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-width:40px;min-height:40px;border:1px solid var(--line);border-radius:999px;color:var(--navy);text-decoration:none;background:white;padding:9px;font-size:.84rem;font-weight:700}.social-link svg{width:18px;height:18px;flex-shrink:0}.social-links .social-link:hover{background:var(--pale);border-color:#9eb9d1}.social-chips{flex-wrap:wrap;margin:0 0 24px}.social-chips .social-link{padding:10px 15px}.nav-links{gap:16px}.social-header{flex-shrink:0}@media(min-width:621px) and (max-width:1200px){.nav-links>a:not(.btn){display:none}}@media(max-width:620px){.social-header{justify-content:flex-start;border-top:1px solid var(--line);padding-top:12px}}
+</style>
+<link rel="stylesheet" href="../updates.css?v=9">
+<link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
+<link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
+<link rel="stylesheet" href="../simulator-page.css?v=1">
+<link rel="stylesheet" href="../projection-lead.css?v=1">
+</head>
+<body data-projection-full="true">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMG6BPKF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="../#inicio" data-ui-id="nav_logo" aria-label="Gerardo España, inicio"><img src="../assets/logo-barra.svg" width="220" height="63" alt="Gerardo España" class="brand-logo"></a>
+<div class="social-links social-header" aria-label="Perfiles de Gerardo España"><a class="social-link" data-ui-id="social_header_tiktok" href="https://www.tiktok.com/@ger.espana" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Gerardo España (abre en otra pestaña)" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 2c.3 2.5 1.7 4 4 4.2v3.4a8 8 0 0 1-4-1.2v7a6.4 6.4 0 1 1-5.5-6.3v3.5a3 3 0 1 0 2 2.8V2z"/></svg></a><a class="social-link" data-ui-id="social_header_instagram" href="https://www.instagram.com/ger.espana/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Gerardo España (abre en otra pestaña)" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a><a class="social-link" href="https://wa.me/message/42SOTDUOUMFGK1" data-wa-social data-measure-location="header" data-measure-id="wa_header_social" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Gerardo España (abre en otra pestaña)" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 15L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.7.7.7-2.7-.2-.4A8 8 0 0 1 12 4zm-3.2 3c-.4 0-1.5.8-1.5 2.4 0 2.6 3.7 6.5 6.8 7 .8.2 2.2-.5 2.5-1.4l.1-1-2.5-1.2-.9 1.1c-1.4-.5-2.6-1.6-3.2-2.9l.8-1L9.8 7z"/></svg></a><a class="social-link" data-ui-id="social_header_linkedin" href="https://www.linkedin.com/in/gerardo-espa%C3%B1a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gerardo España (abre en otra pestaña)" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.5 9h3v12h-3zM9 9h3v1.6c.7-1.1 1.8-1.9 3.6-1.9 3.3 0 4.4 2.1 4.4 5.3v7h-3v-6.2c0-1.9-.1-3.4-2.3-3.4S12 13.1 12 14.7V21H9z"/></svg></a></div>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#simulador" data-measure-location="header">Calcula tu retiro</a>
+      <a href="../#sobre-mi" data-ui-id="nav_about">Sobre mí</a>
+      <a href="../#servicios" data-ui-id="nav_services">En qué te puedo ayudar</a>
+
+
+    </nav>
+    <a class="btn btn-primary header-cta" href="#" data-wa="general" data-measure-location="header" data-measure-id="wa_header_advisory">Agenda una asesoría gratis</a>
+  </div>
+</header>
+<main class="simulator-page">
+<div class="container"><a class="simulator-back" href="../">← Volver al inicio</a><h1>Mi proyección de retiro</h1>
+
+    <div class="sim-shell" id="simulador" aria-labelledby="simTitle">
+      <div class="sim-top"><strong id="simTitle">Calcula tu retiro</strong><span class="live-tag">Proyección ilustrativa</span></div>
+      <form class="calc-form" id="retirementForm" novalidate>
+        <label>Edad actual <span class="age-control"><button type="button" data-age-step="ageNow" data-delta="-1" aria-label="Disminuir edad actual">−</button><input id="ageNow" aria-describedby="ageNotice" type="number" min="18" max="64" value="35" required><button type="button" data-age-step="ageNow" data-delta="1" aria-label="Aumentar edad actual">+</button></span></label>
+        <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" aria-describedby="ageNotice" type="number" min="2000" max="1000000" step="1" value="2000" required><small>MXN</small></span></label>
+        <label>Edad de retiro <span class="age-control"><button type="button" data-age-step="ageRetirement" data-delta="-1" aria-label="Disminuir edad de retiro">−</button><input id="ageRetirement" aria-describedby="ageNotice" type="number" min="65" max="90" value="65" required><button type="button" data-age-step="ageRetirement" data-delta="1" aria-label="Aumentar edad de retiro">+</button></span></label>
+        <button class="btn btn-primary calc-btn" id="calculateButton" type="submit">Calcular mi proyección</button>
+        <div id="ageNotice" class="age-notice" role="alert" hidden></div><p id="calculationError" role="alert" hidden></p><div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
+      </form>
+
+      <div class="retirement-result" id="resultPanel" aria-live="polite" hidden>
+        <p class="result-label">Tendrías desde:</p>
+        <div class="amount-stage"><div class="retirement-amount" id="retirementAmount">—</div><div class="confetti-layer" id="projectionConfetti" aria-hidden="true"></div></div>
+        <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Saldo proyectado y aportaciones acumuladas en MXN por año de proyección"></canvas></div><div class="projection-legend" aria-label="Series de la gráfica"><span><i class="contributions-key" aria-hidden="true"></i>Aportaciones acumuladas</span><span><i class="balance-key" aria-hidden="true"></i>Saldo total · escenario 8%</span></div><p id="chartSummary" class="sr-only"></p>
+        <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
+
+
+        <dl class="projection-metrics" id="projectionMetrics" hidden><div><dt>Plazo</dt><dd id="metricYears">—</dd><small>de proyección</small></div><div><dt>Aportaciones</dt><dd id="metricContributions">—</dd><small>acumuladas</small></div><div><dt>Beneficio Fiscal</dt><dd id="metricTax">—</dd><small>anual de referencia</small></div></dl>
+        <div class="scenario-upper"><p class="result-label">Podrías llegar hasta:</p><div class="retirement-amount" id="upperProjectionAmount">—</div><p class="result-caption">Escenario 12% anual</p>
+ <dl class="projection-metrics" id="projectionMetrics12"><div><dt>Plazo</dt><dd id="metricYears12">—</dd><small>de proyección</small></div><div><dt>Aportaciones</dt><dd id="metricContributions12">—</dd><small>acumuladas</small></div><div><dt>Beneficio Fiscal</dt><dd id="metricTax12">—</dd><small>anual de referencia</small></div></dl></div>
+ <div class="projection-comparison"><p>Diferencia entre los escenarios: <strong id="projectionDifference">—</strong></p><p>Si empiezas un año después, la diferencia en el escenario de 12% sería: <strong id="projectionDelayCost">—</strong></p>
+ <p>Escenario 8%: aportado <strong id="projectionPaid8">—</strong> · rendimiento neto ilustrativo <strong id="projectionGenerated8">—</strong>.</p><p>Escenario 12%: aportado <strong id="projectionPaid12">—</strong> · rendimiento neto ilustrativo <strong id="projectionGenerated12">—</strong>.</p></div>
+ <p class="result-caption">Proyección estimada con fines ilustrativos.</p>
+ <button class="btn btn-wa result-cta" id="projectionWhatsAppButton" type="button">Quiero llegar a ese número</button>
+      </div>
+
+      <details class="sim-note sim-disclaimer"><summary>Detalles de proyección</summary><div class="projection-details">
+        <p><strong>Importante sobre esta proyección</strong></p>
+        <p>Se calculan dos escenarios con rendimientos brutos ilustrativos del 8% y del 12% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
+        <p>Se conserva el motor existente, que aplica supuestos de administración (1.5% trimestral sobre saldo inicial), gestión (0.1% mensual), cargo inicial de $500, cargo mensual de 25 UDIS desde el mes 19, UDI fija de $8.81 y una tabla de bono con tasa ilustrativa del 9%. Estos parámetros, su tratamiento de IVA, la elegibilidad del bono y su aplicación después de 25 años no están verificados contra un contrato vigente. La cifra es un escenario técnico provisional; no es una cotización oficial ni confirma los costos o beneficios de un producto. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
+        <p><strong>Beneficio fiscal anual de referencia:</strong> se estima con un ISR marginal ilustrativo del 25%, que puede variar según la posición de cada persona en la tarifa de ISR. Se aplica a la aportación anual hasta el límite de cinco UMA anuales de 2026 ($213,973.20), suponiendo ingresos suficientes para que la deducción no supere el 10% de los ingresos acumulables y el cumplimiento de los demás requisitos del Artículo 151. Como no se solicitan ingresos ni situación fiscal, esta referencia no es una devolución calculada o asegurada; puede ser menor o nula. Se muestra solo el beneficio anual, sin acumularlo ni reinvertirlo. Los límites de años futuros pueden cambiar.</p>
+        <p>*El tratamiento fiscal está sujeto a las condiciones aplicables y se explica durante la asesoría personalizada.</p>
+        <p><strong>Escenario «Libre de impuestos»:</strong> supone que los retiros se realizan dentro de los requisitos y límites de exención aplicables a la modalidad de disposición elegida. Cumplir 65 años no establece una exención ilimitada del saldo. El motor no determina el ISR personal ni un calendario de retiros; la estrategia y el tratamiento de cualquier excedente se revisan en asesoría. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
+      </div></details>
+    </div>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div><div class="footer-brand">Gerardo España</div><p class="footer-note">La información del simulador es ilustrativa y no constituye una garantía de rendimiento ni una recomendación personalizada. Las condiciones, beneficios fiscales, comisiones y disponibilidad de productos dependen del producto, la normativa aplicable y la situación de cada persona. Verifica los términos antes de contratar.</p><p class="footer-note">La asesoría inicial en línea es gratis y sin obligación de contratar. Esta página es informativa; la contratación del PPR se realiza posteriormente mediante el procedimiento correspondiente. El PPR de Allianz tiene cargos de administración, gestión de inversión y un cargo fijo, más IVA cuando corresponda; también pueden aplicarse cargos y restricciones por retiros anticipados. Antes de contratar revisaremos contigo los costos y condiciones aplicables.</p><p class="footer-note">Las credenciales y referencias profesionales deberán comprobarse y mantenerse actualizadas antes de publicar el sitio.</p></div>
+    <div class="footer-links"><a href="../#inicio" data-ui-id="footer_home">Inicio</a><a href="#simulador" data-measure-location="footer">Simulador</a><a href="../#servicios" data-ui-id="footer_services">Servicios</a><a href="../aviso-de-privacidad.html">Aviso de privacidad</a><button id="measurementPreferences" class="measurement-preferences" type="button" hidden>Preferencias de privacidad</button></div>
+  </div>
+</footer>
+<a class="wa-float" href="#" data-wa="general" data-measure-location="floating" data-measure-id="wa_floating" aria-label="Agenda una asesoría gratis por WhatsApp">
+<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.16 1.6 5.97L.12 24l6.3-1.65a11.9 11.9 0 0 0 5.68 1.45h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.24-6.15-3.47-8.44ZM12.1 21.78a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.82 9.82 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.82 9.82 0 0 1 2.9 7c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg>
+</a>
+<script src="../measurement.js?v=7" defer></script>
+<script src="../engine.js" defer></script>
+<script src="../projection-metrics.js?v=5" defer></script>
+<script src="../app.js?v=13" defer></script>
+<script src="../projection-scenarios.js?v=1" defer></script>
+<script src="../projection-state.js?v=1" defer></script>
+<script src="../simulator.js?v=2" defer></script>
+<script src="../projection-results-ui.js?v=1" defer></script>
+
+<dialog id="contactDialog" aria-labelledby="contactTitle"><button class="modal-close" id="closeContact" aria-label="Cerrar contacto">×</button><h2 id="contactTitle">Agenda una asesoría gratis</h2><p><span id="contactIntro">Coordinamos tu asesoría inicial gratis directamente por WhatsApp.</span></p><div id="contactExtras"></div><p>Destino: +52 442 377 7762</p><label for="contactMessage">Tu mensaje</label><textarea id="contactMessage" maxlength="2000"></textarea><p class="contact-privacy">Al continuar abrirás un servicio externo. Revisa el <a class="privacy-link" href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> antes de compartir información.</p><a class="btn btn-primary" id="contactContinue" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a></dialog><dialog id="credentialDialog" class="credential-dialog" aria-labelledby="credentialTitle"><div class="credential-toolbar"><h2 id="credentialTitle">Documento profesional</h2><button type="button" id="closeCredential" class="modal-close" aria-label="Cerrar documento">×</button></div><div id="credentialContent" class="credential-content"></div></dialog><section id="measurementConsent" class="measurement-consent" aria-label="Analítica y medición publicitaria" hidden>
+  <div><p>Usamos cookies de analítica y medición publicitaria para entender cómo se utiliza nuestra página, medir los resultados de nuestros anuncios y mejorar tu experiencia. Al pulsar “Ok”, aceptas estos usos. <a id="openMeasurementPreferences" class="consent-preferences-link" href="#measurementDetails" aria-haspopup="dialog">Aquí</a> puedes configurar tus preferencias.</p><p class="consent-identity">Antes de elegir, Google puede recibir señales limitadas sin cookies. Gerardo López España · <a href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a></p></div>
+  <button class="consent-primary" type="button" data-consent-action="accept-measurement" aria-label="Ok: aceptar analítica y medición publicitaria">Ok</button>
+</section>
+<dialog id="measurementDetails" class="measurement-details" aria-labelledby="measurementDetailsTitle" aria-describedby="measurementDetailsIntro">
+  <div class="measurement-details-header"><h2 id="measurementDetailsTitle">Preferencias de privacidad</h2><button type="button" class="measurement-details-close" data-close-measurement aria-label="Cerrar preferencias">×</button></div>
+  <div class="measurement-details-content"><p id="measurementDetailsIntro">Elige cada uso por separado. «Ok» guarda exactamente tu selección; «Solo esenciales» desactiva ambas opciones. Puedes cambiarla después desde «Preferencias de privacidad», al pie de la página. Cerrar esta ventana no acepta ni guarda cambios.</p>
+  <div class="measurement-category"><label class="measurement-option"><span>Esenciales <small>Siempre activas</small></span><input type="checkbox" checked disabled aria-label="Esenciales: siempre activas"></label><p>Guardamos tu elección en este navegador durante un máximo de 180 días. El simulador y WhatsApp funcionan sin aceptar las opciones siguientes.</p></div>
+  <div class="measurement-category"><label class="measurement-option" for="consentAnalytics"><span>Analítica</span><input id="consentAnalytics" type="checkbox" aria-describedby="consentAnalyticsHelp"></label><p id="consentAnalyticsHelp">Permite cookies de Google Analytics para conocer visitas, navegación y uso del simulador y los botones. Los eventos propios no incluyen edad, aportaciones, saldo proyectado, teléfono ni mensajes.</p></div>
+  <div class="measurement-category"><label class="measurement-option" for="consentAdvertising"><span>Medición publicitaria</span><input id="consentAdvertising" type="checkbox" aria-describedby="consentAdvertisingHelp"></label><p id="consentAdvertisingHelp">Permite almacenamiento e identificadores de clic y el uso de datos de navegación y eventos por Google para relacionar visitas y acciones con nuestros anuncios y medir sus resultados. No autoriza publicidad personalizada ni el envío de datos financieros, teléfonos o correos.</p></div>
+  <div class="measurement-category"><label class="measurement-option"><span>Publicidad personalizada <small>Desactivada · No la utilizamos</small></span><input type="checkbox" disabled aria-label="Publicidad personalizada: desactivada"></label><p>No usamos estas opciones para remarketing ni para personalizar anuncios.</p></div>
+  <p class="measurement-details-note">Antes de elegir y con «Solo esenciales», Google puede recibir información técnica y señales limitadas sin cookies opcionales mediante el modo de consentimiento avanzado. Estas señales no equivalen a aceptar cookies analíticas o publicitarias. Consulta los datos, destinatarios y finalidades en el aviso completo.</p>
+  <p class="measurement-details-note">Responsable: Gerardo López España. Domicilio: Plaza Nazas, Av. Fray Luis de León 7092, Local 27B, Colinas del Cimatario, C. P. 76090, Santiago de Querétaro, Querétaro, México. Datos de medición: conexión y navegador, páginas y eventos de uso, cookies e identificadores de clic cuando se permiten. Finalidades opcionales: analítica y medición de anuncios, descritas arriba. Puedes limitar esos usos mediante los interruptores o «Solo esenciales».</p>
+  <a class="privacy-link" href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Leer el aviso de privacidad completo</a></div>
+  <div class="consent-actions"><button type="button" data-consent-action="essential">Solo esenciales</button><button class="consent-primary" type="button" data-consent-action="save" aria-label="Ok: guardar las preferencias seleccionadas">Ok</button></div>
+</dialog></body>
+</html>
+
+
+
+

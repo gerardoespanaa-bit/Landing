@@ -15,7 +15,7 @@
 })(window);
 </script>
 <script src="../measurement-config.js?v=3"></script>
-<script src="../measurement-init.js?v=5"></script>
+<script src="../measurement-init.js?v=6"></script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){if(!w.LandingConsent)return;w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -98,6 +98,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
 <link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
 <link rel="stylesheet" href="../simulator-page.css?v=1">
+<link rel="stylesheet" href="../projection-lead.css?v=1">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -121,6 +122,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 <main class="simulator-page">
 <div class="container"><a class="simulator-back" href="../">← Volver al inicio</a><h1>Simulador de retiro</h1>
+<p class="simulator-intro">Al final te mostramos cuánto tendrías y hasta dónde podrías llegar.</p>
+<a class="btn btn-primary" id="completeProjectionLink" href="../mi-proyeccion/" hidden>Ver mi proyección completa</a>
     <div class="sim-shell" id="simulador" aria-labelledby="simTitle">
       <div class="sim-top"><strong id="simTitle">Calcula tu retiro</strong><span class="live-tag">Proyección ilustrativa</span></div>
       <form class="calc-form" id="retirementForm" novalidate>
@@ -132,18 +135,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </form>
 
       <div class="retirement-result" id="resultPanel" aria-live="polite" hidden>
-        <p class="result-label">Tu retiro estimado podría ser</p>
+        <p class="result-label">Tendrías desde:</p>
         <div class="amount-stage"><div class="retirement-amount" id="retirementAmount">—</div><div class="confetti-layer" id="projectionConfetti" aria-hidden="true"></div></div>
-        <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Saldo proyectado y aportaciones acumuladas en MXN por año de proyección"></canvas></div><div class="projection-legend" aria-label="Series de la gráfica"><span><i class="contributions-key" aria-hidden="true"></i>Aportaciones acumuladas</span><span><i class="balance-key" aria-hidden="true"></i>Saldo total proyectado</span></div><p id="chartSummary" class="sr-only"></p>
+        <div class="mini-chart-wrap simulator-chart"><canvas id="miniGrowthChart" role="img" aria-label="Saldo proyectado y aportaciones acumuladas en MXN por año de proyección"></canvas></div><div class="projection-legend" aria-label="Series de la gráfica"><span><i class="contributions-key" aria-hidden="true"></i>Aportaciones acumuladas</span><span><i class="balance-key" aria-hidden="true"></i>Saldo total · escenario 8%</span></div><p id="chartSummary" class="sr-only"></p>
         <p class="result-caption" id="retirementCaption">Proyección estimada al cumplir la edad de retiro que elegiste.</p>
 
 
         <dl class="projection-metrics" id="projectionMetrics" hidden><div><dt>Plazo</dt><dd id="metricYears">—</dd><small>de proyección</small></div><div><dt>Aportaciones</dt><dd id="metricContributions">—</dd><small>acumuladas</small></div><div><dt>Beneficio Fiscal</dt><dd id="metricTax">—</dd><small>anual de referencia</small></div></dl>
-        <a class="btn btn-wa result-cta" href="#" data-wa="simulador" data-measure-location="simulator" data-measure-id="wa_simulator_results">Agenda una asesoría gratis</a>
+        <div class="scenario-upper"><p class="result-label">Podrías llegar hasta:</p><div class="retirement-amount result-mask" id="upperProjectionPlaceholder" aria-hidden="true">$█.█ millones</div><p class="sr-only">Regístrate para ver el escenario de 12%.</p></div>
+        <p class="result-caption">Ambos escenarios comparten el plazo, las aportaciones y el beneficio fiscal mostrados arriba.</p>
+        <p class="result-caption">Proyección estimada con fines ilustrativos.</p>
+        <button class="btn btn-wa result-cta" id="unlockProjectionButton" type="button">Ver hasta dónde puedo llegar</button>
+        
       </div>
+<form id="projectionLeadForm" class="projection-lead-form" novalidate data-hs-do-not-collect="true" hidden aria-labelledby="projectionLeadTitle">
+ <h2 id="projectionLeadTitle">Ver tu proyección completa</h2>
+ <p id="projectionLeadPurpose">Guardaremos en HubSpot tu nombre, teléfono, edad, edad de retiro, aportación mensual y ambos resultados para atender tu simulación y contactarte sobre ella. No implica contratar ni suscribirte a publicidad.</p>
+ <label for="projectionLeadName">Nombre<input id="projectionLeadName" name="firstname" type="text" autocomplete="given-name" maxlength="100" minlength="2" required></label>
+ <label for="projectionLeadPhone">Teléfono / WhatsApp<input id="projectionLeadPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="20" placeholder="10 dígitos de México" required></label>
+ <label class="projection-lead-consent"><input id="projectionLeadConsent" name="simulation_consent" type="checkbox" required aria-describedby="projectionLeadPurpose"><span>Acepto el <a href="../aviso-de-privacidad.html#registro-simulacion" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> y que me contacten sobre mi simulación</span></label>
+ <p class="contact-privacy">Al continuar autorizas expresamente este registro. Conservaremos tu nombre y simulación en este navegador hasta 30 días para abrir tus resultados sin otro formulario. No guardamos aquí tu teléfono.</p>
+ <button class="btn btn-primary" id="projectionLeadContinue" type="submit">Continuar</button>
+ <p id="projectionLeadStatus" role="status" aria-live="polite" hidden></p>
+</form>
       <details class="sim-note sim-disclaimer"><summary>Detalles de proyección</summary><div class="projection-details">
         <p><strong>Importante sobre esta proyección</strong></p>
-        <p>Se utiliza un rendimiento bruto ilustrativo del 10% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
+        <p>Se calculan dos escenarios con rendimientos brutos ilustrativos del 8% y del 12% anual, con aportaciones mensuales constantes y sin ajuste por inflación. El rendimiento no está garantizado y los resultados reales pueden ser menores o mayores. Las cifras futuras no equivalen al poder de compra de hoy.</p>
         <p>Se conserva el motor existente, que aplica supuestos de administración (1.5% trimestral sobre saldo inicial), gestión (0.1% mensual), cargo inicial de $500, cargo mensual de 25 UDIS desde el mes 19, UDI fija de $8.81 y una tabla de bono con tasa ilustrativa del 9%. Estos parámetros, su tratamiento de IVA, la elegibilidad del bono y su aplicación después de 25 años no están verificados contra un contrato vigente. La cifra es un escenario técnico provisional; no es una cotización oficial ni confirma los costos o beneficios de un producto. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
         <p><strong>Beneficio fiscal anual de referencia:</strong> se estima con un ISR marginal ilustrativo del 25%, que puede variar según la posición de cada persona en la tarifa de ISR. Se aplica a la aportación anual hasta el límite de cinco UMA anuales de 2026 ($213,973.20), suponiendo ingresos suficientes para que la deducción no supere el 10% de los ingresos acumulables y el cumplimiento de los demás requisitos del Artículo 151. Como no se solicitan ingresos ni situación fiscal, esta referencia no es una devolución calculada o asegurada; puede ser menor o nula. Se muestra solo el beneficio anual, sin acumularlo ni reinvertirlo. Los límites de años futuros pueden cambiar.</p>
         <p>*El tratamiento fiscal está sujeto a las condiciones aplicables y se explica durante la asesoría personalizada.</p>
@@ -165,7 +182,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="../engine.js" defer></script>
 <script src="../projection-metrics.js?v=5" defer></script>
 <script src="../app.js?v=13" defer></script>
-<script src="../simulator.js?v=1" defer></script>
+<script src="../projection-scenarios.js?v=1" defer></script>
+<script src="../projection-state.js?v=1" defer></script>
+<script src="../hubspot-form-config.js?v=1" defer></script>
+<script src="../hubspot-submission.js?v=1" defer></script>
+<script src="../simulator.js?v=2" defer></script>
+<script src="../projection-lead-ui.js?v=1" defer></script>
 
 <dialog id="contactDialog" aria-labelledby="contactTitle"><button class="modal-close" id="closeContact" aria-label="Cerrar contacto">×</button><h2 id="contactTitle">Agenda una asesoría gratis</h2><p><span id="contactIntro">Coordinamos tu asesoría inicial gratis directamente por WhatsApp.</span></p><div id="contactExtras"></div><p>Destino: +52 442 377 7762</p><label for="contactMessage">Tu mensaje</label><textarea id="contactMessage" maxlength="2000"></textarea><p class="contact-privacy">Al continuar abrirás un servicio externo. Revisa el <a class="privacy-link" href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> antes de compartir información.</p><a class="btn btn-primary" id="contactContinue" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a></dialog><dialog id="credentialDialog" class="credential-dialog" aria-labelledby="credentialTitle"><div class="credential-toolbar"><h2 id="credentialTitle">Documento profesional</h2><button type="button" id="closeCredential" class="modal-close" aria-label="Cerrar documento">×</button></div><div id="credentialContent" class="credential-content"></div></dialog><section id="measurementConsent" class="measurement-consent" aria-label="Analítica y medición publicitaria" hidden>
   <div><p>Usamos cookies de analítica y medición publicitaria para entender cómo se utiliza nuestra página, medir los resultados de nuestros anuncios y mejorar tu experiencia. Al pulsar “Ok”, aceptas estos usos. <a id="openMeasurementPreferences" class="consent-preferences-link" href="#measurementDetails" aria-haspopup="dialog">Aquí</a> puedes configurar tus preferencias.</p><p class="consent-identity">Antes de elegir, Google puede recibir señales limitadas sin cookies. Gerardo López España · <a href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a></p></div>

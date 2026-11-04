@@ -88,11 +88,12 @@
  }
  const privacy=location.pathname.endsWith('/aviso-de-privacidad.html');
  const simulator=/\/simulador(?:\/|\/index\.html)?$/.test(location.pathname);
+ const results=/\/mi-proyeccion(?:\/|\/index\.html)?$/.test(location.pathname);
  const page=Object.freeze({
   measurement_id:config.ga4MeasurementId,
   page_location:safeLocation(new URL(privacy?'aviso-de-privacidad.html':'./',document.baseURI).href),
   page_referrer:safeReferrer(),
-  page_title:privacy?'Aviso de privacidad':simulator?'Simulador de retiro | Gerardo España':'Gerardo España | Asesoría financiera y patrimonial'
+  page_title:privacy?'Aviso de privacidad':results?'Mi proyección | Gerardo España':simulator?'Simulador de retiro | Gerardo España':'Gerardo España | Asesoría financiera y patrimonial'
  });
  // Global defaults plus the existing DLVs. Only approved campaign metadata and
  // a known referring origin; never a raw URL, fragment or arbitrary query.

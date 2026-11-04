@@ -3,14 +3,13 @@
 const $=id=>document.getElementById(id),form=$('retirementForm'),panel=$('resultPanel'),button=$('calculateButton'),chart=$('miniGrowthChart');
 if(!form)return;
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
-let latest=null,frameId=0,progress=1;
+let latest=null,latestPair=null,frameId=0,progress=1;
+const fullProjection=document.body.dataset.projectionFull==='true';
+const displayAmount=n=>fullProjection?new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2}).format(n):'$'+(n/1000000).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' millones';
 const measure=(name,service,location,details)=>{try{window.LandingMeasurement?.track(name,service,location,details);}catch{}};
 function project(age,monthly,retire){
- if(!Number.isInteger(age)||age<18||age>64||!Number.isInteger(retire)||retire<65||retire>90||!Number.isFinite(monthly)||monthly<2000||monthly>1000000)throw Error('Revisa las edades y una aportación mensual entre $2,000 y $1,000,000.');
- const years=retire-age;
- const rows=simulate({edadActual:age,tipoPlan:'Deducible 151',plazo:Math.min(25,years),periodicidad:'Mensual',isrPct:0,tasaRendimiento:.10,inflacion:0,udiValor:8.81,overrides:[monthly*12]},years);
- if(!Array.isArray(rows)||rows.length!==years||rows.some(r=>!Number.isFinite(r.saldoTotal)||r.saldoTotal<=0))throw Error('No fue posible obtener una proyección válida. Revisa los datos.');
- return {rows,years,retire,monthly,amount:rows.at(-1).saldoTotal,contributions:rows.at(-1).aportacionAcumulada,taxAnnual:annualTaxReference(monthly)};
+ latestPair={...window.ProjectionScenarios.calculate({age,monthly,retire}),simulatedAt:Date.now()};
+ return {...latestPair.from,retire,monthly};
 }
 function draw(t){
  if(!latest)return;
@@ -62,7 +61,7 @@ function draw(t){
  }
  ctx.restore();
  ctx.beginPath();ctx.moveTo(...point(0,0));for(let j=1;j<=i;j++)ctx.lineTo(...point(j,vals[j]));ctx.lineTo(...point(position,value));ctx.strokeStyle='#a7d9ff';ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
- $('retirementAmount').textContent=money(value);
+ $('retirementAmount').textContent=displayAmount(value);
 }
 let celebrationTimer=null;
 function clearCelebration(){clearTimeout(celebrationTimer);celebrationTimer=null;$('retirementAmount').classList.remove('amount-pop');$('projectionConfetti').replaceChildren();}
@@ -82,10 +81,10 @@ form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm
  try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch(error){panel.hidden=true;$('calculationError').textContent=error.message;$('calculationError').hidden=false;return;}
  panel.hidden=false;$('projectionMetrics').hidden=true;panel.setAttribute('aria-busy','true');panel.setAttribute('aria-live','off');document.querySelector('.simulator-chart').classList.add('is-visible');button.disabled=true;button.textContent='Proyectando…';$('calculatingMessage').hidden=false;$('retirementCaption').textContent='Evolución ilustrativa del saldo anual';$('chartSummary').textContent='';
  const start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:4000;
- function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos*`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}. Eje horizontal: años de proyección. Eje vertical: pesos mexicanos (MXN).`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} ${latest.years===1?'año':'años'}`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;measure('simulator_complete','retiro','simulator');celebrateProjection();requestAnimationFrame(()=>{if(form.isConnected)$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
+ function frame(now){progress=duration?Math.min(1,(now-start)/duration):1;draw(progress);if(progress<1)frameId=requestAnimationFrame(frame);else{cancel();button.textContent='Volver a calcular';panel.setAttribute('aria-busy','false');panel.setAttribute('aria-live','polite');$('retirementCaption').textContent=`Retiro a los ${latest.retire} años · Libre de impuestos*`;$('chartSummary').textContent=`Saldo final proyectado: ${money(latest.amount)}. Aportaciones acumuladas: ${money(latest.contributions)}. Eje horizontal: años de proyección. Eje vertical: pesos mexicanos (MXN).`;chart.setAttribute('aria-label',$('chartSummary').textContent);$('metricYears').textContent=`${latest.years} ${latest.years===1?'año':'años'}`;$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('projectionMetrics').hidden=false;window.ProjectionFlow?.calculated(latestPair);measure('simulator_complete','retiro','simulator');celebrateProjection();requestAnimationFrame(()=>{if(form.isConnected)$('projectionMetrics').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}}
  frameId=requestAnimationFrame(frame);
 });
-form.addEventListener('input',()=>{cancel();latest=null;panel.hidden=true;});
+form.addEventListener('input',()=>{cancel();latest=null;latestPair=null;panel.hidden=true;window.ProjectionFlow?.invalidated();if(fullProjection)refreshProjection();});
 const minimumAgeMessages={ageNow:'¡La edad mínima de inicio son 18 años!',ageRetirement:'Cotizador permite edad mínima a los 65. Si te interesa retirarte antes agenda una asesoría gratis para ver tu proyección.'};
 const projectionInputs=['ageNow','monthlyContribution','ageRetirement'].map($);
 const fieldMessages=new Map();
@@ -127,6 +126,14 @@ window.addEventListener('resize',()=>draw(progress));
 const projectionDetails=document.querySelector('.sim-disclaimer');
 let detailsWereOpen=projectionDetails.open;
 projectionDetails.addEventListener('toggle',()=>{if(projectionDetails.open===detailsWereOpen)return;detailsWereOpen=projectionDetails.open;measure('ui_click','retiro','simulator',{button_id:'projection_details',action_type:detailsWereOpen?'open':'close'});});
+function refreshProjection(){
+ if(!projectionInputs.every(input=>projectionInputError(input,false)===''&&input.value!==''))return;
+ try{latest=project(Number($('ageNow').value),Number($('monthlyContribution').value),Number($('ageRetirement').value));}catch{return;}
+ panel.hidden=false;panel.setAttribute('aria-busy','false');document.querySelector('.simulator-chart').classList.add('is-visible');progress=1;draw(1);$('projectionMetrics').hidden=false;
+ $('metricYears').textContent=latest.years+' años';$('metricContributions').textContent=money(latest.contributions);$('metricTax').textContent=money(latest.taxAnnual);$('retirementCaption').textContent='Escenario 8% anual · Retiro a los '+latest.retire+' años · Libre de impuestos*';
+ window.ProjectionFlow?.calculated(latestPair);
+}
+window.ProjectionCalculator=Object.freeze({current:()=>latestPair,refresh:refreshProjection});
 const source=location.hash.slice(1);
-measure('simulator_open','retiro',['header','hero','footer'].includes(source)?source:'simulator');
+if(!fullProjection)measure('simulator_open','retiro',['header','hero','footer'].includes(source)?source:'simulator');
 })();
