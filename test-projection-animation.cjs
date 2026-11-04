@@ -62,7 +62,7 @@ check('CRM payload accepts inputs-only projection and omits both monetary result
  const f=Object.fromEntries(p.fields.map(x=>[x.name,x.value]));assert.equal(f.age,'35');assert.equal(f.retire,'65');assert.equal(f.monthly,'2000');assert(!('result8'in f));assert(!('result12'in f));assert.equal(p.legalConsentOptions.consent.consentToProcess,true);
 });
 check('Public DOM has only a fictitious hidden placeholder; upper legend exists only on results',()=>{
- const a=read('simulador/index.html'),b=read('mi-proyeccion/index.html');assert(a.includes('aria-hidden="true">$99,999,999'));assert(!a.includes('upper-balance-key'));assert(b.includes('upper-balance-key'));assert(b.includes('Saldo total · escenario 12%'));
+ const a=read('simulador/index.html'),b=read('mi-proyeccion/index.html');assert(a.includes('aria-hidden="true">$99,999,999'));assert(!a.includes('upper-balance-key'));assert(b.includes('upper-balance-key'));for(const h of [a,b]){const legend=h.match(/<div class="projection-legend"[^>]*>([\s\S]*?)<\/div>/)[1];assert(legend.includes('Tendrías desde'));assert(!/%|escenario|conservador/i.test(legend));}assert(b.includes('Podrías llegar hasta</span>'));
 });
 check('Published financial engine and tax helper remain byte-for-byte unchanged',()=>{
  const previous=path.resolve(__dirname,'../../../cambios-simulador-04-nov/implementacion/landing');

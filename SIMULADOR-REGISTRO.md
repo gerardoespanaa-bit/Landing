@@ -8,7 +8,7 @@ Esta versión está preparada para revisión; no publica cambios ni modifica Goo
 - El marcador y Ver hasta dónde puedo llegar abren el mismo diálogo nativo accesible. Nombre, teléfono mexicano de diez dígitos y casilla explícita.
 - Casilla de simulación: «Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.»
 - Solo tras confirmación de HubSpot se habilita el acceso y abre /mi-proyeccion/, sin datos personales en su URL.
-- Al abrir /mi-proyeccion/ después del registro se calcula el 12%. Ambas curvas, sus cifras y los ejes progresan juntas en una escala común; las barras representan las mismas aportaciones. La leyenda identifica 8% y 12%. Resultados completos en las mismas posiciones, sin los bloques de diferencia, aplazamiento o aportado/rendimiento. Sus cálculos internos no se reescriben.
+- Al abrir /mi-proyeccion/ después del registro se calcula el 12%. Ambas curvas, sus cifras y los ejes progresan juntas en una escala común; las barras representan las mismas aportaciones. La leyenda muestra «Tendrías desde» en azul claro y «Podrías llegar hasta» en azul, sin porcentajes ni nombres de escenarios. Resultados completos en las mismas posiciones, sin los bloques de diferencia, aplazamiento o aportado/rendimiento. Sus cálculos internos no se reescriben.
 - Quiero llegar a ese número pulsa cada tres segundos, muestra Redirigiendo a WhatsApp y navega al mensaje con los valores actuales. No envía mensajes por sí mismo.
 - Supuestos compartidos visibles, explicación ilustrativa en Detalles de proyección y resumen del producto debajo, sin artículo 185 ni mención de ETF. Las 19 alternativas están descritas como opciones de selección según perfil y metas, no como inversión obligatoria en todas.
 
