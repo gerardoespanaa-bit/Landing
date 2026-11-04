@@ -41,9 +41,16 @@ const check=async(name,fn)=>{await fn();checks++;console.log('PASS '+name);};
  });
  await check('Confirmed simulation retries storage without a second CRM post; clean URL only after save',async()=>{
   let posts=0,stored=false;const t=runtime(async()=>{posts++;return{status:200,json:async()=>({inlineMessage:'ok'})};});
-  const projection=require('./projection-scenarios.js').calculate({age:35,retire:65,monthly:2000});
+  const projection=require('./projection-scenarios.js').calculateFrom({age:35,retire:65,monthly:2000});
   t.win.LandingLeadForms.open({kind:'simulation',buttonId:'simulator_range',projection,onSaved:()=>stored});t.fill();await t.submit();assert.equal(posts,1);assert.equal(t.redirects.length,0);
   stored=true;await t.submit();assert.equal(posts,1);assert.deepEqual(t.redirects,['https://example.test/mi-proyeccion/']);assert(!t.redirects[0].includes('PRUEBA'));
+ });
+ await check('Simulation stays locked while CRM is pending or rejected; confirms before storing access',async()=>{
+  let posts=0,release,unlocks=0;const t=runtime(()=>{posts++;return new Promise(r=>release=r);});
+  const projection=require('./projection-scenarios.js').calculateFrom({age:35,retire:65,monthly:2000});
+  t.win.LandingLeadForms.open({kind:'simulation',buttonId:'simulator_range',projection,onSaved:()=>{unlocks++;return true;}});t.fill();
+  let pending=t.submit();assert.equal(unlocks,0);assert.equal(t.redirects.length,0);release({status:500});await pending;assert.equal(unlocks,0);assert.equal(t.redirects.length,0);
+  pending=t.submit();assert.equal(unlocks,0);release({status:200,json:async()=>({inlineMessage:'ok'})});await pending;assert.equal(unlocks,1);assert.equal(t.redirects.length,1);assert.equal(posts,2);
  });
  await check('Advisory routes open CRM without WhatsApp events; only direct routes emit their own service',async()=>{
   class Control{

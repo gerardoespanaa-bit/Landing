@@ -16,10 +16,14 @@
   const last=rows.at(-1),amount=last.saldoTotal,contributions=last.aportacionAcumulada;
   return {rate,amount,contributions,generated:amount-contributions,rows,years,taxAnnual:tax(monthly)};
  }
+ function calculateFrom(inputs){
+  const clean=validate(inputs);
+  return {inputs:clean,from:scenario(clean,.08)};
+ }
  function calculate(inputs){
   const clean=validate(inputs),from=scenario(clean,.08),to=scenario(clean,.12),delayed=scenario(clean,.12,1);
   return {inputs:clean,from,to,difference:to.amount-from.amount,delayCost:to.amount-delayed.amount,delayedAmount:delayed.amount};
  }
- const api=Object.freeze({validate,scenario,calculate});
+ const api=Object.freeze({validate,scenario,calculateFrom,calculate});
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProjectionScenarios=api;
 })(typeof window==='undefined'?globalThis:window);
