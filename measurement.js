@@ -8,7 +8,7 @@
  // Closed identifiers describe interface controls, never the visitor or field values.
  const controls=new Map();
  function controlsAt(service,location,ids,actions){for(const id of ids)controls.set(id,{service,location,actions:new Set(actions)});}
- controlsAt('general','header',['wa_header_social'],['whatsapp_contact']);
+ controlsAt('general','header',['wa_header_social'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('general','header',['wa_header_advisory'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('general','hero',['wa_hero_advisory'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('retiro','simulator',['wa_simulator_results'],['whatsapp_contact','open_contact','close_contact']);
@@ -16,7 +16,7 @@
  controlsAt('seguros','services',['wa_insurance_card'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('bolsa','services',['wa_investments_card'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('auto','services',['wa_auto_card'],['whatsapp_contact','open_contact','close_contact']);
- controlsAt('general','about',['wa_about_social'],['whatsapp_contact']);
+ controlsAt('general','about',['wa_about_social'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('general','cta_band',['wa_cta_advisory'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('general','floating',['wa_floating'],['whatsapp_contact','open_contact','close_contact']);
  controlsAt('general','header',['nav_logo','nav_about','nav_services'],['navigate']);

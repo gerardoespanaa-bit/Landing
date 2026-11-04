@@ -1,7 +1,12 @@
 'use strict';
 ((root)=>{
  const campaignKeys=['gclid','utm_source','utm_medium','utm_campaign','utm_term'];
- const consentText='Acepto el aviso de privacidad y que me contacten sobre mi simulación. Autorizo expresamente guardar en HubSpot mi nombre, teléfono, edad, edad de retiro, aportación mensual y resultados de simulación para atender esta solicitud. No implica contratar ni suscribirme a publicidad.';
+ const simulationConsent='Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.';
+ const requestConsent='Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.';
+ const advisoryIds=new Set(['wa_header_social','wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
+ function consentText(kind='simulation'){return kind==='simulation'?simulationConsent:requestConsent;}
+ function validSource(kind,id){return kind==='simulation'?id==='simulator_range':kind==='contract'?id==='product_contract':kind==='advisory'&&advisoryIds.has(id);}
+ function sourceLabel(kind,id){if(!validSource(kind,id))throw Error('Origen de solicitud no válido.');return (kind==='simulation'?'PPR | Simulación':kind==='contract'?'PPR | Solicitud de contratación':'PPR | Asesoría')+' | '+id;}
  function captureCampaign(href){
   const result=Object.fromEntries(campaignKeys.map(key=>[key,'']));
   try{const url=new URL(href);if(url.search.length>4096)return result;
@@ -18,16 +23,21 @@
   if(accepted!==true)throw Error('Acepta el aviso de privacidad y el contacto sobre tu simulación para continuar.');
   return {name:cleanName,phone:cleanPhone};
  }
- function buildPayload({config,contact,projection,campaign,preferences,cookie='',pageUri,now=Date.now()}){
-  const fields=config.fields,values={name:contact.name,phone:'+52'+contact.phone,age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,result8:projection.from.amount,result12:projection.to.amount,simulatedAt:new Date(projection.simulatedAt||now).toISOString(),consent:'true',source:'Simulador de retiro'};
+ function buildPayload({config,contact,projection,campaign,preferences,kind='simulation',buttonId='simulator_range',pageName,cookie='',pageUri,now=Date.now()}){
+  const fields=config.fields,values={name:contact.name,phone:'+52'+contact.phone,source:sourceLabel(kind,buttonId)};
+  if(kind==='simulation'){
+   if(!projection)throw Error('Calcula tu proyección antes de continuar.');
+   Object.assign(values,{consent:'true',age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,result8:projection.from.amount,result12:projection.to.amount,simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
+  }
   values.gclid=preferences?.advertising===true?campaign.gclid||'':'';
   values.utm=JSON.stringify(Object.fromEntries(campaignKeys.filter(key=>key!=='gclid').map(key=>[key,campaign[key]||''])));
   const url=new URL(pageUri);url.search='';url.hash='';
-  const context={pageUri:url.href,pageName:'Simulador de retiro | Gerardo España'};
+  const titles=new Set(['Simulador de retiro | Gerardo España','Mi proyección | Gerardo España','Gerardo España | Asesoría de PPR en México']);
+  const context={pageUri:url.href,pageName:titles.has(pageName)?pageName:'Simulador de retiro | Gerardo España'};
   // Only reuse an existing cookie with analytics consent. No HubSpot tracking installation.
   const hutk=cookie.split(';').map(s=>s.trim()).find(s=>s.startsWith('hubspotutk='))?.slice(11);
   if(preferences?.analytics===true&&/^[a-f0-9]{32}$/i.test(hutk||''))context.hutk=hutk;
-  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentText,communications:[]}}};
+  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentText(kind),communications:[]}}};
  }
  function createSubmitter({config,fetcher}){
   let pending=false,accepted=false;
@@ -45,6 +55,6 @@
    }finally{pending=false;}
   };
  }
- const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText});
+ const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText,validSource});
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProjectionLead=api;
 })(typeof window==='undefined'?globalThis:window);

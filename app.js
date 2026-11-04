@@ -3,42 +3,22 @@ const WHATSAPP_NUMBER='524423777762';
 const messages={general:'Hola, Gerardo. Quiero agendar una asesoría gratis y conocer cómo puedes ayudarme.',simulador:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',retiro:'Hola Gerardo, vi mi proyección de retiro y quisiera saber más',seguros:'Hola Gerardo, quiero revisar una protección y su cotización',bolsa:'Hola Gerardo, me gustaría una asesoría para invertir en bolsa',auto:'Hola Gerardo, quisiera revisar una cotización para un auto'};
 const $=id=>document.getElementById(id);
 const measure=(name,service,location,details)=>{try{window.LandingMeasurement?.track(name,service,location,details);}catch{/* Measurement must never block the calculator or contact. */}};
-const contact=$('contactDialog');
-let contactContext='general',contactLocation='hero',contactButtonId=null;
 const contactClicks=new WeakMap();
-function measureContact(el,service,location,buttonId){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service==='simulador'?'retiro':service,location,{button_id:buttonId});}
-const contactCopy={
- general:{title:'Agenda una asesoría gratis',intro:'Coordinamos tu asesoría inicial gratis directamente por WhatsApp.'},
- retiro:{title:'Agenda una asesoría gratis',intro:'Agenda una asesoría gratis para revisar los detalles, letras chiquitas y beneficios del plan.'},
- simulador:{title:'Agenda una asesoría gratis',intro:'Agenda una asesoría gratis para revisar los detalles, letras chiquitas y beneficios del plan.'},
- seguros:{title:'Asesora tu protección',intro:''},
- bolsa:{title:'Agenda una asesoría gratis',intro:'Aprende los primeros pasos necesarios para comenzar a invertir en bolsa y al sentirte listo realiza tu primera compra de la mano de un asesor.'},
- auto:{title:'¡Cotiza de inmediato con descuento!',intro:'Obtén una cotización instantánea mandando por mensaje los siguientes datos:'}
+function measureContact(el,service,location,buttonId){const now=performance.now(),previous=contactClicks.get(el);if(previous!==undefined&&now-previous<800)return;contactClicks.set(el,now);measure('whatsapp_contact',service,location,{button_id:buttonId});}
+const directMessages={
+ general:'Hola, Gerardo. Quiero agendar una asesoría gratis y conocer cómo puedes ayudarme.',
+ seguros:'Hola Gerardo, me interesa una cotización de estas opciones de seguro: Residencial, Vida, Gastos Médicos. Borraré las opciones que no me interesen.',
+ bolsa:'Hola Gerardo, me gustaría una asesoría para invertir en bolsa',
+ auto:'Hola Gerardo, quisiera revisar una cotización para un auto. Marca: __. Modelo: __. Año: __. Código postal: __. Edad del conductor: __.'
 };
-function protectionSelection(){return [...$('contactExtras').querySelectorAll('input:checked')].map(input=>input.value);}
-function updateLink(){
- const enabled=contactContext!=='seguros'||protectionSelection().length>0;
- $('contactContinue').setAttribute('aria-disabled',String(!enabled));
- if(enabled)$('contactContinue').href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent($('contactMessage').value.trim()||messages.general)}`;
- else $('contactContinue').removeAttribute('href');
-}
-document.querySelectorAll('[data-wa]').forEach(el=>el.addEventListener('click',e=>{
- e.preventDefault();if(contact.open)return;contactContext=Object.hasOwn(contactCopy,el.dataset.wa)?el.dataset.wa:'general';contactLocation=el.dataset.measureLocation;contactButtonId=el.dataset.measureId;contactClicks.delete($('contactContinue'));
- const copy=contactCopy[contactContext];$('contactTitle').textContent=copy.title;$('contactIntro').textContent=copy.intro;$('contactIntro').parentElement.hidden=!copy.intro;$('contactExtras').replaceChildren();
- if(contactContext==='seguros'){
-  const fieldset=document.createElement('fieldset');fieldset.className='protection-options';
-  const legend=document.createElement('legend');legend.textContent='¿Qué quieres proteger?';fieldset.append(legend);
-  for(const value of ['Residencial','Vida','Gastos Médicos']){const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=value;input.name='protection';label.append(input,document.createTextNode(value));fieldset.append(label);}
-  fieldset.addEventListener('change',()=>{const values=protectionSelection();$('contactMessage').value=values.length?`Hola Gerardo, quiero revisar una protección de ${values.join(', ')} y su cotización`:messages.seguros;updateLink();});$('contactExtras').append(fieldset);
- }else if(contactContext==='auto'){
-  const list=document.createElement('ul');for(const text of ['Marca','Modelo','Año','Código postal','Edad del conductor']){const item=document.createElement('li');item.textContent=text;list.append(item);}$('contactExtras').append(list);
-  const note=document.createElement('p');note.className='auto-conditions';note.textContent='Consulta las condiciones del descuento y su disponibilidad al cotizar.';$('contactExtras').append(note);
- }
- $('contactMessage').value=messages[contactContext];updateLink();contact.showModal();measure('ui_click',contactContext==='simulador'?'retiro':contactContext,contactLocation,{button_id:contactButtonId,action_type:'open_contact'});
+document.querySelectorAll('[data-wa-direct]').forEach(el=>{
+ const kind=el.dataset.waDirect;el.href='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(directMessages[kind]||directMessages.general);
+ el.removeAttribute('target');el.removeAttribute('rel');el.addEventListener('click',()=>measureContact(el,kind,el.dataset.measureLocation,el.dataset.measureId));
+});
+document.querySelectorAll('[data-lead]').forEach(el=>el.addEventListener('click',e=>{
+ e.preventDefault();const kind=el.dataset.lead;
+ window.LandingLeadForms?.open({kind,buttonId:el.dataset.leadId||el.dataset.measureId,opener:el,measurement:el.dataset.measureId?{location:el.dataset.measureLocation}:null});
 }));
-$('contactContinue').addEventListener('click',e=>{if($('contactContinue').getAttribute('aria-disabled')==='true'){e.preventDefault();return;}measureContact(e.currentTarget,contactContext,contactLocation,contactButtonId);});
-document.querySelectorAll('[data-wa-social]').forEach(el=>el.addEventListener('click',()=>measureContact(el,'general',el.dataset.measureLocation,el.dataset.measureId)));
-$('contactMessage').addEventListener('input',updateLink);$('closeContact').addEventListener('click',()=>contact.close());
 $('menuToggle').addEventListener('click',()=>{const open=$('navLinks').classList.toggle('open');$('menuToggle').setAttribute('aria-expanded',String(open));measure('ui_click','general','header',{button_id:'mobile_menu',action_type:open?'open':'close'});});
 $('navLinks').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{$('navLinks').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
 
@@ -62,7 +42,6 @@ $('closeCredential').addEventListener('click',()=>credentialDialog.close());cred
 
 
 // Informational actions only. Never read form values, messages or generated projections.
-contact.addEventListener('close',()=>measure('ui_click',contactContext==='simulador'?'retiro':contactContext,contactLocation,{button_id:contactButtonId,action_type:'close_contact'}));
 document.querySelectorAll('[data-ui-id]').forEach(el=>el.addEventListener('click',()=>{
  const id=el.dataset.uiId;
  const location=id.startsWith('footer_')?'footer':id.startsWith('social_about_')?'about':'header';
