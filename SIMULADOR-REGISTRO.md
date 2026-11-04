@@ -16,7 +16,8 @@ Esta versión está preparada para revisión; no publica cambios ni modifica Goo
 | Botón | Destino |
 | --- | --- |
 | Asesoría en barra, portada y franja final | Formulario CRM · PPR / Asesoría |
-| Iconos sociales de contacto | Icono de conversación y formulario CRM |
+| Icono de la barra superior | WhatsApp directo con icono y enlace originales |
+| Icono de contacto de Sobre mí | Icono de conversación y formulario CRM |
 | Flotante inferior derecho | WhatsApp directo, conserva icono |
 | Conoce más · Plan de retiro | /simulador/, conserva parámetros admitidos |
 | Conoce más · Seguros | WhatsApp directo: Residencial, Vida y Gastos Médicos en el mensaje |
@@ -48,7 +49,7 @@ Una pestaña nueva normalmente requiere registro. Algunos navegadores restauran 
 Bloqueo del doble envío y del cierre mientras se guarda; errores permiten reintentar. Un envío ya confirmado no se repite en esa página cuando falla el almacenamiento. Recalcular en la página completa no envía nuevos contactos. No hay actualización posterior automática del CRM.
 
 ## Medición
-No se cambian GA4, GTM, sus etiquetas, Consent Mode o conversiones de Ads. El código de medición de la web solo admite abrir/cerrar los dos iconos que pasan a formulario. Los eventos existentes y sus IDs se conservan. Los formularios no disparan whatsapp_contact; ese evento se reserva para salidas reales a WhatsApp. No se crea un evento clave de formulario ni se transmiten valores financieros o PII a dataLayer.
+No se cambian GA4, GTM, sus etiquetas, Consent Mode o conversiones de Ads. El código de medición de la web solo admite abrir/cerrar el icono de Sobre mí que pasa a formulario. Los eventos existentes y sus IDs se conservan. Los formularios no disparan whatsapp_contact; ese evento se reserva para salidas reales a WhatsApp. No se crea un evento clave de formulario ni se transmiten valores financieros o PII a dataLayer.
 
 ## Pruebas
 Desde el directorio del sitio:

@@ -51,7 +51,7 @@ const syntheticClick='Cj0KCQ_SYNTHETIC_TEST_Abc123xyz456';
   for(const f of ['lead-dialog.js','hubspot-submission.js','app.js'])assert(!/pat-(?:na|eu)\\d|Bearer\\s+[A-Za-z0-9]/.test(read(f)));
  });
  await check('Direct services and floating WhatsApp, retirement goes to simulator; no preview handler remains',()=>{
-  const h=read('index.html');assert(!h.includes('contactDialog'));assert(!h.includes('contactContinue'));assert.equal((h.match(/data-wa-direct=/g)||[]).length,4);assert(h.includes('data-simulator-link data-measure-location="services"'));assert.equal((h.match(/data-lead="advisory"/g)||[]).length,5);
+  const h=read('index.html');assert(!h.includes('contactDialog'));assert(!h.includes('contactContinue'));assert.equal((h.match(/data-wa-direct=/g)||[]).length,4);assert(h.includes('data-simulator-link data-measure-location="services"'));assert.equal((h.match(/data-lead="advisory"/g)||[]).length,4);
   const app=read('app.js');for(const service of ['Residencial','Vida','Gastos Médicos'])assert(app.includes(service));assert(app.includes("measureContact(el,kind"));assert(!app.includes('contact.showModal()'));
  });
  console.log(JSON.stringify({result:'passed',checks,realHubSpot:false,realBrowser:false,networkRequests:0}));

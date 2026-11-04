@@ -52,12 +52,13 @@ const check=async(name,fn)=>{await fn();checks++;console.log('PASS '+name);};
    click(){this.events.click?.({preventDefault(){},currentTarget:this});}
   }
   const direct=[['general','floating','wa_floating'],['seguros','services','wa_insurance_card'],['bolsa','services','wa_investments_card'],['auto','services','wa_auto_card']].map(([waDirect,measureLocation,measureId])=>new Control({waDirect,measureLocation,measureId}));
+  const social=new Control({measureLocation:'header',measureId:'wa_header_social'});social.href='https://wa.me/message/42SOTDUOUMFGK1';
   const advisory=new Control({lead:'advisory',measureId:'wa_hero_advisory',measureLocation:'hero'}),ids=new Map(),events=[],forms=[];
-  const doc={getElementById:id=>{if(!ids.has(id))ids.set(id,new Control());return ids.get(id);},querySelectorAll:s=>s==='[data-wa-direct]'?direct:s==='[data-lead]'?[advisory]:[]};
+  const doc={getElementById:id=>{if(!ids.has(id))ids.set(id,new Control());return ids.get(id);},querySelectorAll:s=>s==='[data-wa-direct]'?direct:s==='[data-lead]'?[advisory]:s==='[data-wa-social]'?[social]:[]};
   vm.runInNewContext(read('app.js'),{document:doc,window:{LandingMeasurement:{track:(...args)=>events.push(args)},LandingLeadForms:{open:v=>forms.push(v)}},performance:{now:()=>100},WeakMap});
-  advisory.click();assert.equal(forms.length,1);assert.equal(forms[0].kind,'advisory');assert.equal(events.length,0);
+  advisory.click();assert.equal(forms.length,1);assert.equal(forms[0].kind,'advisory');assert.equal(events.length,0);social.click();social.click();assert.equal(social.href,'https://wa.me/message/42SOTDUOUMFGK1');assert.equal(forms.length,1);
   for(const control of direct){assert(new URL(control.href).pathname.includes('524423777762'));control.click();control.click();}
-  assert.equal(events.length,4);assert.deepEqual(events.map(e=>e[1]),['general','seguros','bolsa','auto']);assert(events.every(e=>e[0]==='whatsapp_contact'));
+  assert.equal(events.length,5);assert.deepEqual(events.map(e=>e[1]),['general','general','seguros','bolsa','auto']);assert(events.every(e=>e[0]==='whatsapp_contact'));
   const message=new URL(direct[1].href).searchParams.get('text');for(const option of ['Residencial','Vida','Gastos Médicos'])assert(message.includes(option));
  });
  console.log(JSON.stringify({result:'passed',checks,networkRequests:0}));

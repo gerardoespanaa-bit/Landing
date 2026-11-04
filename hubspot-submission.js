@@ -3,7 +3,7 @@
  const campaignKeys=['gclid','utm_source','utm_medium','utm_campaign','utm_term'];
  const simulationConsent='Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.';
  const requestConsent='Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.';
- const advisoryIds=new Set(['wa_header_social','wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
+ const advisoryIds=new Set(['wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
  function consentText(kind='simulation'){return kind==='simulation'?simulationConsent:requestConsent;}
  function validSource(kind,id){return kind==='simulation'?id==='simulator_range':kind==='contract'?id==='product_contract':kind==='advisory'&&advisoryIds.has(id);}
  function sourceLabel(kind,id){if(!validSource(kind,id))throw Error('Origen de solicitud no válido.');return (kind==='simulation'?'PPR | Simulación':kind==='contract'?'PPR | Solicitud de contratación':'PPR | Asesoría')+' | '+id;}

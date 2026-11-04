@@ -15,6 +15,7 @@ document.querySelectorAll('[data-wa-direct]').forEach(el=>{
  const kind=el.dataset.waDirect;el.href='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(directMessages[kind]||directMessages.general);
  el.removeAttribute('target');el.removeAttribute('rel');el.addEventListener('click',()=>measureContact(el,kind,el.dataset.measureLocation,el.dataset.measureId));
 });
+document.querySelectorAll('[data-wa-social]').forEach(el=>el.addEventListener('click',()=>measureContact(el,'general',el.dataset.measureLocation,el.dataset.measureId)));
 document.querySelectorAll('[data-lead]').forEach(el=>el.addEventListener('click',e=>{
  e.preventDefault();const kind=el.dataset.lead;
  window.LandingLeadForms?.open({kind,buttonId:el.dataset.leadId||el.dataset.measureId,opener:el,measurement:el.dataset.measureId?{location:el.dataset.measureLocation}:null});
