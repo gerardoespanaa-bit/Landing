@@ -1,96 +1,71 @@
-# Simulador con registro y proyección completa
+# Simulador y solicitudes comerciales — revisión de noviembre de 2026
 
-Cambio para revisión: no implica desplegar la landing, modificar campañas o conectar HubSpot con Google Ads.
+Esta versión está preparada para revisión; no publica cambios ni modifica Google Ads. Conserva el motor y los escenarios del 8% y 12%.
 
 ## Recorrido
+- /simulador/: saldo inferior completo en MXN, redondeado al peso; marcador superior ficticio borroso. El resultado de 12% no se escribe en el DOM, atributos, gráfica o texto accesible públicos.
+- Escritorio: importes en una fila con guion. Móvil: inferior arriba, superior después de la gráfica y antes de la leyenda. Autoalineación bajo la barra al calcular; respeta movimiento reducido.
+- El marcador y Ver hasta dónde puedo llegar abren el mismo diálogo nativo accesible. Nombre, teléfono mexicano de diez dígitos y casilla explícita.
+- Casilla de simulación: «Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.»
+- Solo tras confirmación de HubSpot se habilita el acceso y abre /mi-proyeccion/, sin datos personales en su URL.
+- Resultados completos en las mismas posiciones, sin los bloques de diferencia, aplazamiento o aportado/rendimiento. Sus cálculos internos no se reescriben.
+- Quiero llegar a ese número pulsa cada tres segundos, muestra Redirigiendo a WhatsApp y navega al mensaje con los valores actuales. No envía mensajes por sí mismo.
+- Supuestos compartidos visibles, explicación ilustrativa en Detalles de proyección y resumen del producto debajo, sin artículo 185 ni mención de ETF. Las 19 alternativas están descritas como opciones de selección según perfil y metas, no como inversión obligatoria en todas.
 
-1. Abre `/simulador/` sin un registro previo en ese navegador. Calcula con los campos existentes.
-2. Se muestra el resultado de 8% en millones, con dos decimales, y un relleno desenfocado para el de 12%. El importe real superior no se escribe en el DOM, los atributos, la gráfica ni los textos accesibles de esta página.
-3. Pulsa **Ver hasta dónde puedo llegar**. Escribe nombre y un teléfono mexicano de diez dígitos, y acepta expresamente el aviso y el contacto sobre la simulación.
-4. **Continuar** envía al formulario real de HubSpot mediante su API pública de formularios, sin tokens privados. El botón y los campos se bloquean mientras está pendiente. Un error deja la página abierta y permite reintentar.
-5. Solo después de una confirmación de HubSpot se guarda el estado local y se navega a `/mi-proyeccion/`, sin nombre, teléfono ni datos financieros en su URL.
-6. La página completa permite editar los tres campos y recalcula inmediatamente sin enviar otro formulario. Muestra ambos resultados exactos, su diferencia, la diferencia de empezar un año después y aportado frente a rendimiento neto ilustrativo.
-7. **Quiero llegar a ese número** prepara WhatsApp con los datos actuales. No envía el mensaje automáticamente. El mensaje permanece en memoria y no se coloca en atributos de un enlace que pudieran copiarse a la medición de clics.
-8. Al volver a `/simulador/`, una persona con estado local vigente ve **Ver mi proyección completa** sin otro formulario ni otro cálculo obligatorio.
-
-## Cálculos y supuestos
-
-`engine.js` y `projection-metrics.js` no cambian. Se llama al mismo motor con .08 y .12 de rendimiento bruto anual. Conserva cargos, bono, periodicidad, impuestos ilustrativos y los demás supuestos existentes; no se introduce una fórmula alternativa de interés compuesto. El formulario actual no tiene ahorro inicial, por lo que no se inventa ese campo.
-
-Empezar un año después se calcula con edad actual + 1, un año menos de aportaciones y la misma edad de retiro. Cuando queda un solo año hasta el retiro, el escenario aplazado tiene cero aportaciones y saldo cero. Rendimiento neto ilustrativo significa saldo proyectado menos aportaciones, con los componentes del motor vigente; no es rendimiento garantizado ni una cotización.
-
-## HubSpot y límite gratuito
-
-Se reutilizan `firstname` y `phone`. El teléfono se guarda como +52 y los diez dígitos introducidos. Con autorización del usuario, las cuatro UTM se agrupan en una propiedad de texto con sus nombres explícitos, para respetar el límite de diez propiedades personalizadas de Contacto:
-
-| Propiedad | Tipo | Contenido |
-| --- | --- | --- |
-| `ppr_edad_actual` | Número | Edad actual |
-| `ppr_edad_retiro` | Número | Edad de retiro |
-| `ppr_aportacion_mensual` | Número | Aportación mensual |
-| `ppr_resultado_8` | Número | Resultado del motor con 8% |
-| `ppr_resultado_12` | Número | Resultado del motor con 12% |
-| `ppr_fecha_simulacion` | Texto | Fecha y hora ISO en UTC |
-| `ppr_gclid` | Texto | Identificador validado, solo con permiso publicitario |
-| `ppr_campana_utm` | Texto de varias líneas | JSON con utm_source, utm_medium, utm_campaign y utm_term; valores vacíos cuando faltan |
-| `ppr_consentimiento_simulacion` | Casilla | Sí en un envío expresamente aceptado |
-| `ppr_origen_lead` | Texto | Simulador de retiro |
-
-El envío incluye también `legalConsentOptions.consent.consentToProcess`, el texto del consentimiento y una lista vacía de suscripciones de comunicación: no suscribe a marketing. Los seis campos anteriores de Negocios permanecen intactos. Las dos propiedades UTM individuales creadas durante la preparación se archivaron vacías, con autorización, para sustituirlas por el campo agrupado.
-
-Está habilitada la opción de HubSpot que permite crear contactos sin correo. Es un ajuste general de formularios de esa cuenta, no una deduplicación por teléfono.
-
-## Privacidad, cookies y atribución
-
-- La autorización de este formulario es distinta de las preferencias de cookies. No concede permisos de analítica, publicidad o personalización.
-- Nombre, teléfono, edades, aportación, resultados y mensaje no se añaden a dataLayer ni a nuevos eventos. No se agregan etiquetas o conversiones. Los eventos existentes conservan sus identificadores.
-- `pageUri` del contexto del formulario queda limpio, sin consulta ni fragmento. Los parámetros de campaña se validan por separado. No se transmite una IP adicional obtenida de otro servicio.
-- Se adjunta una cookie `hubspotutk` existente y de formato válido únicamente con consentimiento de analítica. Este cambio **no instala el rastreador de HubSpot**, por lo que esa cookie puede no existir y no se garantiza asociación con visitas previas ni clasificación automática de Google Ads en «Original Traffic Source». Guardar UTM/gclid no equivale a esa asociación.
-- La prueba real se realizó sin esa cookie. HubSpot muestra el aviso correspondiente. No se inventó un identificador para ocultarlo.
-- El aviso de privacidad se actualiza solo para describir el registro financiero ilustrativo, el proveedor HubSpot, las finalidades, el consentimiento expreso y el almacenamiento solicitado.
-- Se conservan nombre, los tres datos de simulación y la marca local durante 30 días desde la última simulación. No se conserva el teléfono en ese registro. Si el almacenamiento está bloqueado, se informa y no se redirige; en esa misma página, reintentar tras un envío ya confirmado no vuelve a crear un registro.
-
-## Acceso y duplicados: límites
-
-El primer script de `<head>` comprueba el estado antes de cargar los demás scripts. Sin estado válido, el documento permanece oculto y se redirige al simulador. La ruta completa lleva `noindex, nofollow`; no se añade a menús o sitemap. Este bloqueo local es un flujo de navegación, **no autenticación de servidor**: alguien que modifique manualmente su navegador puede eludirlo.
-
-La página evita doble clic, reenvío durante la misma solicitud y registros nuevos tras el desbloqueo. No se garantiza unicidad entre otros navegadores, dispositivos o una recarga tras una respuesta de red ambigua. HubSpot no deduplica por teléfono estos formularios. En el plan gratuito conviene revisar coincidencias por teléfono normalizado antes de crear una oportunidad y fusionar solo tras verificar la identidad. No se configuró un flujo de pago ni se convierte un registro en conversación real o prospecto calificado.
-
-No se implementa la actualización opcional del contacto al pulsar WhatsApp: los recálculos posteriores son locales.
-
-## IDs estables
-
-| Control | ID |
+## Accesos de contacto
+| Botón | Destino |
 | --- | --- |
-| Simulador / formulario de cálculo | `simulador` / `retirementForm` |
-| Campos de cálculo | `ageNow`, `monthlyContribution`, `ageRetirement` |
-| Calcular | `calculateButton` |
-| Abrir registro | `unlockProjectionButton` |
-| Formulario de registro | `projectionLeadForm` |
-| Nombre, teléfono y aceptación | `projectionLeadName`, `projectionLeadPhone`, `projectionLeadConsent` |
-| Continuar / error | `projectionLeadContinue` / `projectionLeadStatus` |
-| Proyección ya desbloqueada | `completeProjectionLink` |
-| WhatsApp final | `projectionWhatsAppButton` |
+| Asesoría en barra, portada y franja final | Formulario CRM · PPR / Asesoría |
+| Icono de la barra superior | WhatsApp directo con icono y enlace originales |
+| Icono de contacto de Sobre mí | Icono de conversación y formulario CRM |
+| Flotante inferior derecho | WhatsApp directo, conserva icono |
+| Conoce más · Plan de retiro | /simulador/, conserva parámetros admitidos |
+| Conoce más · Seguros | WhatsApp directo: Residencial, Vida y Gastos Médicos en el mensaje |
+| Conoce más · Bolsa | WhatsApp directo con mensaje de bolsa |
+| Conoce más · Auto | WhatsApp directo con campos de cotización en el mensaje |
+| Quiero contratar | Formulario CRM con título Te contactaremos para contratar tu plan |
+
+Después de los formularios se muestra En un momento te contactaremos. Los generales permanecen en la página; el de simulación abre los resultados después de una confirmación breve.
+
+## HubSpot gratuito
+Se reutilizan el formulario público existente y sus diez propiedades de Contacto; no hay tokens privados, nuevas suscripciones, conexión con Ads ni rastreador de HubSpot.
+
+Los parámetros publicitarios siguen sus preferencias vigentes: gclid solo con permiso publicitario; una cookie hubspotutk existente solo con Analítica. La autorización del formulario no concede cookies o publicidad personalizada.
+
+- Simulación: nombre, teléfono, tres entradas, ambos resultados exactos, fecha, gclid y cuatro UTM agrupadas, marcador de consentimiento de simulación y origen.
+- Asesoría / contratación: nombre, teléfono, parámetros disponibles y origen; consentimiento nativo de procesamiento con el texto de la solicitud. No se envían edades, importes, resultados, fecha de simulación ni marcador de consentimiento financiero inventados.
+- Contexto pageUri limpio; pageName restringido a los tres títulos propios. Sin parámetros arbitrarios ni IP adicional.
+- ppr_origen_lead identifica producto, intención y botón: PPR | Simulación | simulator_range; PPR | Asesoría | wa_hero_advisory; PPR | Solicitud de contratación | product_contract.
+- Una solicitud de contratación no se marca como contrato, cita o prospecto calificado.
+- El valor de origen de Contacto representa el último guardado; los envíos constituyen el historial.
+
+No se instala detección automática por teléfono ni un contador que sume contactos distintos. El contador nativo de formularios es por contacto y no resuelve esta deduplicación. Se mantiene la revisión manual autorizada.
+
+## Sesión y seguridad
+Se sustituye la persistencia de 30 días por sessionStorage (ppr-projection-session-v2), hasta cerrar la pestaña y como máximo 24 horas desde el último cálculo. El código retira la marca local antigua. No guarda el teléfono en el almacenamiento de sesión. El acceso no depende de una cuenta de Google.
+
+Una pestaña nueva normalmente requiere registro. Algunos navegadores restauran sesiones cerradas o copian el estado al duplicar pestañas. El bloqueo local es navegación, no autenticación de servidor; un usuario técnico puede eludirlo. /mi-proyeccion/ mantiene el primer script de guardia, documento oculto hasta validar y noindex, nofollow; no se añade a menús o sitemap.
+
+Bloqueo del doble envío y del cierre mientras se guarda; errores permiten reintentar. Un envío ya confirmado no se repite en esa página cuando falla el almacenamiento. Recalcular en la página completa no envía nuevos contactos. No hay actualización posterior automática del CRM.
+
+## Medición
+No se cambian GA4, GTM, sus etiquetas, Consent Mode o conversiones de Ads. El código de medición de la web solo admite abrir/cerrar el icono de Sobre mí que pasa a formulario. Los eventos existentes y sus IDs se conservan. Los formularios no disparan whatsapp_contact; ese evento se reserva para salidas reales a WhatsApp. No se crea un evento clave de formulario ni se transmiten valores financieros o PII a dataLayer.
 
 ## Pruebas
+Desde el directorio del sitio:
+- node test-projection-flow.cjs
+- node test-lead-dialog.cjs
+- node test-simulator-route.cjs
+- node test-ui-measurement.cjs
 
-Pruebas aisladas ejecutables desde el directorio del sitio, sin llamadas a servicios reales:
+Comprueban motor sin cambios, presentación, sesión, guardia, privacidad, origen, ausencia de simulaciones inventadas, bloqueo del doble clic, errores y reintentos, y separación entre solicitudes y salidas WhatsApp.
 
-```text
-node test-projection-flow.cjs
-node test-simulator-route.cjs
-node test-attribution.cjs
-node test-consent-ui.cjs
-```
+test-measurement.cjs se adapta al nuevo flujo y se comprueba su sintaxis; no se declara ejecutado con Playwright en esta sesión. Las pruebas de navegador se realizan con la herramienta del navegador integrado y un servidor local que suprime etiquetas de Google.
 
-`test-measurement.cjs` se adapta al nuevo recorrido e intercepta HubSpot, Google y WhatsApp. Se comprobó su sintaxis; no se ejecutó ese guion con Playwright en esta sesión. La prueba de navegador se hizo por la herramienta de navegador integrado sobre una vista HTTP local que suprime las etiquetas de Google.
+Se prueban escritorio y móvil real de 390 × 844, modal, foco/cierre, desplazamiento, importes y enlaces. Los envíos reales sintéticos de simulación, asesoría y contratación se comprueban en HubSpot; las evidencias y sus identificadores permanecen fuera de este repositorio público y se excluyen de resultados comerciales.
 
-La prueba real de HubSpot creó un contacto sintético identificado como **PRUEBA CRM SIMULADOR NO ES PROSPECTO**, comprobó las diez propiedades personalizadas, nombre, teléfono, consentimiento nativo y redirección limpia. No debe contarse como prospecto comercial. Los detalles privados y las capturas se entregan fuera de este repositorio público.
-
-La vista de escritorio y el recálculo se comprobaron en navegador. Se solicitó 390 × 844 para móvil, pero el navegador no respetó ese tamaño; no se presenta la captura resultante como prueba visual móvil. Las pruebas aisladas del lienzo a 340 px sí pasaron.
-
-## Fuentes oficiales
-
-- [API pública de envío de formularios](https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/v3-legacy/submit-data-unauthenticated).
-- [Crear contactos sin correo](https://knowledge.hubspot.com/forms/how-can-i-allow-form-submissions-without-email-addresses-to-create-contacts-in-hubspot).
-- [Deduplicación de registros y sus límites](https://knowledge.hubspot.com/records/deduplication-of-records).
+## Referencias
+- https://www.allianz.com.mx/seguros/ahorro-e-inversion/seguro-ahorro.html
+- https://www.allianz.com.mx/content/dam/onemarketing/iberolatam/allianz-mx/ahorro---plus/documentos---plus/Folleto%20OptiMaxx%20plus%202025.pdf
+- https://knowledge.hubspot.com/records/deduplication-of-records
+- https://knowledge.hubspot.com/properties/hubspots-default-contact-properties
