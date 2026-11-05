@@ -41,7 +41,7 @@ const syntheticClick='Cj0KCQ_SYNTHETIC_TEST_Abc123xyz456';
   for(const file of ['simulador/index.html','mi-proyeccion/index.html']){
    const h=read(file);for(const id of ['range-from','range-dash','scenario-upper','productOverviewTitle'])assert(h.includes(id));
    assert(!h.includes('projectionDifference'));assert(!h.includes('projectionDelayCost'));assert(!h.includes('ETF'));
-   assert(h.includes('19 alternativas de inversión'));assert(!h.includes('Artículo 185'));
+   assert(h.includes('¿Cómo se vería tu asesoría?'));assert(!h.includes('Artículo 185'));
   }
   const h=read('simulador/index.html');assert(h.includes('upperProjectionTrigger'));assert(h.includes('aria-hidden="true">$99,999,999'));assert(!h.includes('millones'));assert(!h.includes('id="projectionLeadForm"'));
   const js=read('simulator.js');assert(js.includes('const displayAmount=money'));assert(js.includes('scrollToProjection'));assert(js.includes('fullProjection?window.ProjectionScenarios.calculate:window.ProjectionScenarios.calculateFrom'));

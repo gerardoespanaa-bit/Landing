@@ -1,4 +1,4 @@
-// Focused content/integration checks. Optional first argument: previous site directory.
+// Focused integration checks for the advisory section; optional prior-site directory.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -8,7 +8,7 @@ let checks = 0;
 function check(value, message) { assert.ok(value, message); checks++; }
 function section(html) {
   const start = html.indexOf('<section class="product-overview');
-  assert.ok(start >= 0, 'Product information section exists');
+  assert.ok(start >= 0, 'Information section exists');
   const tags = /<\/?section\b[^>]*>/g;
   tags.lastIndex = start;
   let depth = 0, match;
@@ -16,45 +16,54 @@ function section(html) {
     depth += match[0].startsWith('</') ? -1 : 1;
     if (!depth) {
       let end = tags.lastIndex;
-      if (html.slice(end).startsWith('<!-- /product-guide -->')) end += '<!-- /product-guide -->'.length;
+      const marker = /^<!-- \/(?:product|advisory)-guide -->/.exec(html.slice(end));
+      if (marker) end += marker[0].length;
       return {before: html.slice(0, start), body: html.slice(start, end), after: html.slice(end)};
     }
   }
-  throw new Error('Unbalanced product section');
+  throw new Error('Unbalanced information section');
 }
 const pages = routes.map(route => section(fs.readFileSync(path.join(root, route), 'utf8')));
-check(pages[0].body === pages[1].body, 'Both simulator routes show the same product information');
+check(pages[0].body === pages[1].body, 'The two simulator routes present the same advisory content');
 for (const page of pages) {
-  check((page.body.match(/class="guide-chapter /g) || []).length === 3, 'Exactly three information chapters');
+  check((page.body.match(/<li class="advisory-step\b/g) || []).length === 6, 'Six moments of the advisory journey');
+  check(page.body.includes('<h2 id="productOverviewTitle">¿Cómo se vería tu asesoría?</h2>'), 'The existing section identifier has the requested new title');
+  check(page.body.includes('Compartes solo lo que quieras.'), 'Sharing context remains voluntary');
+  check(page.body.includes('Si decides contratar,') && page.body.includes('sin obligación de contratar'), 'Later contracting remains optional');
+  check(page.body.includes('Las proyecciones son ilustrativas.'), 'Scenarios are identified as illustrative');
+  check(!/AMIB|CNSF|CONDUSEF|advisory-trust/.test(page.body), 'Credentials and regulatory details are deferred to the advisory');
+  check(page.body.includes('<span>Asesoría Gratis</span>') && !/inicial/i.test(page.body), 'The offer uses exactly the requested short label');
+  check((page.body.match(/class="advisory-art [^"]+" aria-hidden="true"/g)||[]).length===6, 'Each step has a decorative illustration with an equivalent text explanation');
+  check(!/<script\b|\bonclick\s*=|<iframe\b|<input\b/.test(page.body), 'No additional scripts, forms, tracking or interactive financial inputs');
+  check(!/guide-tax|tax151Title|tax93Title|plan-timeline|investment-basket/.test(page.body), 'Previous plan explainer has been replaced completely');
   const ids = [...page.body.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
   check(new Set(ids).size === ids.length, 'No duplicate information IDs');
-  for (const [, id] of page.body.matchAll(/aria-labelledby="([^"]+)"/g)) check(ids.includes(id), 'Section has an existing accessible title');
-  check(!/<script\b|\bonclick\s*=|<iframe\b|<input\b/.test(page.body), 'Information does not introduce tracking, forms, scripts or input fields');
-  check(!/\bETFs?\b|\bDCA\b/i.test(page.body), 'Investment explanation uses plain language');
-  check(page.body.includes('18 aportaciones si pagas mensualmente'), '18 payments are explicitly conditional on monthly frequency');
-  check(page.body.includes('10% de tus ingresos acumulables') && page.body.includes('5 UMA anuales'), 'Deduction limit retains both conditions');
-  check(page.body.includes('La normativa permite una') && page.body.includes('no es un 20% de todo tu ahorro'), 'Article 93 withholding is qualified and not charged on all savings');
+  for (const [, id] of page.body.matchAll(/aria-labelledby="([^"]+)"/g)) check(ids.includes(id), 'Accessible section title exists');
 }
 const css = fs.readFileSync(path.join(root, 'product-guide.css'), 'utf8');
 check(!/@import|url\(/.test(css), 'No added remote dependencies');
 check(css.includes('@media(max-width:760px)'), 'Mobile layout is provided');
+check(css.includes('@media(prefers-reduced-motion:reduce)'), 'Decorative animation respects reduced-motion preferences');
 if (process.argv[2]) {
   const baseline = path.resolve(process.argv[2]);
   for (let i = 0; i < routes.length; i++) {
     const old = section(fs.readFileSync(path.join(baseline, routes[i]), 'utf8'));
-    const currentPrefix = pages[i].before.replace(/^.*<link rel="stylesheet" href="\.\.\/product-guide\.css\?v=1">\r?\n/m, '');
-    check(currentPrefix === old.before, 'Everything before the information is unchanged except its stylesheet');
-    check(pages[i].after === old.after, 'Footer, dialogs and scripts after the information are unchanged');
+    check(pages[i].before.replace('../product-guide.css?v=4','../product-guide.css?v=3') === old.before, 'Only the stylesheet version changes before the section');
+    check(pages[i].after === old.after, 'Footer, dialogs and scripts remain identical');
     const contract = html => html.slice(html.indexOf('<div class="product-contract">'), html.lastIndexOf('</section>')).trim();
-    check(contract(pages[i].body) === contract(old.body), 'Existing contract CTA, text and measurement identifiers are unchanged');
+    check(contract(pages[i].body) === contract(old.body), 'The existing CTA text, attributes and identifiers are unchanged');
   }
+  const changed = new Set([...routes, 'product-guide.css', 'test-product-guide.cjs', 'test-projection-flow.cjs', 'GUIA-PRODUCTO.md']);
+  const previousFlow = fs.readFileSync(path.join(baseline, 'test-projection-flow.cjs'), 'utf8');
+  const currentFlow = fs.readFileSync(path.join(root, 'test-projection-flow.cjs'), 'utf8');
+  check(currentFlow === previousFlow, 'The existing flow test is unchanged');
   function compare(dir = '') {
     for (const entry of fs.readdirSync(path.join(baseline, dir), {withFileTypes:true})) {
       const relative = path.join(dir, entry.name);
       if (entry.isDirectory()) compare(relative);
-      else if (!routes.includes(relative.replaceAll('\\','/'))) check(fs.readFileSync(path.join(baseline, relative)).equals(fs.readFileSync(path.join(root, relative))), 'Unrelated file unchanged: ' + relative);
+      else if (!changed.has(relative.replaceAll('\\','/'))) check(fs.readFileSync(path.join(baseline, relative)).equals(fs.readFileSync(path.join(root, relative))), 'Unrelated file unchanged: ' + relative);
     }
   }
   compare();
 }
-console.log(checks + ' focused content and change-boundary checks passed.');
+console.log(checks + ' focused advisory content and change-boundary checks passed.');
