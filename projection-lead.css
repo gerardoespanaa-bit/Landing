@@ -16,3 +16,13 @@
 .retirement-result .retirement-amount{margin:0}.range-dash{transform:translateY(14px)}
 
 .projection-legend .upper-balance-key{background:#4c8ff5;width:22px;height:3px;border-radius:2px}
+
+#projectionMetrics>div{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.scenario-upper .amount-stage{min-height:0;padding:0}.scenario-upper>.amount-stage{padding:11px 5px}
+.range-from .confetti-layer,.scenario-upper .confetti-layer{inset:-48px 0;contain:layout paint}
+.retirement-result .confetti-piece{animation:projection-celebration 1.25s cubic-bezier(.12,.7,.3,1) both;box-shadow:0 0 5px currentColor}
+.confetti-layer.is-celebrating:before,.confetti-layer.is-celebrating:after{content:"";position:absolute;left:50%;top:45%;width:22px;height:22px;border:1px solid #a7d9ff;border-radius:50%;opacity:0;animation:projection-spark-ring 1.15s ease-out both}
+.confetti-layer.is-celebrating:after{border-color:#d7b16a;animation-delay:.15s}
+@keyframes projection-celebration{0%{opacity:0;transform:translate3d(0,0,0) rotate(0deg) scale(.4)}12%{opacity:1}45%{opacity:1;transform:translate3d(var(--mid-x),var(--dy),0) rotate(var(--mid-turn)) scale(1)}100%{opacity:0;transform:translate3d(var(--dx),var(--end-y),0) rotate(var(--turn)) scale(.6)}}
+@keyframes projection-spark-ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}15%{opacity:.55}100%{opacity:0;transform:translate(-50%,-50%) scale(5)}}
+@media(prefers-reduced-motion:reduce){.retirement-result .amount-pop,.retirement-result .confetti-piece,.confetti-layer.is-celebrating:before,.confetti-layer.is-celebrating:after{animation:none}.retirement-result .confetti-layer{display:none}}

@@ -75,17 +75,22 @@ function setChartSummary(){
  chart.setAttribute('aria-label',$('chartSummary').textContent);
 }
 let celebrationTimer=null;
-function clearCelebration(){clearTimeout(celebrationTimer);celebrationTimer=null;$('retirementAmount').classList.remove('amount-pop');$('projectionConfetti').replaceChildren();}
+const celebrationTargets=()=>[[$('retirementAmount'),$('projectionConfetti')],[$(fullProjection?'upperProjectionAmount':'upperProjectionPlaceholder'),$('upperProjectionConfetti')]].filter(([amount,layer])=>amount&&layer);
+function clearCelebration(){clearTimeout(celebrationTimer);celebrationTimer=null;for(const [amount,layer] of celebrationTargets()){amount.classList.remove('amount-pop');layer.classList.remove('is-celebrating');layer.replaceChildren();}}
 function celebrateProjection(){
  clearCelebration();if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const layer=$('projectionConfetti'),width=layer.clientWidth,spread=Math.min(160,width*.25),origin=Math.min(70,width*.12),colors=['#a7d9ff','#ffffff','#4c8ff5','#d7b16a'];
- $('retirementAmount').classList.add('amount-pop');const pieces=document.createDocumentFragment();
- for(let i=0;i<24;i++){
-  const side=i%2===0?-1:1,distance=side*(spread*.4+Math.random()*spread*.6),turn=side*(180+Math.random()*360),piece=document.createElement('span');
-  piece.className='confetti-piece';piece.style.left=`calc(50% + ${side*origin}px)`;piece.style.backgroundColor=colors[i%colors.length];piece.style.borderRadius=i%3===0?'50%':'1px';
-  piece.style.setProperty('--dx',`${distance}px`);piece.style.setProperty('--mid-x',`${distance*.48}px`);piece.style.setProperty('--dy',`${-18-Math.random()*45}px`);piece.style.setProperty('--end-y',`${35+Math.random()*28}px`);piece.style.setProperty('--mid-turn',`${turn*.45}deg`);piece.style.setProperty('--turn',`${turn}deg`);piece.style.animationDelay=`${Math.random()*80}ms`;pieces.append(piece);
+ const colors=['#a7d9ff','#ffffff','#4c8ff5','#d7b16a'];
+ for(const [amount,layer] of celebrationTargets()){
+  const width=layer.clientWidth,spread=Math.min(150,width*.34),origin=Math.min(52,width*.12),count=width<420?28:40,pieces=document.createDocumentFragment();
+  amount.classList.add('amount-pop');layer.classList.add('is-celebrating');
+  for(let i=0;i<count;i++){
+   const side=i%2===0?-1:1,distance=side*(spread*.25+Math.random()*spread*.75),turn=side*(180+Math.random()*400),piece=document.createElement('span'),color=colors[i%colors.length];
+   piece.className='confetti-piece';piece.style.left=`calc(50% + ${side*origin}px)`;piece.style.backgroundColor=color;piece.style.color=color;piece.style.borderRadius=i%3===0?'50%':'1px';
+   piece.style.setProperty('--dx',`${distance}px`);piece.style.setProperty('--mid-x',`${distance*.62}px`);piece.style.setProperty('--dy',`${-26-Math.random()*54}px`);piece.style.setProperty('--end-y',`${26+Math.random()*32}px`);piece.style.setProperty('--mid-turn',`${turn*.45}deg`);piece.style.setProperty('--turn',`${turn}deg`);piece.style.animationDelay=`${Math.random()*140}ms`;pieces.append(piece);
+  }
+  layer.append(pieces);
  }
- layer.append(pieces);celebrationTimer=setTimeout(clearCelebration,1100);
+ celebrationTimer=setTimeout(clearCelebration,1550);
 }
 function cancel(){cancelAnimationFrame(frameId);clearCelebration();button.disabled=false;button.textContent='Calcular mi proyección';$('calculatingMessage').hidden=true;}
 form.addEventListener('submit',e=>{e.preventDefault();if(!validateProjectionForm())return;cancel();$('calculationError').hidden=true;
