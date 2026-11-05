@@ -1,22 +1,22 @@
-# Línea del tiempo de la asesoría
+# Secuencia visual de la asesoría
 
-La sección «¿Cómo se vería tu asesoría?» se simplifica en seis pasos conectados por una línea vertical. En escritorio, el texto alterna a ambos lados; en móvil queda a la derecha de los iconos.
+La sección «¿Cómo se vería tu asesoría?» presenta seis pasos con explicaciones breves y escenas gráficas amplias. Se elimina la línea literal que conectaba los pasos; en escritorio las ilustraciones alternan a los lados del texto y en móvil aparecen debajo de cada explicación.
 
-1. Nos conocemos: presentación del asesor, credenciales y compañía.
-2. Hablamos de tus metas: el visitante comparte solo lo que quiera.
-3. Entiendes el plan: reglas, costos, riesgos, posibles rendimientos, condiciones fiscales y dudas.
-4. Exploras tu proyección: simulador y comparación de escenarios ilustrativos.
-5. Decides si es para ti: sin obligación de contratar.
-6. Te acompaño después: firma y seguimiento si decide contratar.
+1. Nos conocemos: presentación del asesor, sus credenciales y la compañía. Ilustración de una videollamada.
+2. Hablamos de tus metas: prioridades y contexto que el cliente decida compartir. Ilustración de metas, plazo y tranquilidad.
+3. Entiendes el plan: aportaciones, reglas, costos, riesgos, rendimientos posibles, condiciones fiscales y dudas. Documento con lupa.
+4. Tu proyección, en tus manos: el cliente prueba aportaciones, plazos y alternativas durante la asesoría. Gráfica decorativa con barras y curvas animadas.
+5. ¿Es una solución para ti?: comparación con sus objetivos, sin obligación de contratar. Dos elementos visuales, «Tus metas» y «El plan».
+6. Te acompaño después: solicitud, firma y seguimiento si decide contratar. Firma ilustrada y etapas del acompañamiento.
 
-La oferta muestra «40 minutos», «Asesoría Gratis» y «En línea · Sin obligación de contratar». Se retiran de esta sección las siglas, explicaciones de certificaciones y el recuadro de regulación. Estos temas se revisan durante la asesoría; la sección de credenciales de la página de inicio no cambia.
+Se conserva «40 minutos», «Asesoría Gratis» y «En línea · Sin obligación de contratar». No se muestran siglas ni detalles de certificaciones en esta sección; estos temas se revisan en la asesoría. No se modifica la sección de credenciales del inicio.
 
-Cada paso incorpora un icono SVG propio y ligero. La curva del icono de proyección tiene una animación discreta en CSS, que se desactiva cuando el navegador solicita reducir movimiento. No hay dependencias ni scripts nuevos.
+Las escenas se construyen con HTML, CSS y SVG ligeros, sin imágenes externas, bibliotecas ni scripts nuevos. Son ilustraciones decorativas: no son datos financieros reales, citas realizadas, documentos contractuales, recomendaciones o controles de otro simulador. Quedan fuera de lectores de pantalla, que cuentan con la explicación equivalente de cada paso. Las animaciones respetan la preferencia de movimiento reducido.
 
-Se conserva el botón final, su texto, identificadores y funcionamiento. Los cambios se limitan a la sección informativa compartida por /simulador/ y /mi-proyeccion/ y su hoja de estilos. No cambian cálculos, registro, CRM, privacidad, medición, inicio del sitio ni Google Ads.
+El CTA final, sus textos, identificadores y función se conservan. Las fórmulas, gráficos reales del simulador, registro CRM, privacidad, medición, página de inicio y Google Ads permanecen idénticos.
 
 ## Validación
 
-La prueba test-product-guide.cjs verifica ambas rutas y, con la carpeta anterior como argumento, compara los límites del cambio, el CTA y los archivos no afectados. La revisión visual local comprueba la línea vertical y la legibilidad en computadora y celular. La propuesta se entrega en el mismo PR #31, sin fusión ni publicación.
+La prueba test-product-guide.cjs comprueba ambas rutas y los límites del cambio frente a la versión anterior. La revisión visual comprueba las ilustraciones y su lectura en computadora y móvil. La propuesta se mantiene en el PR #31, sin fusión ni publicación.
 
-Comprobación terminada: 75 verificaciones de contenido y límites del cambio aprobadas. Vista previa en 1280 × 800 y 390 × 844 sin desbordamiento horizontal; en escritorio se confirmó la alternancia y en móvil la columna única. La animación decorativa muestra una duración de 5 segundos y está excluida de lectores de pantalla. No se repitieron envíos al CRM ni auditorías generales.
+Comprobación terminada: 75 verificaciones de contenido y límites del cambio aprobadas. Vista previa local en 1280 × 800 y 390 × 844 sin desbordamiento horizontal. Se revisaron las seis ilustraciones, la alternancia de lados en escritorio, el apilado en móvil y las animaciones de barras, curvas y firma. Sin envíos al CRM ni repetición de la auditoría general.

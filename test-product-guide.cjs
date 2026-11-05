@@ -33,7 +33,7 @@ for (const page of pages) {
   check(page.body.includes('Las proyecciones son ilustrativas.'), 'Scenarios are identified as illustrative');
   check(!/AMIB|CNSF|CONDUSEF|advisory-trust/.test(page.body), 'Credentials and regulatory details are deferred to the advisory');
   check(page.body.includes('<span>Asesoría Gratis</span>') && !/inicial/i.test(page.body), 'The offer uses exactly the requested short label');
-  check((page.body.match(/class="advisory-icon" aria-hidden="true"/g)||[]).length===6, 'Each step has a decorative icon with an equivalent text heading');
+  check((page.body.match(/class="advisory-art [^"]+" aria-hidden="true"/g)||[]).length===6, 'Each step has a decorative illustration with an equivalent text explanation');
   check(!/<script\b|\bonclick\s*=|<iframe\b|<input\b/.test(page.body), 'No additional scripts, forms, tracking or interactive financial inputs');
   check(!/guide-tax|tax151Title|tax93Title|plan-timeline|investment-basket/.test(page.body), 'Previous plan explainer has been replaced completely');
   const ids = [...page.body.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
@@ -48,7 +48,7 @@ if (process.argv[2]) {
   const baseline = path.resolve(process.argv[2]);
   for (let i = 0; i < routes.length; i++) {
     const old = section(fs.readFileSync(path.join(baseline, routes[i]), 'utf8'));
-    check(pages[i].before.replace('../product-guide.css?v=3','../product-guide.css?v=2') === old.before, 'Only the stylesheet version changes before the section');
+    check(pages[i].before.replace('../product-guide.css?v=4','../product-guide.css?v=3') === old.before, 'Only the stylesheet version changes before the section');
     check(pages[i].after === old.after, 'Footer, dialogs and scripts remain identical');
     const contract = html => html.slice(html.indexOf('<div class="product-contract">'), html.lastIndexOf('</section>')).trim();
     check(contract(pages[i].body) === contract(old.body), 'The existing CTA text, attributes and identifiers are unchanged');
