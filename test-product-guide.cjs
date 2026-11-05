@@ -28,10 +28,12 @@ check(pages[0].body === pages[1].body, 'The two simulator routes present the sam
 for (const page of pages) {
   check((page.body.match(/<li class="advisory-step\b/g) || []).length === 6, 'Six moments of the advisory journey');
   check(page.body.includes('<h2 id="productOverviewTitle">¿Cómo se vería tu asesoría?</h2>'), 'The existing section identifier has the requested new title');
-  check(page.body.includes('Tú decides qué compartir.'), 'Sharing context remains voluntary');
-  check(page.body.includes('Si decides avanzar después') && page.body.includes('no te obliga a contratar'), 'Later contracting is distinguished from the free initial advisory');
-  check(page.body.includes('no rendimientos garantizados'), 'The illustrative scenarios are not presented as guaranteed returns');
-  check(page.body.includes('https://listainstituciones.cnsf.gob.mx/'), 'The institution can be checked through the official directory');
+  check(page.body.includes('Compartes solo lo que quieras.'), 'Sharing context remains voluntary');
+  check(page.body.includes('Si decides contratar,') && page.body.includes('sin obligación de contratar'), 'Later contracting remains optional');
+  check(page.body.includes('Las proyecciones son ilustrativas.'), 'Scenarios are identified as illustrative');
+  check(!/AMIB|CNSF|CONDUSEF|advisory-trust/.test(page.body), 'Credentials and regulatory details are deferred to the advisory');
+  check(page.body.includes('<span>Asesoría Gratis</span>') && !/inicial/i.test(page.body), 'The offer uses exactly the requested short label');
+  check((page.body.match(/class="advisory-icon" aria-hidden="true"/g)||[]).length===6, 'Each step has a decorative icon with an equivalent text heading');
   check(!/<script\b|\bonclick\s*=|<iframe\b|<input\b/.test(page.body), 'No additional scripts, forms, tracking or interactive financial inputs');
   check(!/guide-tax|tax151Title|tax93Title|plan-timeline|investment-basket/.test(page.body), 'Previous plan explainer has been replaced completely');
   const ids = [...page.body.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
@@ -41,11 +43,12 @@ for (const page of pages) {
 const css = fs.readFileSync(path.join(root, 'product-guide.css'), 'utf8');
 check(!/@import|url\(/.test(css), 'No added remote dependencies');
 check(css.includes('@media(max-width:760px)'), 'Mobile layout is provided');
+check(css.includes('@media(prefers-reduced-motion:reduce)'), 'Decorative animation respects reduced-motion preferences');
 if (process.argv[2]) {
   const baseline = path.resolve(process.argv[2]);
   for (let i = 0; i < routes.length; i++) {
     const old = section(fs.readFileSync(path.join(baseline, routes[i]), 'utf8'));
-    check(pages[i].before.replace('../product-guide.css?v=2','../product-guide.css?v=1') === old.before, 'Only the stylesheet version changes before the section');
+    check(pages[i].before.replace('../product-guide.css?v=3','../product-guide.css?v=2') === old.before, 'Only the stylesheet version changes before the section');
     check(pages[i].after === old.after, 'Footer, dialogs and scripts remain identical');
     const contract = html => html.slice(html.indexOf('<div class="product-contract">'), html.lastIndexOf('</section>')).trim();
     check(contract(pages[i].body) === contract(old.body), 'The existing CTA text, attributes and identifiers are unchanged');
@@ -53,7 +56,7 @@ if (process.argv[2]) {
   const changed = new Set([...routes, 'product-guide.css', 'test-product-guide.cjs', 'test-projection-flow.cjs', 'GUIA-PRODUCTO.md']);
   const previousFlow = fs.readFileSync(path.join(baseline, 'test-projection-flow.cjs'), 'utf8');
   const currentFlow = fs.readFileSync(path.join(root, 'test-projection-flow.cjs'), 'utf8');
-  check(currentFlow.replace("assert(h.includes('¿Cómo se vería tu asesoría?'))", "assert(h.includes('19 alternativas de inversión'))") === previousFlow, 'The existing flow test only updates its obsolete content assertion');
+  check(currentFlow === previousFlow, 'The existing flow test is unchanged');
   function compare(dir = '') {
     for (const entry of fs.readdirSync(path.join(baseline, dir), {withFileTypes:true})) {
       const relative = path.join(dir, entry.name);
