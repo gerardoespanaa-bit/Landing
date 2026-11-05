@@ -1,0 +1,7 @@
+.retirement-result>.projection-unlock-anchor{grid-area:action;display:flex;min-width:0}
+#unlockProjectionButton.is-unlock-proxied{visibility:hidden}
+.projection-unlock-float{position:fixed;z-index:65;margin:0;white-space:normal;box-sizing:border-box;box-shadow:0 6px 24px #07182b40;transform-origin:center}
+.projection-unlock-float[hidden]{display:none!important}
+@media(prefers-reduced-motion:no-preference){.projection-unlock-float{animation:ppr-action-pulse 3s ease-in-out infinite}.projection-unlock-float:hover,.projection-unlock-float:focus-visible{animation-play-state:paused;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.projection-unlock-float{animation:none}}
+@media(max-width:620px){body.projection-dock-bottom .wa-float{bottom:calc(var(--projection-dock-lift,70px) + 12px)}}
