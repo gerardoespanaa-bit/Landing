@@ -3,7 +3,7 @@
  const links=[...document.querySelectorAll('[data-simulator-link]')];
  function update(){
   // Reuse the existing sanitized page metadata; never copy arbitrary URL values.
-  const metadata=(window.dataLayer||[]).find(item=>item.measurement_id&&item.page_location);
+  const metadata=(window.dataLayer||[]).find(item=>item.landing_page_metadata===true&&item.page_location);
   const permittedAds=window.LandingConsent?.getPreferences()?.advertising===true;
   for(const link of links){
    const target=new URL('simulador/',document.baseURI);

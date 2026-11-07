@@ -1,3 +1,5 @@
+> Estado vigente: únicamente la etiqueta directa AW-18527900519. El contenedor anterior se retira por solicitud del propietario; los eventos que dependían de él dejan de enviarse a analítica. Consulta [RETIRADA-CONTENEDOR.md](RETIRADA-CONTENEDOR.md). Las referencias anteriores se conservan como registro histórico.
+
 # Etiqueta de Google Ads AW-18527900519
 
 El propietario solicitó el 7 de noviembre de 2026 instalar directamente el snippet de Google correspondiente a AW-18527900519. Se añade una sola copia idéntica en el head de index.html, simulador/index.html, mi-proyeccion/index.html y aviso-de-privacidad.html.

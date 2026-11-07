@@ -54,7 +54,7 @@
   });
   for(const surface of [banner,preferences])surface.querySelectorAll('[data-consent-action]').forEach(button=>button.addEventListener('click',()=>{
    const action=button.dataset.consentAction;
-   const selected=action==='accept-measurement'?{analytics:true,advertising:true}:action==='essential'?{analytics:false,advertising:false}:action==='save'?{analytics:analytics.checked,advertising:advertising.checked}:null;
+   const selected=action==='accept-measurement'?{analytics:false,advertising:true}:action==='essential'?{analytics:false,advertising:false}:action==='save'?{analytics:analytics.checked,advertising:advertising.checked}:null;
    if(!selected||!consent.choose(selected))return;
    if(preferences.open)preferences.close();syncConsentUI();
   }));
@@ -69,9 +69,9 @@
    const control=controls.get(buttonId),action=actionType||name;
    if(!control||control.service!==service||control.location!==location||!control.actions.has(action))return false;
   }else if(service!=='retiro'||(name==='simulator_complete'?location!=='simulator':!['header','hero','footer','simulator'].includes(location)))return false;
-  // Advanced mode: Google tags apply consent to these allowlisted interactions.
+  // Local interface queue only; no destination is configured for these custom events.
   // No user input, financial amount, phone, message, link URL or retroactive replay.
-  // Explicit nulls clear the previous event's values in GTM's data model.
+  // Explicit nulls prevent stale interface values within the shared queue.
   window.dataLayer.push({event:name,service,button_location:location,button_id:buttonId,action_type:actionType});
   return true;
  }
