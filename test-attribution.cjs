@@ -79,9 +79,14 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
  assert.equal(win.dataLayer.filter(item=>item.event).length,3);
  for(const event of ['simulator_open','simulator_complete','whatsapp_contact'])assert.equal(win.dataLayer.filter(item=>item.event===event).length,1);
 });
-check('HTML retains one loader, denied defaults, outgoing referrer protection and cache versions',()=>{
- for(const name of ['index.html','aviso-de-privacidad.html']){
-  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);assert(!html.includes('gtag/js'));assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=6'));
+check('HTML retains one GTM loader, the authorized Ads tag, denied defaults and cache versions',()=>{
+ for(const name of ['index.html','simulador/index.html','mi-proyeccion/index.html','aviso-de-privacidad.html']){
+  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);
+  const direct=[...html.matchAll(/<script\b[^>]*src="([^"]*gtag\/js[^"]*)"/g)].map(m=>m[1]);
+  assert.deepEqual(direct,['https://www.googletagmanager.com/gtag/js?id=AW-18527900519']);
+  assert.equal((html.match(/gtag\('config', 'AW-18527900519'\)/g)||[]).length,1);
+  assert(!/gtag\(\s*['"]config['"]\s*,\s*['"]G-/.test(html));
+  assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=6'));
   assert(html.includes('<meta name="referrer" content="no-referrer">'));
   for(const permission of ['analytics_storage','ad_storage','ad_user_data','ad_personalization'])assert(new RegExp(permission+":'denied'").test(html));
  }
