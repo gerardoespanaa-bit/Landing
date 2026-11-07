@@ -1,10 +1,10 @@
 'use strict';
-// Synchronous head bootstrap: consent and safe page parameters BEFORE GTM.
-// Queues commands for GTM; never downloads gtag.js or configures GA4 directly.
+// Synchronous bootstrap: consent and safe page parameters before the Google Ads tag.
+// Prepares the shared queue; never installs another Google tag.
 (()=>{
  if(window.LandingConsent)return;
  const config=window.LANDING_MEASUREMENT_CONFIG||{};
- if(config.enabled!==true||config.gtmContainerId!=='GTM-KMG6BPKF'||config.ga4MeasurementId!=='G-VSNRQ7H8JL')return;
+ if(config.enabled!==true||config.googleAdsId!=='AW-18527900519')return;
  const storageKey='landing-privacy-consent-v3',legacyKey='landing-analytics-consent-v2',maxAge=180*86400000;
  const noticeVersion='privacy-2026-10-28-v3';
  function fresh(saved){const age=Date.now()-saved.updatedAt;return Number.isFinite(saved.updatedAt)&&age>=0&&age<maxAge;}
@@ -90,7 +90,7 @@
  const simulator=/\/simulador(?:\/|\/index\.html)?$/.test(location.pathname);
  const results=/\/mi-proyeccion(?:\/|\/index\.html)?$/.test(location.pathname);
  const page=Object.freeze({
-  measurement_id:config.ga4MeasurementId,
+  landing_page_metadata:true,
   page_location:safeLocation(new URL(privacy?'aviso-de-privacidad.html':'./',document.baseURI).href),
   page_referrer:safeReferrer(),
   page_title:privacy?'Aviso de privacidad':results?'Mi proyección | Gerardo España':simulator?'Simulador de retiro | Gerardo España':'Gerardo España | Asesoría financiera y patrimonial'

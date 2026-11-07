@@ -1,3 +1,5 @@
+> Estado vigente: únicamente la etiqueta directa AW-18527900519. El contenedor anterior se retira por solicitud del propietario; los eventos que dependían de él dejan de enviarse a analítica. Consulta [RETIRADA-CONTENEDOR.md](RETIRADA-CONTENEDOR.md). Las referencias anteriores se conservan como registro histórico.
+
 # Landing de Gerardo España
 
 Sitio estático sin dependencias de producción. index.html contiene las secciones y estilos base; updates.css contiene ajustes visuales. engine.js conserva el motor financiero original; projection-metrics.js calcula la referencia fiscal anual, y app.js maneja gráfica, contacto, controles y galería.

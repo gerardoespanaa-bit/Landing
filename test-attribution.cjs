@@ -13,7 +13,7 @@ function boot(query='',{referrer='',choice=null,path='/',campaignIds}={}){
  vm.createContext(ctx);vm.runInContext(config,ctx);
  if(campaignIds!==undefined)win.LANDING_MEASUREMENT_CONFIG={...win.LANDING_MEASUREMENT_CONFIG,adsCampaignIds:campaignIds};
  vm.runInContext(bootstrap,ctx);
- const page=win.dataLayer.find(item=>item.measurement_id);
+ const page=win.dataLayer.find(item=>item.landing_page_metadata===true);
  const params=Object.fromEntries(new URL(page.page_location).searchParams);
  return {win,ctx,page,params};
 }
@@ -71,7 +71,7 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
  assert.equal(set.allow_google_signals,false);assert.equal(set.allow_ad_personalization_signals,false);assert.equal(set.ads_data_redaction,true);assert.equal(set.url_passthrough,false);
  const before=win.dataLayer.length;vm.runInContext(bootstrap,ctx);assert.equal(win.dataLayer.length,before);
  win.LandingConsent.choose('denied');win.LandingConsent.choose('granted');
- assert.equal(win.dataLayer.filter(item=>item.measurement_id).length,1);
+ assert.equal(win.dataLayer.filter(item=>item.landing_page_metadata===true).length,1);
  for(const item of win.dataLayer.filter(item=>item[0]==='consent'))for(const ad of ['ad_storage','ad_user_data','ad_personalization'])assert.equal(item[2][ad],'denied');
  assert(!win.dataLayer.some(item=>item[0]==='config'||item[0]==='event'));
  vm.runInContext(read('measurement.js'),ctx);
@@ -79,14 +79,14 @@ for(const choice of [null,'denied','granted'])check('privacy, idempotence and ex
  assert.equal(win.dataLayer.filter(item=>item.event).length,3);
  for(const event of ['simulator_open','simulator_complete','whatsapp_contact'])assert.equal(win.dataLayer.filter(item=>item.event===event).length,1);
 });
-check('HTML retains one GTM loader, the authorized Ads tag, denied defaults and cache versions',()=>{
+check('HTML retains only the authorized Ads tag, denied defaults and cache versions',()=>{
  for(const name of ['index.html','simulador/index.html','mi-proyeccion/index.html','aviso-de-privacidad.html']){
-  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,1);
+  const html=read(name);assert.equal((html.match(/j\.src=/g)||[]).length,0);
   const direct=[...html.matchAll(/<script\b[^>]*src="([^"]*gtag\/js[^"]*)"/g)].map(m=>m[1]);
   assert.deepEqual(direct,['https://www.googletagmanager.com/gtag/js?id=AW-18527900519']);
   assert.equal((html.match(/gtag\('config', 'AW-18527900519'\)/g)||[]).length,1);
   assert(!/gtag\(\s*['"]config['"]\s*,\s*['"]G-/.test(html));
-  assert(html.includes('measurement-config.js?v=3'));assert(html.includes('measurement-init.js?v=6'));
+  assert(html.includes('measurement-config.js?v=4'));assert(html.includes('measurement-init.js?v=7'));
   assert(html.includes('<meta name="referrer" content="no-referrer">'));
   for(const permission of ['analytics_storage','ad_storage','ad_user_data','ad_personalization'])assert(new RegExp(permission+":'denied'").test(html));
  }

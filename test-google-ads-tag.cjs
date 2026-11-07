@@ -19,9 +19,10 @@ for(const file of pages){
  const html=read(file),start=html.indexOf(snippet);
  check(start>=0&&start===html.lastIndexOf(snippet),'Exact supplied snippet appears once: '+file);
  check(start>html.indexOf('<head>')&&start<html.indexOf('</head>'),'Snippet is inside the head');
- check(html.indexOf("command('consent','default'")<start&&html.indexOf('measurement-init.js?v=6')<start,'Consent and privacy defaults precede the async loader');
- check(html.indexOf('<!-- Google Tag Manager -->')>start,'Existing GTM remains after the configured privacy defaults');
- check((html.match(/gtm\.js\?id=/g)||[]).length===1&&(html.match(/ns\.html\?id=GTM-KMG6BPKF/g)||[]).length===1,'One existing GTM container and noscript fallback');
+ check(html.indexOf("command('consent','default'")<start&&html.indexOf('measurement-init.js?v=7')<start,'Consent and privacy defaults precede the async loader');
+ check(!/GTM-|gtm\.js|ns\.html|Google Tag Manager|G-VSNRQ7H8JL/.test(html),'No container, noscript or old analytics destination remains');
+ const external=[...html.matchAll(/<script\b[^>]*src="(https?:[^"]+)"/g)].map(m=>m[1]);
+ check(external.length===1&&external[0]==='https://www.googletagmanager.com/gtag/js?id=AW-18527900519','The only external Google script is the authorized Ads tag');
  const pathname=file==='index.html'?'/':file.replace('index.html','');
  for(const saved of [undefined,record(false,false),record(true,false),record(false,true),record(true,true)]){
   const state=boot({saved,pathname}),layer=state.win.dataLayer,before=JSON.stringify(lastState(state));
@@ -38,7 +39,9 @@ for(const file of pages){
  }
  if(process.argv[2]){
   const previous=fs.readFileSync(path.join(path.resolve(process.argv[2]),file),'utf8');
-  check(html.replace(snippet+'\n','')===previous,'No other HTML, GTM or access-guard changes: '+file);
+  const firstScript=h=>h.match(/<head>[\s\S]*?<script>([\s\S]*?)<\/script>/)[1];
+  check(firstScript(html)===firstScript(previous),'The first consent/access-guard script is unchanged: '+file);
+  if(file!=='aviso-de-privacidad.html')check(html.match(/<main\b[\s\S]*?<\/main>/)[0]===previous.match(/<main\b[\s\S]*?<\/main>/)[0],'Visible main content and simulator stay unchanged: '+file);
  }
 }
 console.log(JSON.stringify({result:'passed',checks,pages:pages.length,networkRequests:0,realGoogleDelivery:false}));
