@@ -100,7 +100,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
 <link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
 <link rel="stylesheet" href="../simulator-page.css?v=1">
-<link rel="stylesheet" href="../projection-lead.css?v=5">
+<link rel="stylesheet" href="../projection-lead.css?v=6">
 <link rel="stylesheet" href="../product-guide.css?v=4">
 <link rel="stylesheet" href="../projection-unlock-dock.css?v=1">
 </head>
@@ -129,7 +129,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
       <form class="calc-form" id="retirementForm" novalidate>
         <label>Edad actual <span class="age-control"><button type="button" data-age-step="ageNow" data-delta="-1" aria-label="Disminuir edad actual">−</button><input id="ageNow" aria-describedby="ageNotice" type="number" min="18" max="64" value="35" required><button type="button" data-age-step="ageNow" data-delta="1" aria-label="Aumentar edad actual">+</button></span></label>
         <label>Aportación mensual <span class="money-input"><b>$</b><input id="monthlyContribution" aria-describedby="ageNotice" type="number" min="2000" max="1000000" step="1" value="2000" required><small>MXN</small></span></label>
-        <label>Edad de retiro <span class="age-control"><button type="button" data-age-step="ageRetirement" data-delta="-1" aria-label="Disminuir edad de retiro">−</button><input id="ageRetirement" aria-describedby="ageNotice" type="number" min="65" max="90" value="65" required><button type="button" data-age-step="ageRetirement" data-delta="1" aria-label="Aumentar edad de retiro">+</button></span></label>
+        <label>Edad de retiro <span class="age-control"><button type="button" data-age-step="ageRetirement" data-delta="-1" aria-label="Disminuir edad de retiro">−</button><input id="ageRetirement" aria-describedby="ageNotice" type="number" min="60" max="90" value="65" required><button type="button" data-age-step="ageRetirement" data-delta="1" aria-label="Aumentar edad de retiro">+</button></span></label>
         <button class="btn btn-primary calc-btn" id="calculateButton" type="submit" disabled>Calcular mi proyección</button>
         <div id="ageNotice" class="age-notice" role="alert" hidden></div><p id="calculationError" role="alert" hidden></p><div id="calculatingMessage" class="calculating-message" hidden><strong>Calculando tu proyección…</strong><p>Observa cómo podría crecer tu inversión con el tiempo.</p></div>
       </form>
@@ -141,7 +141,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
         <p>Se conserva el motor existente, que aplica supuestos de administración (1.5% trimestral sobre saldo inicial), gestión (0.1% mensual), cargo inicial de $500, cargo mensual de 25 UDIS desde el mes 19, UDI fija de $8.81 y una tabla de bono con tasa ilustrativa del 9%. Estos parámetros, su tratamiento de IVA, la elegibilidad del bono y su aplicación después de 25 años no están verificados contra un contrato vigente. La cifra es un escenario técnico provisional; no es una cotización oficial ni confirma los costos o beneficios de un producto. El bono no representa dinero de libre disposición ni un rendimiento garantizado. No se reinvierte el posible beneficio fiscal.</p>
         <p><strong>Beneficio fiscal anual de referencia:</strong> se estima con un ISR marginal ilustrativo del 25%, que puede variar según la posición de cada persona en la tarifa de ISR. Se aplica a la aportación anual hasta el límite de cinco UMA anuales de 2026 ($213,973.20), suponiendo ingresos suficientes para que la deducción no supere el 10% de los ingresos acumulables y el cumplimiento de los demás requisitos del Artículo 151. Como no se solicitan ingresos ni situación fiscal, esta referencia no es una devolución calculada o asegurada; puede ser menor o nula. Se muestra solo el beneficio anual, sin acumularlo ni reinvertirlo. Los límites de años futuros pueden cambiar.</p>
         <p>*El tratamiento fiscal está sujeto a las condiciones aplicables y se explica durante la asesoría personalizada.</p>
-        <p><strong>Escenario «Libre de impuestos»:</strong> supone que los retiros se realizan dentro de los requisitos y límites de exención aplicables a la modalidad de disposición elegida. Cumplir 65 años no establece una exención ilimitada del saldo. El motor no determina el ISR personal ni un calendario de retiros; la estrategia y el tratamiento de cualquier excedente se revisan en asesoría. En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
+        <p><span id="retirementTaxNote" hidden><strong>Escenario «Libre de impuestos»:</strong> supone que los retiros se realizan dentro de los requisitos y límites de exención aplicables a la modalidad de disposición elegida. Cumplir 65 años no establece una exención ilimitada del saldo. El motor no determina el ISR personal ni un calendario de retiros; la estrategia y el tratamiento de cualquier excedente se revisan en asesoría. </span>En la asesoría revisaremos los costos vigentes, las condiciones del bono, el plazo contractual, la disponibilidad de los recursos y una propuesta personalizada. Para horizontes mayores a 25 años, se proyecta la continuidad de las aportaciones hasta la edad elegida; esto no establece un plazo contractual.</p>
       </div></details>
     </div>
 <section class="product-overview advisory-guide" aria-labelledby="productOverviewTitle">
@@ -191,12 +191,12 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <script src="../engine.js" defer></script>
 <script src="../projection-metrics.js?v=5" defer></script>
 <script src="../app.js?v=14" defer></script>
-<script src="../projection-scenarios.js?v=2" defer></script>
-<script src="../projection-state.js?v=2" defer></script>
+<script src="../projection-scenarios.js?v=3" defer></script>
+<script src="../projection-state.js?v=3" defer></script>
 <script src="../hubspot-form-config.js?v=1" defer></script>
-<script src="../hubspot-submission.js?v=4" defer></script>
+<script src="../hubspot-submission.js?v=5" defer></script>
 <script src="../lead-dialog.js?v=1" defer></script>
-<script src="../simulator.js?v=5" defer></script>
+<script src="../simulator.js?v=6" defer></script>
 <script src="../projection-unlock-dock.js?v=1" defer></script>
 <script src="../projection-lead-ui.js?v=3" defer></script>
 <script src="../projection-direct-form.js?v=1" defer></script>
@@ -216,8 +216,8 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
       <label for="directProjectionAge">Edad actual
         <input id="directProjectionAge" type="number" inputmode="numeric" min="18" max="64" step="1" placeholder="35" required>
       </label>
-      <label for="directProjectionRetirement">Edad de retiro
-        <input id="directProjectionRetirement" type="number" inputmode="numeric" min="65" max="90" step="1" placeholder="65" required>
+      <label for="directProjectionRetirement">Edad deseada de retiro
+        <input id="directProjectionRetirement" type="number" inputmode="numeric" min="60" max="90" step="1" value="65" required>
       </label>
       <label for="directProjectionMonthly">Aportación mensual (MXN)
         <input id="directProjectionMonthly" type="number" inputmode="numeric" min="2000" max="1000000" step="1" placeholder="Mínimo $2,000" required>
@@ -225,7 +225,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
     </div>
     <label class="projection-lead-consent">
       <input id="directProjectionConsent" type="checkbox" required>
-      <span>Acepto el <a href="../aviso-de-privacidad.html#registro-simulacion" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> y autorizo guardar mi simulación y contactarme respecto a mi simulación.</span>
+      <span>Acepto <a href="../aviso-de-privacidad.html#registro-simulacion" target="_blank" rel="noopener noreferrer">aviso de privacidad</a></span>
     </label>
     <button class="btn btn-primary" id="directProjectionContinue" type="submit">Continuar</button>
     <button class="measurement-preferences" id="directProjectionPrivacy" type="button" aria-haspopup="dialog" hidden>Preferencias de privacidad</button>

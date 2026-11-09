@@ -4,7 +4,10 @@
  const simulationConsent='Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.';
  const requestConsent='Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.';
  const advisoryIds=new Set(['wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
- function consentText(kind='simulation'){return kind==='simulation'?simulationConsent:requestConsent;}
+ function consentText(kind='simulation',buttonId){
+  if(kind!=='simulation')return requestConsent;
+  return buttonId==='simulator_direct'?'Acepto aviso de privacidad':simulationConsent;
+ }
  function validSource(kind,id){return kind==='simulation'?['simulator_range','simulator_direct'].includes(id):kind==='contract'?id==='product_contract':kind==='advisory'&&advisoryIds.has(id);}
  function sourceLabel(kind,id){if(!validSource(kind,id))throw Error('Origen de solicitud no válido.');return (kind==='simulation'?'PPR | Simulación':kind==='contract'?'PPR | Solicitud de contratación':'PPR | Asesoría')+' | '+id;}
  function captureCampaign(href){
@@ -38,7 +41,7 @@
   // Only reuse an existing cookie with analytics consent. No HubSpot tracking installation.
   const hutk=cookie.split(';').map(s=>s.trim()).find(s=>s.startsWith('hubspotutk='))?.slice(11);
   if(preferences?.analytics===true&&/^[a-f0-9]{32}$/i.test(hutk||''))context.hutk=hutk;
-  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentText(kind),communications:[]}}};
+  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentText(kind,buttonId),communications:[]}}};
  }
  function createSubmitter({config,fetcher}){
   let pending=false,accepted=false;

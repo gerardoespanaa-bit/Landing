@@ -22,7 +22,7 @@ function run(query,{advertising=false,fetcher}={}){
  form.querySelectorAll=()=>[name,phone,consent,age,retire,monthly];
  Object.assign(name,{value:'PRUEBA AISLADA'});
  Object.assign(phone,{value:'0000000000'});
- consent.checked=true;age.valueAsNumber=39;retire.valueAsNumber=68;monthly.valueAsNumber=2500;
+ consent.checked=true;age.valueAsNumber=39;retire.valueAsNumber=60;monthly.valueAsNumber=2500;
  const baseURI='https://example.test/simulador/',location={href:baseURI+query,replace:url=>redirects.push(url)};
  const document={baseURI,title:'Simulador de retiro | Gerardo España',cookie:'',getElementById:el,body:{classList:{add(){},remove(){}}}};
  const keys=['name','phone','source','consent','age','retire','monthly','simulatedAt','gclid','utm'];
@@ -58,12 +58,13 @@ const query='?registro=1&gclid=QATestGclid1234567890&utm_medium=cpc&email=qa%40e
  assert.equal(t.redirects.length,0);assert.equal(t.el('directProjectionContinue').disabled,false);
  const retry=t.submit();release(success());await retry;
  assert.deepEqual(t.redirects,['https://example.test/mi-proyeccion/']);
- assert.deepEqual(state.load(t.storage).inputs,{age:39,retire:68,monthly:2500});
+ assert.deepEqual(state.load(t.storage).inputs,{age:39,retire:60,monthly:2500});
  const payload=t.requests.at(-1),fields=Object.fromEntries(payload.fields.map(f=>[f.name,f.value]));
  assert.equal(payload.context.pageUri,'https://example.test/simulador/');
+ assert.deepEqual(payload.legalConsentOptions.consent,{consentToProcess:true,text:'Acepto aviso de privacidad',communications:[]});
  assert.equal(fields.source,'PPR | Simulación | simulator_direct');
  assert.equal(fields.gclid,'');assert.equal(JSON.parse(fields.utm).utm_medium,'cpc');
- assert.deepEqual([fields.age,fields.retire,fields.monthly],['39','68','2500']);
+ assert.deepEqual([fields.age,fields.retire,fields.monthly],['39','60','2500']);
  assert(!Object.keys(fields).some(key=>key.startsWith('result')));
 
  const blocked=run(query,{advertising:true});
