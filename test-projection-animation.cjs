@@ -1,6 +1,6 @@
 // Focused checks for the public dummy counter and the post-registration chart.
 // No network, production tags, real contacts or WhatsApp messages.
-const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto');
 const core=require('./projection-scenarios.js'),lead=require('./hubspot-submission.js');
 const read=f=>fs.readFileSync(path.join(__dirname,f),'utf8');
 const inputs={age:35,retire:65,monthly:2000};
@@ -17,7 +17,7 @@ function runtime({full=false,width=640,reduced=false}={}){
   focus(){}scrollIntoView(){}getBoundingClientRect(){return {height:76,top:150};}
  }
  const get=id=>{if(!elements.has(id))elements.set(id,new El(id));return elements.get(id);};
- for(const [id,value,min,max] of [['ageNow',35,18,64],['ageRetirement',65,65,90],['monthlyContribution',2000,2000,1000000]])Object.assign(get(id),{value:String(value),min:String(min),max:String(max)});
+ for(const [id,value,min,max] of [['ageNow',35,18,64],['ageRetirement',65,60,90],['monthlyContribution',2000,2000,1000000]])Object.assign(get(id),{value:String(value),min:String(min),max:String(max)});
  let points=[];const ctx={scale(){},measureText:t=>({width:t.length*6}),beginPath(){points=[];},moveTo(x,y){points.push([x,y]);},lineTo(x,y){points.push([x,y]);},stroke(){strokes.push({color:this.strokeStyle,points:points.slice()});},fillText(){},fillRect(){},save(){},restore(){},rect(){},clip(){}};
  get('miniGrowthChart').getContext=()=>ctx;
  const doc={getElementById:get,body:{dataset:{projectionFull:String(full)}},querySelector:s=>get(s),querySelectorAll:()=>[],createElement:()=>new El(''),createDocumentFragment:()=>Object.assign(new El(''),{fragment:true})};
@@ -28,6 +28,16 @@ function runtime({full=false,width=640,reduced=false}={}){
  return {win,get,calls,events,strokes,frame,finishCelebration(){for(const fn of [...timers.values()])fn();timers.clear();},submit(){get('retirementForm').fire('submit');},input(id,value){get(id).value=String(value);get('retirementForm').fire('input');}};
 }
 const number=el=>Number(el.textContent.replace(/[^0-9.-]/g,''));
+for(const full of [false,true])check('Only 65 and later show the tax note in results and details, full '+full,()=>{
+ const t=runtime({full,reduced:true});
+ for(const age of [60,64,65,60]){
+  t.input('ageRetirement',age);
+  if(!full){t.submit();t.frame(0);}
+  assert.equal(t.get('resultPanel').hidden,false);
+  assert.equal(t.get('retirementTaxNote').hidden,age<65);
+  assert.equal(t.get('retirementCaption').textContent.includes('Libre de impuestos'),age>=65);
+ }
+});
 check('Public scenario calculates 8% only; has no upper rows, amount or delayed scenario',()=>{
  const rates=[];const w={simulate:(p,years)=>{rates.push(p.tasaRendimiento);return Array.from({length:years},(_,i)=>({saldoTotal:(i+1)*100,aportacionAcumulada:(i+1)*50}));},annualTaxReference:()=>6000};
  vm.runInNewContext(read('projection-scenarios.js'),{window:w});
@@ -72,7 +82,9 @@ check('Public DOM has only a fictitious hidden placeholder; upper legend exists 
  const a=read('simulador/index.html'),b=read('mi-proyeccion/index.html');assert(a.includes('aria-hidden="true">$99,999,999'));assert(!a.includes('upper-balance-key'));assert(b.includes('upper-balance-key'));for(const h of [a,b]){const legend=h.match(/<div class="projection-legend"[^>]*>([\s\S]*?)<\/div>/)[1];assert(legend.includes('Tendrías desde'));assert(!/%|escenario|conservador/i.test(legend));}assert(b.includes('Podrías llegar hasta</span>'));
 });
 check('Published financial engine and tax helper remain byte-for-byte unchanged',()=>{
- const previous=path.resolve(__dirname,'../../../cambios-simulador-04-nov/implementacion/landing');
- for(const f of ['engine.js','projection-metrics.js'])assert.deepEqual(fs.readFileSync(path.join(__dirname,f)),fs.readFileSync(path.join(previous,f)));
+ for(const [file,sha] of [['engine.js','982d0efe11d8aecd4fb13d7b06ed177f829389d9'],['projection-metrics.js','a67295fc05111bbcbce2608215eab809a4b3dea0']]){
+  const bytes=fs.readFileSync(path.join(__dirname,file));
+  assert.equal(crypto.createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex'),sha);
+ }
 });
 console.log(JSON.stringify({result:'passed',checks,networkRequests:0}));

@@ -5,7 +5,8 @@
  const tax=typeof module!=='undefined'&&module.exports?require('./projection-metrics.js').annualTaxReference:root.annualTaxReference;
  function validate(inputs){
   const {age,monthly,retire}=inputs||{};
-  if(!Number.isInteger(age)||age<18||age>64||!Number.isInteger(retire)||retire<65||retire>90||!Number.isInteger(monthly)||monthly<2000||monthly>1000000)throw new RangeError('Revisa las edades y una aportación mensual entre $2,000 y $1,000,000.');
+  if(!Number.isInteger(age)||age<18||age>64||!Number.isInteger(retire)||retire<60||retire>90||!Number.isInteger(monthly)||monthly<2000||monthly>1000000)throw new RangeError('Revisa las edades y una aportación mensual entre $2,000 y $1,000,000.');
+  if(retire<=age)throw new RangeError('La edad de retiro debe ser mayor que tu edad actual.');
   return {age,monthly,retire};
  }
  function scenario(inputs,rate,delayYears=0){
