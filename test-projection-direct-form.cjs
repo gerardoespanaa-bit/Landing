@@ -61,6 +61,7 @@ const query='?registro=1&gclid=QATestGclid1234567890&utm_medium=cpc&email=qa%40e
  assert.deepEqual(state.load(t.storage).inputs,{age:39,retire:68,monthly:2500});
  const payload=t.requests.at(-1),fields=Object.fromEntries(payload.fields.map(f=>[f.name,f.value]));
  assert.equal(payload.context.pageUri,'https://example.test/simulador/');
+ assert.deepEqual(payload.legalConsentOptions.consent,{consentToProcess:true,text:'Acepto aviso de privacidad',communications:[]});
  assert.equal(fields.source,'PPR | Simulación | simulator_direct');
  assert.equal(fields.gclid,'');assert.equal(JSON.parse(fields.utm).utm_medium,'cpc');
  assert.deepEqual([fields.age,fields.retire,fields.monthly],['39','68','2500']);
