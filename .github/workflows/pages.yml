@@ -1,0 +1,48 @@
+name: Publish static site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the approved version
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Package the static website
+        shell: bash
+        run: |
+          mkdir -p "${RUNNER_TEMP}/pages"
+          git archive HEAD -- '*.html' '*.css' '*.js' CNAME gerardo-espana.png assets | tar -x -C "${RUNNER_TEMP}/pages"
+          test -f "${RUNNER_TEMP}/pages/index.html"
+          test -f "${RUNNER_TEMP}/pages/simulador/index.html"
+          test -f "${RUNNER_TEMP}/pages/mi-proyeccion/index.html"
+          test -f "${RUNNER_TEMP}/pages/aviso-de-privacidad.html"
+      - name: Upload the site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
