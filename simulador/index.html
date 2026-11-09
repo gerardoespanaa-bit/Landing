@@ -100,7 +100,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
 <link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
 <link rel="stylesheet" href="../simulator-page.css?v=1">
-<link rel="stylesheet" href="../projection-lead.css?v=4">
+<link rel="stylesheet" href="../projection-lead.css?v=5">
 <link rel="stylesheet" href="../product-guide.css?v=4">
 <link rel="stylesheet" href="../projection-unlock-dock.css?v=1">
 </head>
@@ -194,11 +194,44 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <script src="../projection-scenarios.js?v=2" defer></script>
 <script src="../projection-state.js?v=2" defer></script>
 <script src="../hubspot-form-config.js?v=1" defer></script>
-<script src="../hubspot-submission.js?v=3" defer></script>
+<script src="../hubspot-submission.js?v=4" defer></script>
 <script src="../lead-dialog.js?v=1" defer></script>
 <script src="../simulator.js?v=5" defer></script>
 <script src="../projection-unlock-dock.js?v=1" defer></script>
 <script src="../projection-lead-ui.js?v=3" defer></script>
+<script src="../projection-direct-form.js?v=1" defer></script>
+
+<dialog id="directProjectionDialog" class="lead-dialog" aria-labelledby="directProjectionTitle" aria-describedby="directProjectionIntro">
+  <form id="directProjectionForm" class="projection-lead-form" data-hs-do-not-collect="true">
+    <button type="button" class="modal-close" id="closeDirectProjection" aria-label="Cerrar formulario">×</button>
+    <h2 id="directProjectionTitle">Ve tu proyección de retiro</h2>
+    <p id="directProjectionIntro">Completa tus datos para ver tu simulación. Podrás ajustar los valores en el siguiente paso.</p>
+    <label for="directProjectionName">Nombre
+      <input id="directProjectionName" name="firstname" type="text" autocomplete="given-name" minlength="2" maxlength="100" required>
+    </label>
+    <label for="directProjectionPhone">Teléfono / WhatsApp
+      <input id="directProjectionPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 dígitos de México" required>
+    </label>
+    <div class="direct-projection-inputs">
+      <label for="directProjectionAge">Edad actual
+        <input id="directProjectionAge" type="number" inputmode="numeric" min="18" max="64" step="1" placeholder="35" required>
+      </label>
+      <label for="directProjectionRetirement">Edad de retiro
+        <input id="directProjectionRetirement" type="number" inputmode="numeric" min="65" max="90" step="1" placeholder="65" required>
+      </label>
+      <label for="directProjectionMonthly">Aportación mensual (MXN)
+        <input id="directProjectionMonthly" type="number" inputmode="numeric" min="2000" max="1000000" step="1" placeholder="Mínimo $2,000" required>
+      </label>
+    </div>
+    <label class="projection-lead-consent">
+      <input id="directProjectionConsent" type="checkbox" required>
+      <span>Acepto el <a href="../aviso-de-privacidad.html#registro-simulacion" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> y autorizo guardar mi simulación y contactarme respecto a mi simulación.</span>
+    </label>
+    <button class="btn btn-primary" id="directProjectionContinue" type="submit">Continuar</button>
+    <button class="measurement-preferences" id="directProjectionPrivacy" type="button" aria-haspopup="dialog" hidden>Preferencias de privacidad</button>
+    <p id="directProjectionStatus" role="status" aria-live="polite" hidden></p>
+  </form>
+</dialog>
 
 <dialog id="credentialDialog" class="credential-dialog" aria-labelledby="credentialTitle"><div class="credential-toolbar"><h2 id="credentialTitle">Documento profesional</h2><button type="button" id="closeCredential" class="modal-close" aria-label="Cerrar documento">×</button></div><div id="credentialContent" class="credential-content"></div></dialog><section id="measurementConsent" class="measurement-consent" aria-label="Medición publicitaria" hidden>
   <div><p>Usamos cookies de medición publicitaria para medir los resultados de nuestros anuncios y mejorar tu experiencia. Al pulsar “Ok”, aceptas este uso. <a id="openMeasurementPreferences" class="consent-preferences-link" href="#measurementDetails" aria-haspopup="dialog">Aquí</a> puedes configurar tus preferencias.</p><p class="consent-identity">Antes de elegir, Google puede recibir señales limitadas sin cookies. Gerardo López España · <a href="../aviso-de-privacidad.html" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a></p></div>
