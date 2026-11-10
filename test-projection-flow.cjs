@@ -21,17 +21,18 @@ const syntheticClick='Cj0KCQ_SYNTHETIC_TEST_Abc123xyz456';
  await check('Double click and retry after confirmed save never post twice',async()=>{let calls=0,release;const submit=lead.createSubmitter({config:baseConfig,fetcher:()=>{calls++;return new Promise(r=>release=r);}});const first=submit({});assert.deepEqual(await submit({}),{ok:false,pending:true});release({status:200,json:async()=>({inlineMessage:'Guardado'})});assert((await first).ok);assert((await submit({})).alreadySaved);assert.equal(calls,1);});
  await check('Failure, malformed success, 429 and disabled form never unlock',async()=>{for(const response of [{status:400},{status:429},{status:200,json:async()=>({errors:['bad']})},{status:200,json:async()=>({})}]){const submit=lead.createSubmitter({config:baseConfig,fetcher:async()=>response});await assert.rejects(submit({}));}let n=0;const retry=lead.createSubmitter({config:baseConfig,fetcher:async()=>++n===1?{status:500}:{status:200,json:async()=>({redirectUri:'https://evil.invalid/'})}});await assert.rejects(retry({}));assert((await retry({})).ok);assert.equal(n,2);await assert.rejects(lead.createSubmitter({config:{...baseConfig,enabled:false},fetcher:()=>{throw Error('must not call');}})({}));});
  await check('Published engine and tax formulas unchanged; no private tokens',()=>{const blob=f=>{const b=fs.readFileSync(path.join(__dirname,f));return crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');};assert.equal(blob('engine.js'),'982d0efe11d8aecd4fb13d7b06ed177f829389d9');assert.equal(blob('projection-metrics.js'),'a67295fc05111bbcbce2608215eab809a4b3dea0');assert(!read('index.html').includes('mi-proyeccion'));for(const f of ['hubspot-form-config.js','hubspot-submission.js','projection-lead-ui.js'])assert(!/pat-(?:na|eu)\d|Bearer\s+[A-Za-z0-9]/.test(read(f)));});
- await check('General requests carry no fabricated simulation and classify intent separately',()=>{
+ await check('Full requests carry entered values without invented results and classify intent separately',()=>{
   for(const [kind,buttonId,label] of [['advisory','wa_about_social','Asesoría'],['contract','product_contract','Solicitud de contratación']]){
-   const p=lead.buildPayload({config:baseConfig,contact:personal,kind,buttonId,campaign:{},preferences:{},pageUri:'https://example.test/?name=PRIVATE'});
+   const p=lead.buildPayload({config:baseConfig,contact:personal,projection:{inputs:valid},kind,buttonId,campaign:{},preferences:{},pageUri:'https://example.test/?name=PRIVATE'});
    const values=Object.fromEntries(p.fields.map(f=>[f.name,f.value]));
    assert(values.ppr_origen_lead.includes(label));assert(values.ppr_origen_lead.includes(buttonId));
-   for(const name of ['ppr_edad_actual','ppr_edad_retiro','ppr_aportacion_mensual','ppr_resultado_8','ppr_resultado_12','ppr_fecha_simulacion','ppr_consentimiento_simulacion'])assert(!(name in values));
-   assert.equal(p.legalConsentOptions.consent.text,'Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.');
+   assert.deepEqual([values.ppr_edad_actual,values.ppr_edad_retiro,values.ppr_aportacion_mensual],['35','65','2000']);
+   for(const name of ['ppr_resultado_8','ppr_resultado_12','ppr_fecha_simulacion','ppr_consentimiento_simulacion'])assert(!(name in values));
+   assert.equal(p.legalConsentOptions.consent.text,'Acepto aviso de privacidad');
    assert.deepEqual(p.legalConsentOptions.consent.communications,[]);
   }
   assert.throws(()=>lead.buildPayload({config:baseConfig,contact:personal,kind:'contract',buttonId:'arbitrary'}));
-  assert.equal(lead.consentText('simulation'),'Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.');
+  assert.equal(lead.consentText(),'Acepto aviso de privacidad');
  });
  await check('Same-tab state expires, new session has no unlock and no phone is persisted',()=>{
   const a=storage(),b=storage();assert(state.save(a,personal.name,valid));assert(state.load(a));assert.equal(state.load(b),null);
@@ -47,7 +48,7 @@ const syntheticClick='Cj0KCQ_SYNTHETIC_TEST_Abc123xyz456';
   const js=read('simulator.js');assert(js.includes('const displayAmount=money'));assert(js.includes('scrollToProjection'));assert(js.includes('fullProjection?window.ProjectionScenarios.calculate:window.ProjectionScenarios.calculateFrom'));
  });
  await check('Shared modal uses the visible consent text and native dialog; no tokens or auto subscription',()=>{
-  const h=read('lead-dialog.js');assert(h.includes("document.createElement('dialog')"));assert(h.includes('dialog.showModal()'));assert(h.includes("dialog.addEventListener('cancel'"));assert(h.includes('if(sending)e.preventDefault()'));assert(h.includes('accepted.contact'));assert(h.includes('En un momento te contactaremos'));
+  const h=read('lead-dialog.js');assert(h.includes("document.createElement('dialog')"));assert(h.includes('dialog.showModal()'));assert(h.includes("dialog.addEventListener('cancel'"));assert(h.includes('if(sending)e.preventDefault()'));assert(h.includes('accepted.contact'));assert(h.includes('window.location.assign(resultUrl.href)'));
   for(const f of ['lead-dialog.js','hubspot-submission.js','app.js'])assert(!/pat-(?:na|eu)\\d|Bearer\\s+[A-Za-z0-9]/.test(read(f)));
  });
  await check('Direct services and floating WhatsApp, retirement goes to simulator; no preview handler remains',()=>{

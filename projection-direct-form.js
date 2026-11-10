@@ -11,6 +11,7 @@
  const dialog=$('directProjectionDialog'),form=$('directProjectionForm'),button=$('directProjectionContinue');
  const status=$('directProjectionStatus'),close=$('closeDirectProjection');
  const privacy=$('directProjectionPrivacy'),manage=$('measurementPreferences'),preferences=$('measurementDetails');
+ const checkbox=$('directProjectionConsent'),refreshPrivacy=window.FormPrivacy?.bind(checkbox);
  const fields=[...form.querySelectorAll('input')];
  const campaign=lead.captureCampaign(location.href);
  const submit=lead.createSubmitter({config,fetcher:window.fetch.bind(window)});
@@ -47,9 +48,10 @@
   setSending(true);
   try{
    if(!accepted){
-    const contact=lead.validateContact($('directProjectionName').value,$('directProjectionPhone').value,$('directProjectionConsent').checked);
+    const priorConsent=refreshPrivacy?.();
+    const contact=lead.validateContact($('directProjectionName').value,$('directProjectionPhone').value,checkbox.checked);
     const inputs=scenarios.validate({age:$('directProjectionAge').valueAsNumber,retire:$('directProjectionRetirement').valueAsNumber,monthly:$('directProjectionMonthly').valueAsNumber});
-    const payload=lead.buildPayload({config,contact,projection:{inputs},kind:'simulation',buttonId:'simulator_direct',campaign,preferences:window.LandingConsent?.getPreferences(),cookie:document.cookie,pageUri:location.href,pageName:document.title});
+    const payload=lead.buildPayload({config,contact,projection:{inputs},kind:'simulation',buttonId:'simulator_direct',campaign,preferences:window.LandingConsent?.getPreferences(),consentCopy:priorConsent?window.FormPrivacy.text:undefined,cookie:document.cookie,pageUri:location.href,pageName:document.title});
     const result=await submit(payload);
     if(!result.ok)throw Error('Espera a que termine el envío.');
     accepted={contact,inputs};

@@ -40,3 +40,6 @@ dialog.measurement-details[open]{display:flex;flex-direction:column;overflow:hid
 .measurement-details-header{flex:0 0 auto}.measurement-details-content{min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 4px 10px 0}
 .measurement-details-content>.privacy-link{color:#153f68;font-size:.8125rem}
 .measurement-details .consent-actions{flex:0 0 auto;margin-top:0;padding-top:14px;border-top:1px solid #dfe7ef;background:white}
+.form-privacy-choice{display:flex;align-items:flex-start;gap:8px;margin:10px 0 0;color:#153f68;font-size:.85rem;line-height:1.4}
+.form-privacy-choice input{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#153f68}
+.form-privacy-choice a{color:inherit;text-decoration:underline}

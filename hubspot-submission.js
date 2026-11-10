@@ -1,16 +1,9 @@
 'use strict';
 ((root)=>{
  const campaignKeys=['gclid','utm_source','utm_medium','utm_campaign','utm_term'];
- const simulationConsent='Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.';
- const requestConsent='Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.';
- const advisoryFormIds=new Set(['wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
- function needsAdvisoryInputs(kind,id){return kind==='advisory'&&advisoryFormIds.has(id);}
- function consentText(kind='simulation',buttonId){
-  if(needsAdvisoryInputs(kind,buttonId))return 'Acepto aviso de privacidad';
-  if(kind!=='simulation')return requestConsent;
-  return buttonId==='simulator_direct'?'Acepto aviso de privacidad':simulationConsent;
- }
- function validSource(kind,id){return kind==='simulation'?['simulator_range','simulator_direct'].includes(id):kind==='contract'?id==='product_contract':kind==='advisory'&&(id==='wa_about_social'||advisoryFormIds.has(id));}
+ const advisoryFormIds=new Set(['wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
+ function consentText(){return 'Acepto aviso de privacidad';}
+ function validSource(kind,id){return kind==='simulation'?['simulator_range','simulator_direct'].includes(id):kind==='contract'?id==='product_contract':kind==='advisory'&&advisoryFormIds.has(id);}
  function sourceLabel(kind,id){if(!validSource(kind,id))throw Error('Origen de solicitud no válido.');return (kind==='simulation'?'PPR | Simulación':kind==='contract'?'PPR | Solicitud de contratación':'PPR | Asesoría')+' | '+id;}
  function captureCampaign(href){
   const result=Object.fromEntries(campaignKeys.map(key=>[key,'']));
@@ -25,20 +18,16 @@
   const cleanName=String(name||'').trim().replace(/\s+/g,' '),cleanPhone=String(phone||'').trim();
   if(cleanName.length<2||cleanName.length>100||/[<>\u0000-\u001f]/.test(cleanName))throw Error('Escribe tu nombre (entre 2 y 100 caracteres).');
   if(!/^[0-9]{10}$/.test(cleanPhone))throw Error('Escribe tu teléfono de México con 10 dígitos, sin lada internacional.');
-  if(accepted!==true)throw Error('Acepta el aviso de privacidad y el contacto sobre tu simulación para continuar.');
+  if(accepted!==true)throw Error('Acepta el aviso de privacidad para continuar.');
   return {name:cleanName,phone:cleanPhone};
  }
- function buildPayload({config,contact,projection,advisoryInputs,campaign,preferences,kind='simulation',buttonId='simulator_range',pageName,cookie='',pageUri,now=Date.now()}){
+ function buildPayload({config,contact,projection,campaign,preferences,consentCopy=consentText(),kind='simulation',buttonId='simulator_range',pageName,cookie='',pageUri,now=Date.now()}){
   const fields=config.fields,values={name:contact.name,phone:'+52'+contact.phone,source:sourceLabel(kind,buttonId)};
+  if(!projection?.inputs)throw Error('Completa los datos para tu proyección.');
+  const {age,retire,monthly}=projection.inputs;
+  Object.assign(values,{age,retire,monthly});
   if(kind==='simulation'){
-   if(!projection)throw Error('Calcula tu proyección antes de continuar.');
-   // Store the requested inputs, never monetary projection results.
-   Object.assign(values,{consent:'true',age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
-  }
-  if(needsAdvisoryInputs(kind,buttonId)){
-   if(!advisoryInputs)throw Error('Completa los datos para tu asesoría.');
-   const {age,retire,monthly}=advisoryInputs;
-   Object.assign(values,{age,retire,monthly});
+   Object.assign(values,{consent:'true',simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
   }
   values.gclid=preferences?.advertising===true?campaign.gclid||'':'';
   values.utm=JSON.stringify(Object.fromEntries(campaignKeys.filter(key=>key!=='gclid').map(key=>[key,campaign[key]||''])));
@@ -48,7 +37,7 @@
   // Only reuse an existing cookie with analytics consent. No HubSpot tracking installation.
   const hutk=cookie.split(';').map(s=>s.trim()).find(s=>s.startsWith('hubspotutk='))?.slice(11);
   if(preferences?.analytics===true&&/^[a-f0-9]{32}$/i.test(hutk||''))context.hutk=hutk;
-  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentText(kind,buttonId),communications:[]}}};
+  return {submittedAt:String(now),fields:Object.entries(values).map(([key,value])=>{if(!fields[key])throw Error('Falta configurar un campo del formulario.');return {objectTypeId:'0-1',name:fields[key],value:String(value)};}),context,legalConsentOptions:{consent:{consentToProcess:true,text:consentCopy,communications:[]}}};
  }
  function createSubmitter({config,fetcher}){
   let pending=false,accepted=false;
@@ -66,6 +55,6 @@
    }finally{pending=false;}
   };
  }
- const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText,validSource,needsAdvisoryInputs});
+ const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText,validSource});
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProjectionLead=api;
 })(typeof window==='undefined'?globalThis:window);
