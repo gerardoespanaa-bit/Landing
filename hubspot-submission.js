@@ -3,12 +3,14 @@
  const campaignKeys=['gclid','utm_source','utm_medium','utm_campaign','utm_term'];
  const simulationConsent='Acepto el aviso de privacidad y autorizo guardar mi simulación y contactarme respecto a mi simulación.';
  const requestConsent='Acepto el aviso de privacidad y que me contacten respecto a mi solicitud.';
- const advisoryIds=new Set(['wa_about_social','wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
+ const advisoryFormIds=new Set(['wa_header_advisory','wa_hero_advisory','wa_cta_advisory']);
+ function needsAdvisoryInputs(kind,id){return kind==='advisory'&&advisoryFormIds.has(id);}
  function consentText(kind='simulation',buttonId){
+  if(needsAdvisoryInputs(kind,buttonId))return 'Acepto aviso de privacidad';
   if(kind!=='simulation')return requestConsent;
   return buttonId==='simulator_direct'?'Acepto aviso de privacidad':simulationConsent;
  }
- function validSource(kind,id){return kind==='simulation'?['simulator_range','simulator_direct'].includes(id):kind==='contract'?id==='product_contract':kind==='advisory'&&advisoryIds.has(id);}
+ function validSource(kind,id){return kind==='simulation'?['simulator_range','simulator_direct'].includes(id):kind==='contract'?id==='product_contract':kind==='advisory'&&(id==='wa_about_social'||advisoryFormIds.has(id));}
  function sourceLabel(kind,id){if(!validSource(kind,id))throw Error('Origen de solicitud no válido.');return (kind==='simulation'?'PPR | Simulación':kind==='contract'?'PPR | Solicitud de contratación':'PPR | Asesoría')+' | '+id;}
  function captureCampaign(href){
   const result=Object.fromEntries(campaignKeys.map(key=>[key,'']));
@@ -26,12 +28,17 @@
   if(accepted!==true)throw Error('Acepta el aviso de privacidad y el contacto sobre tu simulación para continuar.');
   return {name:cleanName,phone:cleanPhone};
  }
- function buildPayload({config,contact,projection,campaign,preferences,kind='simulation',buttonId='simulator_range',pageName,cookie='',pageUri,now=Date.now()}){
+ function buildPayload({config,contact,projection,advisoryInputs,campaign,preferences,kind='simulation',buttonId='simulator_range',pageName,cookie='',pageUri,now=Date.now()}){
   const fields=config.fields,values={name:contact.name,phone:'+52'+contact.phone,source:sourceLabel(kind,buttonId)};
   if(kind==='simulation'){
    if(!projection)throw Error('Calcula tu proyección antes de continuar.');
    // Store the requested inputs, never monetary projection results.
    Object.assign(values,{consent:'true',age:projection.inputs.age,retire:projection.inputs.retire,monthly:projection.inputs.monthly,simulatedAt:new Date(projection.simulatedAt||now).toISOString()});
+  }
+  if(needsAdvisoryInputs(kind,buttonId)){
+   if(!advisoryInputs)throw Error('Completa los datos para tu asesoría.');
+   const {age,retire,monthly}=advisoryInputs;
+   Object.assign(values,{age,retire,monthly});
   }
   values.gclid=preferences?.advertising===true?campaign.gclid||'':'';
   values.utm=JSON.stringify(Object.fromEntries(campaignKeys.filter(key=>key!=='gclid').map(key=>[key,campaign[key]||''])));
@@ -59,6 +66,6 @@
    }finally{pending=false;}
   };
  }
- const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText,validSource});
+ const api=Object.freeze({captureCampaign,validateContact,buildPayload,createSubmitter,consentText,validSource,needsAdvisoryInputs});
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProjectionLead=api;
 })(typeof window==='undefined'?globalThis:window);
