@@ -2,13 +2,14 @@
 (()=>{
  const lead=window.ProjectionLead,config=window.PPR_HUBSPOT_FORM,state=window.ProjectionState;if(!lead||!config||!state)return;
  const campaign=lead.captureCampaign(location.href),saved=new Map();let context=null,sending=false,opener=null;
- const dialog=document.createElement('dialog');dialog.id='projectionLeadDialog';dialog.className='lead-dialog';dialog.setAttribute('aria-labelledby','projectionLeadTitle');
+ const dialog=document.createElement('dialog');dialog.id='projectionLeadDialog';dialog.className='lead-dialog';dialog.setAttribute('aria-labelledby','projectionLeadTitle');dialog.setAttribute('aria-describedby','projectionLeadIntro');
  const base=new URL(document.body.dataset.projectionFull==='true'||location.pathname.endsWith('/simulador/')?'../':'./',document.baseURI);
  const privacy=new URL('aviso-de-privacidad.html#registro-simulacion',base),resultUrl=new URL('mi-proyeccion/',base);
  dialog.innerHTML=`
   <button type="button" class="modal-close" id="closeProjectionLead" aria-label="Cerrar formulario">×</button>
   <form id="projectionLeadForm" class="projection-lead-form" novalidate data-hs-do-not-collect="true">
    <h2 id="projectionLeadTitle"></h2>
+   <p id="projectionLeadIntro">Usaremos estos datos para contactarte y verificar si quieres hacer realidad tu proyección</p>
    <label for="projectionLeadName">Nombre<input id="projectionLeadName" name="firstname" type="text" autocomplete="given-name" maxlength="100" minlength="2" required></label>
    <label for="projectionLeadPhone">Teléfono / WhatsApp<input id="projectionLeadPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" maxlength="20" placeholder="10 dígitos de México" required></label>
    <div id="advisoryProjectionInputs" class="projection-lead-inputs" hidden>
