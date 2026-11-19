@@ -11,7 +11,7 @@
    <h2 id="projectionLeadTitle"></h2>
    <p id="projectionLeadIntro">Usaremos estos datos para contactarte y verificar si quieres hacer realidad tu proyección</p>
    <label for="projectionLeadName">Nombre<input id="projectionLeadName" name="firstname" type="text" autocomplete="given-name" maxlength="100" minlength="2" required></label>
-   <label for="projectionLeadPhone">Teléfono / WhatsApp<input id="projectionLeadPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" maxlength="20" placeholder="10 dígitos de México" required></label>
+   <label for="projectionLeadPhone">Teléfono / WhatsApp<input id="projectionLeadPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" maxlength="32" placeholder="10 dígitos de México" required></label>
    <div id="advisoryProjectionInputs" class="projection-lead-inputs" hidden>
     <label for="advisoryProjectionAge">Edad actual
      <input id="advisoryProjectionAge" type="number" inputmode="numeric" min="18" max="64" step="1" placeholder="35" required>
@@ -42,6 +42,10 @@
   if(dialog.open||sending)return false;
   if(!['simulation','advisory','contract'].includes(options.kind)||!lead.validSource(options.kind,options.buttonId))return false;
   if(options.kind==='simulation'&&!options.projection)return false;
+  if(window.ProjectionResume?.open({resultUrl:resultUrl.href,projection:options.projection,opener:options.opener,onNewRegistration(){
+   saved.clear();
+   window.LandingLeadForms.open(options);
+  }}))return true;
   context={...options,submit:lead.createSubmitter({config,fetcher:window.fetch.bind(window)})};opener=options.opener||document.activeElement;
   form.reset();status.hidden=true;refreshPrivacy?.();
   advisoryFields.hidden=options.kind==='simulation';

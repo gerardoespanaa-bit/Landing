@@ -8,7 +8,7 @@ const state=require('./projection-state.js');
 const scenarios=require('./projection-scenarios.js');
 const script=fs.readFileSync(path.join(__dirname,'projection-direct-form.js'),'utf8');
 
-function run(query,{advertising=false,fetcher}={}){
+function run(query,{advertising=false,fetcher,registered=false}={}){
  const els=new Map(),requests=[],redirects=[],saved=new Map();
  const el=id=>{
   if(!els.has(id))els.set(id,{listeners:{},value:'',hidden:false,disabled:false,
@@ -21,25 +21,30 @@ function run(query,{advertising=false,fetcher}={}){
  const age=el('directProjectionAge'),retire=el('directProjectionRetirement'),monthly=el('directProjectionMonthly');
  form.querySelectorAll=()=>[name,phone,consent,age,retire,monthly];
  Object.assign(name,{value:'PRUEBA AISLADA'});
- Object.assign(phone,{value:'0000000000'});
+ Object.assign(phone,{value:'5512345678'});
  consent.checked=true;age.valueAsNumber=39;retire.valueAsNumber=60;monthly.valueAsNumber=2500;
  const baseURI='https://example.test/simulador/',location={href:baseURI+query,replace:url=>redirects.push(url)};
  const document={baseURI,title:'Simulador de retiro | Gerardo España',cookie:'',getElementById:el,body:{classList:{add(){},remove(){}}}};
  const keys=['name','phone','source','consent','age','retire','monthly','simulatedAt','gclid','utm'];
  const config={enabled:true,portalId:'1',formId:'00000000-0000-4000-8000-000000000000',fields:Object.fromEntries(keys.map(key=>[key,key]))};
  const storage={setItem:(key,value)=>saved.set(key,value),getItem:key=>saved.get(key)};
- let blocked=false;
+ let blocked=false,resumeOptions;
  const window={location,ProjectionLead:lead,ProjectionState:state,ProjectionScenarios:scenarios,PPR_HUBSPOT_FORM:config,
   get sessionStorage(){if(blocked)throw Error('Storage blocked');return storage;},
   LandingConsent:{getPreferences:()=>({advertising})},
+  ProjectionResume:{open(options){resumeOptions=options;return registered;}},
   fetch:async(url,options)=>{requests.push(JSON.parse(options.body));return fetcher?.()??success();}};
  vm.runInNewContext(script,{window,document,location,URL});
- return {el,requests,redirects,storage,block:value=>{blocked=value;},submit:()=>form.listeners.submit({preventDefault(){}})};
+ return {el,requests,redirects,storage,resume:resumeOptions,block:value=>{blocked=value;},submit:()=>form.listeners.submit({preventDefault(){}})};
 }
 function success(){return {status:200,json:async()=>({inlineMessage:'OK'})};}
 const query='?registro=1&gclid=QATestGclid1234567890&utm_medium=cpc&email=qa%40example.test';
 
 (async()=>{
+ const returning=run(query,{registered:true});
+ assert(!returning.el('directProjectionDialog').open);
+ assert.equal(returning.requests.length,0);assert.equal(returning.resume.resultUrl,'https://example.test/mi-proyeccion/');
+ returning.resume.onNewRegistration();assert(returning.el('directProjectionDialog').open);
  for(const query of ['', '?registro=0', '?registro=1&registro=1']){
   const t=run(query);assert.equal(t.el('directProjectionDialog').open,undefined);
  }

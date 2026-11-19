@@ -15,9 +15,14 @@
   }catch{}return Object.freeze(result);
  }
  function validateContact(name,phone,accepted){
-  const cleanName=String(name||'').trim().replace(/\s+/g,' '),cleanPhone=String(phone||'').trim();
+  const cleanName=String(name||'').trim().replace(/\s+/g,' ');
+  const enteredPhone=String(phone||'').trim();
+  let cleanPhone=enteredPhone.replace(/[\s().-]/g,'');
+  if(/^\+52[0-9]{10}$/.test(cleanPhone))cleanPhone=cleanPhone.slice(3);
+  else if(/^52[0-9]{10}$/.test(cleanPhone))cleanPhone=cleanPhone.slice(2);
   if(cleanName.length<2||cleanName.length>100||/[<>\u0000-\u001f]/.test(cleanName))throw Error('Escribe tu nombre (entre 2 y 100 caracteres).');
-  if(!/^[0-9]{10}$/.test(cleanPhone))throw Error('Escribe tu teléfono de México con 10 dígitos, sin lada internacional.');
+  if(enteredPhone.length>32||!/^[0-9]{10}$/.test(cleanPhone))throw Error('Escribe tu teléfono de México con 10 dígitos. También puedes incluir +52.');
+  if(/^([0-9])\1{9}$/.test(cleanPhone)||['0123456789','1234567890','9876543210','0987654321'].includes(cleanPhone))throw Error('Revisa tu número de teléfono e ingresa uno válido para contactarte.');
   if(accepted!==true)throw Error('Acepta el aviso de privacidad para continuar.');
   return {name:cleanName,phone:cleanPhone};
  }
