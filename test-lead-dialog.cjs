@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const lead=require('./hubspot-submission.js'),scenarios=require('./projection-scenarios.js'),state=require('./projection-state.js');const read=f=>fs.readFileSync(path.join(__dirname,f),'utf8');let checks=0;
 const config={enabled:true,portalId:'52231197',formId:'00000000-0000-4000-8000-000000000000',fields:{name:'firstname',phone:'phone',age:'ppr_edad_actual',retire:'ppr_edad_retiro',monthly:'ppr_aportacion_mensual',result8:'ppr_resultado_8',result12:'ppr_resultado_12',simulatedAt:'ppr_fecha_simulacion',gclid:'ppr_gclid',utm:'ppr_campana_utm',consent:'ppr_consentimiento_simulacion',source:'ppr_origen_lead'}};
-function runtime(fetcher,baseURI='https://example.test/simulador/'){
+function runtime(fetcher,baseURI='https://example.test/simulador/',initialStorage){
  const ids=new Map();let active=null;const labels=[];const events=[],redirects=[];
  class El{
   constructor(tag='div'){this.tag=tag;this.children=[];this.hidden=false;this.disabled=false;this.value='';this.checked=false;this.attrs={};this.handlers={};this.isConnected=true;this.classList={add(){},remove(){}};}
@@ -17,14 +17,60 @@ function runtime(fetcher,baseURI='https://example.test/simulador/'){
  }
  const document={createElement:tag=>new El(tag),createTextNode:text=>({textContent:text}),getElementById:id=>ids.get(id),body:new El('body'),baseURI,cookie:'',get activeElement(){return active;}};document.body.dataset={projectionFull:String(baseURI.endsWith('/mi-proyeccion/'))};
  const values=new Map();let blocked=false;
- const storage={getItem:k=>values.get(k),setItem(k,v){if(blocked)throw Error();values.set(k,v);}};
+ const storage=initialStorage||{getItem:k=>values.get(k),removeItem:k=>values.delete(k),setItem(k,v){if(blocked)throw Error();values.set(k,v);}};
  const win={ProjectionLead:lead,ProjectionScenarios:scenarios,ProjectionState:state,sessionStorage:storage,PPR_HUBSPOT_FORM:config,fetch:fetcher,LandingConsent:{getPreferences:()=>({analytics:false,advertising:false})},LandingMeasurement:{track:(...v)=>events.push(v)},location:{assign:url=>redirects.push(url)}};
- vm.runInNewContext(read('lead-dialog.js'),{window:win,document,URL,Map,Object,location:new URL(baseURI)});
- function fill(){ids.get('projectionLeadName').value='PRUEBA AISLADA';ids.get('projectionLeadPhone').value='0000000000';ids.get('projectionLeadConsent').checked=true;ids.get('advisoryProjectionAge').valueAsNumber=37;ids.get('advisoryProjectionRetirement').valueAsNumber=60;ids.get('advisoryProjectionMonthly').valueAsNumber=3200;}
+ const scope={window:win,document,URL,Map,Object,location:new URL(baseURI)};
+ vm.runInNewContext(read('projection-resume.js'),scope);
+ vm.runInNewContext(read('lead-dialog.js'),scope);
+ function fill(){ids.get('projectionLeadName').value='PRUEBA AISLADA';ids.get('projectionLeadPhone').value='5512345678';ids.get('projectionLeadConsent').checked=true;ids.get('advisoryProjectionAge').valueAsNumber=37;ids.get('advisoryProjectionRetirement').valueAsNumber=60;ids.get('advisoryProjectionMonthly').valueAsNumber=3200;}
  return {ids,win,fill,events,redirects,labels,storage,block:value=>{blocked=value;},submit:()=>ids.get('projectionLeadForm').fire('submit')};
 }
 const check=async(name,fn)=>{await fn();checks++;console.log('PASS '+name);};
 (async()=>{
+ await check('Reloaded registration resumes across all form origins without another CRM request',async()=>{
+  let posts=0;
+  const fetcher=async()=>{posts++;return{status:200,json:async()=>({inlineMessage:'ok'})};};
+  const first=runtime(fetcher);first.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_hero_advisory'});first.fill();await first.submit();
+  assert.equal(posts,1);
+  for(const options of [{kind:'advisory',buttonId:'wa_header_advisory'},{kind:'contract',buttonId:'product_contract'},{kind:'simulation',buttonId:'simulator_range',projection:scenarios.calculateFrom({age:40,retire:65,monthly:4000})}]){
+   const reloaded=runtime(fetcher,'https://example.test/',first.storage);
+   assert(reloaded.win.LandingLeadForms.open(options));
+   assert(reloaded.ids.get('projectionResumeDialog').open);
+   assert(!reloaded.ids.get('projectionLeadDialog').open);
+   assert.equal(reloaded.ids.get('projectionLeadPhone').value,'');
+   const click=await reloaded.ids.get('resumeProjectionLink').fire('click');
+   assert(!click.prevented);assert.equal(reloaded.ids.get('resumeProjectionLink').href,'https://example.test/mi-proyeccion/');
+   if(options.projection)assert.deepEqual(state.load(first.storage).inputs,options.projection.inputs);
+   assert.equal(posts,1);
+  }
+ });
+ await check('Expired, corrupted, separate and blocked sessions do not bypass registration',async()=>{
+  for(const stored of ['broken',JSON.stringify({unlocked:true}),JSON.stringify({version:2,unlocked:true,name:'PRUEBA',inputs:{age:35,retire:65,monthly:2000},savedAt:Date.now()-86400001})]){
+   const t=runtime(async()=>{throw Error('No requests expected');});t.storage.setItem(state.key,stored);
+   t.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_hero_advisory'});
+   assert(t.ids.get('projectionLeadDialog').open);assert(!t.ids.get('projectionResumeDialog').open);
+  }
+  const t=runtime(async()=>{throw Error('No requests expected');},'https://example.test/',{getItem(){throw Error('blocked');}});
+  t.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_hero_advisory'});assert(t.ids.get('projectionLeadDialog').open);
+ });
+ await check('Another person can explicitly start a blank registration and expired resume links return to the form',async()=>{
+  const t=runtime(async()=>{throw Error('No request expected');});assert(state.save(t.storage,'PRUEBA ANTERIOR',{age:35,retire:65,monthly:2000}));
+  t.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_hero_advisory'});
+  await t.ids.get('newProjectionRegistration').fire('click');
+  assert.equal(state.load(t.storage),null);assert(!t.ids.get('projectionResumeDialog').open);assert(t.ids.get('projectionLeadDialog').open);
+  assert.equal(t.ids.get('projectionLeadName').value,'');assert.equal(t.ids.get('projectionLeadPhone').value,'');
+  const expired=runtime(async()=>{throw Error('No request expected');});state.save(expired.storage,'PRUEBA',{age:35,retire:65,monthly:2000});
+  expired.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_header_advisory'});state.clear(expired.storage);
+  assert((await expired.ids.get('resumeProjectionLink').fire('click')).prevented);assert(expired.ids.get('projectionLeadDialog').open);
+ });
+ await check('Resume storage failures keep the dialog open without submitting or losing confirmed data',async()=>{
+  const t=runtime(async()=>{throw Error('No request expected');});state.save(t.storage,'PRUEBA',{age:35,retire:65,monthly:2000});
+  t.win.LandingLeadForms.open({kind:'simulation',buttonId:'simulator_range',projection:scenarios.calculateFrom({age:40,retire:65,monthly:4000})});t.block(true);
+  assert((await t.ids.get('resumeProjectionLink').fire('click')).prevented);assert(t.ids.get('projectionResumeDialog').open);
+  assert.deepEqual(state.load(t.storage).inputs,{age:35,retire:65,monthly:2000});assert(!t.ids.get('projectionResumeStatus').hidden);
+  t.storage.removeItem=()=>{throw Error('cannot clear');};
+  await t.ids.get('newProjectionRegistration').fire('click');assert(t.ids.get('projectionResumeDialog').open);assert(!t.ids.get('projectionLeadDialog').open);
+ });
  await check('Invalid phone and missing authorization never send',async()=>{
   let posts=0;const t=runtime(async()=>{posts++;return{status:200,json:async()=>({inlineMessage:'ok'})};});
   t.win.LandingLeadForms.open({kind:'advisory',buttonId:'wa_hero_advisory'});await t.submit();t.fill();t.ids.get('projectionLeadConsent').checked=false;await t.submit();assert.equal(posts,0);assert.equal(t.redirects.length,0);

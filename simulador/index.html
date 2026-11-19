@@ -100,7 +100,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <link rel="icon" type="image/x-icon" href="../assets/favicon-ge-white.ico">
 <link rel="icon" type="image/png" sizes="160x160" href="../assets/favicon-ge-white.png">
 <link rel="stylesheet" href="../simulator-page.css?v=1">
-<link rel="stylesheet" href="../projection-lead.css?v=8">
+<link rel="stylesheet" href="../projection-lead.css?v=9">
 <link rel="stylesheet" href="../product-guide.css?v=4">
 <link rel="stylesheet" href="../projection-unlock-dock.css?v=1">
 </head>
@@ -194,13 +194,13 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
 <script src="../app.js?v=14" defer></script>
 <script src="../projection-scenarios.js?v=3" defer></script>
 <script src="../projection-state.js?v=3" defer></script>
-<script src="../hubspot-form-config.js?v=1" defer></script>
-<script src="../hubspot-submission.js?v=7" defer></script>
-<script src="../lead-dialog.js?v=4" defer></script>
+<script src="../projection-resume.js?v=1" defer></script><script src="../hubspot-form-config.js?v=1" defer></script>
+<script src="../hubspot-submission.js?v=8" defer></script>
+<script src="../lead-dialog.js?v=5" defer></script>
 <script src="../simulator.js?v=6" defer></script>
 <script src="../projection-unlock-dock.js?v=1" defer></script>
 <script src="../projection-lead-ui.js?v=4" defer></script>
-<script src="../projection-direct-form.js?v=2" defer></script>
+<script src="../projection-direct-form.js?v=3" defer></script>
 
 <dialog id="directProjectionDialog" class="lead-dialog" aria-labelledby="directProjectionTitle" aria-describedby="directProjectionIntro">
   <form id="directProjectionForm" class="projection-lead-form" data-hs-do-not-collect="true">
@@ -211,7 +211,7 @@ body.modal-active:after{content:"";position:fixed;inset:0;background:rgba(7,24,4
       <input id="directProjectionName" name="firstname" type="text" autocomplete="given-name" minlength="2" maxlength="100" required>
     </label>
     <label for="directProjectionPhone">Teléfono / WhatsApp
-      <input id="directProjectionPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 dígitos de México" required>
+      <input id="directProjectionPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" maxlength="32" placeholder="10 dígitos de México" required>
     </label>
     <div class="projection-lead-inputs">
       <label for="directProjectionAge">Edad actual

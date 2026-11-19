@@ -8,6 +8,10 @@
 .projection-lead-form h2{font-size:1.45rem;line-height:1.25;padding-right:24px;color:var(--navy);margin:0 0 8px}.projection-lead-form>label{display:grid;gap:8px;margin:15px 0;color:var(--navy);font-weight:700}.projection-lead-form input:not([type=checkbox]){width:100%;border:1px solid #d2deea;border-radius:12px;padding:13px 12px;font:inherit}.projection-lead-form .projection-lead-consent{display:flex;align-items:flex-start;font-size:.9rem;line-height:1.5}.projection-lead-consent input{width:20px;height:20px;flex-shrink:0}.projection-lead-consent a{color:var(--navy);text-decoration:underline}.projection-lead-form [role=status]{padding:12px;border:1px solid var(--line);border-radius:12px}.projection-lead-form button:disabled{opacity:.6;cursor:wait}
 #directProjectionTitle{margin-bottom:8px}
 #projectionLeadIntro,#directProjectionIntro{margin:0 0 16px;color:var(--muted)}
+.projection-resume h2{font-size:1.45rem;line-height:1.25;padding-right:24px;color:var(--navy);margin:0 0 8px}
+.projection-resume p{color:var(--muted);margin:0 0 20px;line-height:1.6}
+.projection-resume .btn{display:flex;width:100%;text-align:center}
+.projection-resume .measurement-preferences{display:block;margin:18px auto 0;color:var(--navy)}
 .projection-lead-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .projection-lead-inputs label{display:grid;grid-template-rows:1fr auto;gap:6px;color:var(--navy);font-weight:700}
 .projection-lead-inputs label:last-child{grid-column:1/-1}
